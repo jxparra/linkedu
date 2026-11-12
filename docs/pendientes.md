@@ -1,12 +1,12 @@
 # Pendientes
 
-> Actualizado: 2026-11-10. Marca lo que vayas haciendo. Último día → [[diario/2026-11-10]]
+> Actualizado: 2026-11-12. Marca lo que vayas haciendo. Último día → [[diario/2026-11-10]]
 
 ## 🔴 Primero (antes de seguir programando)
 - [ ] **Confirmar con el tutor qué se entrega en ~2 semanas** y en qué formato (¿demo, memoria, presentación?)
 - [ ] Conseguir la **estructura oficial de la memoria** y sustituir [[memoria/00-indice]]
 - [ ] Decidir edad mínima y reseñas de docentes → [[decisiones/ADR-003-resenas-docentes]]
-- [ ] **Guardar el trabajo en Git** (ver abajo). Ahora mismo solo está en tu ordenador
+- [x] **Guardar el trabajo en Git** → https://github.com/jxparra/StudyHub (2026-11-12)
 
 ## 🟡 Siguiente bloque de código (elige uno)
 - [x] **Empleo** (al estilo InfoJobs) → [[diseno/empleo]]
@@ -60,11 +60,11 @@ Abre http://localhost:3000 · Cuentas de prueba: `irene@demo.studyhub` (estudian
 
 Si faltan datos de prueba: `python -m app.seed` dentro de `backend` con el entorno activado.
 
-## Guardar en Git (una vez)
+## Guardar cambios en Git
+Repositorio: https://github.com/jxparra/StudyHub
 ```powershell
 cd $HOME\Documents\StudyHub
-git init
 git add .
-git commit -m "StudyHub: registro, inicio, publicaciones, empleo, estadísticas, ajustes"
+git commit -m "Qué has hecho"
+git push
 ```
-Después, cuando quieras: crear el repo en GitHub y `git remote add origin …` + `git push`.
