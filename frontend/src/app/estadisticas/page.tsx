@@ -39,10 +39,10 @@ function Sidebar({ user }: { user: User | null }) {
 
   return (
     <div className="space-y-3">
-      <section className="overflow-hidden rounded-card border border-line bg-white">
-        <div className="h-16 bg-gradient-to-r from-brand-700 via-brand-600 to-accent-400" />
+      <section className="overflow-hidden rounded-card border border-line bg-card">
+        <div className="h-16 bg-gradient-to-br from-banner-from to-banner-to" />
         <div className="px-4 pb-4">
-          <span className={`-mt-9 block w-fit border-4 border-white bg-white ${user?.role === "company" ? "rounded-[14px]" : "rounded-full"}`}>
+          <span className={`-mt-9 block w-fit border-4 border-card bg-card ${user?.role === "company" ? "rounded-[14px]" : "rounded-full"}`}>
             <Avatar name={name || "?"} src={profile?.user.avatar_url ? mediaUrl(profile.user.avatar_url) : null} size="lg" square={user?.role === "company"} />
           </span>
           <Link href="/perfil" className="mt-2 block truncate text-lg font-semibold hover:underline">
@@ -51,13 +51,13 @@ function Sidebar({ user }: { user: User | null }) {
           {profile?.user.headline && <p className="line-clamp-2 text-[13px] text-ink-muted">{profile.user.headline}</p>}
         </div>
       </section>
-      <nav aria-label={t("Estadísticas")} className="rounded-card border border-line bg-white py-3">
+      <nav aria-label={t("Estadísticas")} className="rounded-card border border-line bg-card py-3">
         {item("rendimiento", "Rendimiento")}
         {item("contenido", "Contenido")}
         <div className="px-4 pt-4">
           <Link
             href="/inicio"
-            className="flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand-600 px-4 font-semibold text-white transition-colors hover:bg-brand-700"
+            className="flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand-600 px-4 font-semibold text-on-brand transition-colors hover:bg-brand-hover"
           >
             <PenSquare className="h-4 w-4" aria-hidden />
             {t("Crear publicación")}
@@ -99,7 +99,7 @@ function Row({ label, sub, value, pct, help }: { label: string; sub?: string; va
 function Section({ title, help, children, days, onDays }: { title: string; help: string; children: React.ReactNode; days: number; onDays: (d: number) => void }) {
   const t = useT();
   return (
-    <section className="rounded-card border border-line bg-white p-6">
+    <section className="rounded-card border border-line bg-card p-6">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <h2 className="flex items-center gap-2 text-xl font-semibold">
@@ -144,7 +144,7 @@ function Rendimiento() {
 
   if (error) {
     return (
-      <div className="rounded-card border border-line bg-white p-6 text-center">
+      <div className="rounded-card border border-line bg-card p-6 text-center">
         <p className="text-ink-muted">{t("No hemos podido cargar las estadísticas.")}</p>
         <button type="button" onClick={() => load(days)} className="mt-3 inline-flex min-h-11 items-center gap-2 font-semibold text-brand-700">
           <RotateCcw className="h-4 w-4" aria-hidden /> {t("Reintentar")}
@@ -152,7 +152,7 @@ function Rendimiento() {
       </div>
     );
   }
-  if (!data) return <div className="h-96 animate-pulse rounded-card bg-white" />;
+  if (!data) return <div className="h-96 animate-pulse rounded-card bg-card" />;
 
   const m = (x: Metric) => ({ value: x.value, pct: x.change_pct });
   const compare = `${t("en comparación con")} ${range(data.previous_start, data.start)}`;
@@ -191,10 +191,10 @@ function Contenido() {
     api<PostStats[]>("/stats/me/posts?days=7").then(setPosts).catch(() => setPosts([]));
   }, []);
 
-  if (!posts) return <div className="h-64 animate-pulse rounded-card bg-white" />;
+  if (!posts) return <div className="h-64 animate-pulse rounded-card bg-card" />;
   if (posts.length === 0) {
     return (
-      <section className="rounded-card border border-line bg-white p-10 text-center">
+      <section className="rounded-card border border-line bg-card p-10 text-center">
         <h2 className="text-lg font-semibold">{t("Todavía no has publicado nada")}</h2>
         <p className="mt-1 text-ink-muted">{t("Cuando publiques, aquí verás cuánta gente lo ve y cómo reacciona.")}</p>
       </section>
@@ -202,7 +202,7 @@ function Contenido() {
   }
 
   return (
-    <section className="rounded-card border border-line bg-white">
+    <section className="rounded-card border border-line bg-card">
       <h2 className="border-b border-line px-6 py-4 text-xl font-semibold">{t("Tus publicaciones")}</h2>
       <ul>
         {posts.map((p) => (
@@ -248,7 +248,7 @@ function Content() {
 
   return (
     <div className="space-y-3">
-      <section className="flex items-center justify-between rounded-card border border-line bg-white px-6 py-5">
+      <section className="flex items-center justify-between rounded-card border border-line bg-card px-6 py-5">
         <h1 className="text-[28px] font-semibold">{tab === "contenido" ? t("Contenido") : t("Rendimiento")}</h1>
         {/* En móvil no hay columna izquierda: se cambia de vista aquí */}
         <select

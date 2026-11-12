@@ -78,7 +78,7 @@ export function SocialNav() {
   const t = useT();
 
   return (
-    <nav aria-label={t("Grupos")} className="rounded-card border border-line bg-white p-3">
+    <nav aria-label={t("Grupos")} className="rounded-card border border-line bg-card p-3">
       <h1 className="px-2 pb-3 pt-1 text-2xl font-bold">{t("Grupos")}</h1>
       <GroupSearch />
 
@@ -95,7 +95,7 @@ export function SocialNav() {
                 }`}
               >
                 <span
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${active ? "bg-brand-600 text-white" : "bg-field text-ink"}`}
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${active ? "bg-brand-600 text-on-brand" : "bg-field text-ink"}`}
                 >
                   <Icon className="h-5 w-5" aria-hidden />
                 </span>
@@ -176,7 +176,7 @@ export function SocialMobileTabs() {
               key={href}
               href={href}
               aria-current={active ? "page" : undefined}
-              className={`${chip} ${active ? "bg-brand-600 text-white" : "bg-white text-ink ring-1 ring-line"}`}
+              className={`${chip} ${active ? "bg-brand-600 text-on-brand" : "bg-card text-ink ring-1 ring-line"}`}
             >
               <Icon className="h-4 w-4" aria-hidden />
               {t(label)}

@@ -23,7 +23,7 @@ export function Composer({
   const firstName = user.student_profile?.name ?? name;
 
   return (
-    <div className="rounded-card border border-line bg-white p-4">
+    <div className="rounded-card border border-line bg-card p-4">
       <div className="flex items-center gap-3">
         <Link href="/perfil" aria-label="Ir a tu perfil" className="shrink-0 rounded-full">
           <Avatar name={name} size="md" square={user.role === "company"} />

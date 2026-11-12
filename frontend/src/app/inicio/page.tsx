@@ -46,7 +46,7 @@ function Feed({ user }: { user: User }) {
       <Composer user={user} onPublished={(p) => setPosts((ps) => [p, ...(ps ?? [])])} />
 
       {error && (
-        <div className="rounded-card border border-line bg-white p-6 text-center">
+        <div className="rounded-card border border-line bg-card p-6 text-center">
           <p className="text-ink-muted">No hemos podido cargar las publicaciones.</p>
           <button type="button" onClick={load} className="mt-3 inline-flex min-h-11 items-center gap-2 font-semibold text-brand-700">
             <RotateCcw className="h-4 w-4" aria-hidden /> Reintentar
@@ -55,10 +55,10 @@ function Feed({ user }: { user: User }) {
       )}
 
       {posts === null && !error &&
-        [0, 1].map((i) => <div key={i} className="h-56 animate-pulse rounded-card border border-line bg-white" />)}
+        [0, 1].map((i) => <div key={i} className="h-56 animate-pulse rounded-card border border-line bg-card" />)}
 
       {posts?.length === 0 && (
-        <div className="rounded-card border border-line bg-white p-8 text-center">
+        <div className="rounded-card border border-line bg-card p-8 text-center">
           <h2 className="text-lg font-semibold">Tu inicio está vacío</h2>
           <p className="mt-1 text-ink-muted">Únete a comunidades o publica algo para empezar.</p>
         </div>
@@ -66,7 +66,7 @@ function Feed({ user }: { user: User }) {
 
       {posts?.map((p) =>
         hidden.includes(p.id) ? (
-          <div key={p.id} className="flex items-center justify-between rounded-card border border-line bg-white px-4 py-3 text-sm text-ink-muted">
+          <div key={p.id} className="flex items-center justify-between rounded-card border border-line bg-card px-4 py-3 text-sm text-ink-muted">
             Publicación ocultada
             <button type="button" onClick={() => setHidden((h) => h.filter((x) => x !== p.id))} className="min-h-11 px-2 font-semibold text-brand-700">
               Deshacer

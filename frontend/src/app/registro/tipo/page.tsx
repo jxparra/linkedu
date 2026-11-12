@@ -75,7 +75,7 @@ export default function Tipo() {
             >
               <span
                 className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
-                  selected ? "bg-brand-600 text-white" : "bg-page text-ink"
+                  selected ? "bg-brand-600 text-on-brand" : "bg-page text-ink"
                 }`}
               >
                 <Icon className="h-5 w-5" aria-hidden />
@@ -84,7 +84,7 @@ export default function Tipo() {
                 <span className="block font-semibold">{title}</span>
                 <span className="mt-0.5 block text-sm text-ink-muted">{text}</span>
               </span>
-              {selected && <Check className="h-5 w-5 text-brand-600" aria-hidden />}
+              {selected && <Check className="h-5 w-5 text-brand-700" aria-hidden />}
             </button>
           );
         })}

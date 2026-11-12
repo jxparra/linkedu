@@ -35,7 +35,7 @@ function GroupItem({ group, onLeave }: { group: MyGroup; onLeave: (g: MyGroup) =
   const href = `/social/grupo/${group.id}`;
   const when = group.last_activity ?? group.joined_at;
   return (
-    <li className="rounded-card border border-line bg-white p-4">
+    <li className="rounded-card border border-line bg-card p-4">
       <div className="flex items-center gap-3">
         <Link href={href} tabIndex={-1} aria-hidden className="shrink-0">
           <GroupCover src={group.cover_url} topic={group.topic} iconSize="sm" className="h-20 w-20 rounded-xl" />
@@ -75,7 +75,7 @@ function GroupItem({ group, onLeave }: { group: MyGroup; onLeave: (g: MyGroup) =
             <MoreHorizontal className="h-5 w-5" aria-hidden />
           </button>
           {menu.open && (
-            <div role="menu" className="absolute right-0 z-10 mt-1 w-52 rounded-xl border border-line bg-white p-1 shadow-lg">
+            <div role="menu" className="absolute right-0 z-10 mt-1 w-52 rounded-xl border border-line bg-card p-1 shadow-lg">
               <button
                 type="button"
                 role="menuitem"
@@ -130,7 +130,7 @@ function YourGroups() {
             <ArrowUpDown className="h-4 w-4" aria-hidden /> Ordenar
           </button>
           {menu.open && (
-            <div role="menu" className="absolute right-0 z-10 mt-1 w-60 rounded-xl border border-line bg-white p-1 shadow-lg">
+            <div role="menu" className="absolute right-0 z-10 mt-1 w-60 rounded-xl border border-line bg-card p-1 shadow-lg">
               {(Object.keys(SORTS) as Sort[]).map((key) => (
                 <button
                   key={key}
@@ -155,13 +155,13 @@ function YourGroups() {
       {groups === null && (
         <div className="grid gap-4 sm:grid-cols-2">
           {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="h-40 animate-pulse rounded-card border border-line bg-white" />
+            <div key={i} className="h-40 animate-pulse rounded-card border border-line bg-card" />
           ))}
         </div>
       )}
 
       {groups?.length === 0 && (
-        <div className="rounded-card border border-line bg-white p-10 text-center">
+        <div className="rounded-card border border-line bg-card p-10 text-center">
           <Users className="mx-auto h-10 w-10 text-ink-subtle" aria-hidden />
           <h3 className="mt-3 text-lg font-semibold">Aún no te has unido a ningún grupo</h3>
           <p className="mx-auto mt-1 max-w-sm text-ink-muted">Busca grupos de tus estudios, de tu ciudad o de lo que te guste.</p>

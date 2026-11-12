@@ -11,7 +11,7 @@
    - Base de datos → [[04-base-datos]]
    - Arquitectura → [[05-arquitectura]]
    - Interfaz → [[diseno/sistema-diseno]], [[diseno/flujo-registro]], [[diseno/inicio]], [[diseno/empleo]], [[diseno/menu-estadisticas-ajustes]], [[diseno/social]]
-   - Decisiones → `decisiones/` (ADR-001 a ADR-009)
+   - Decisiones → `decisiones/` (ADR-001 a ADR-010)
 6. Implementación
 7. Pruebas
 8. Despliegue

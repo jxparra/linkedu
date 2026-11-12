@@ -10,14 +10,14 @@ import { timeAgo } from "@/lib/time";
 
 const ICONS: Record<string, { icon: typeof Bell; cls: string }> = {
   like: { icon: Heart, cls: "bg-red-50 text-danger" },
-  follow: { icon: UserPlus, cls: "bg-brand-50 text-brand-600" },
-  comment: { icon: MessageCircle, cls: "bg-brand-50 text-brand-600" },
+  follow: { icon: UserPlus, cls: "bg-brand-50 text-brand-700" },
+  comment: { icon: MessageCircle, cls: "bg-brand-50 text-brand-700" },
   tag: { icon: Tag, cls: "bg-accent-50 text-accent-800" },
   job: { icon: Briefcase, cls: "bg-accent-50 text-accent-800" },
-  job_application: { icon: Briefcase, cls: "bg-brand-50 text-brand-600" },
+  job_application: { icon: Briefcase, cls: "bg-brand-50 text-brand-700" },
   application_status: { icon: Briefcase, cls: "bg-accent-50 text-accent-800" },
-  group_invite: { icon: Users, cls: "bg-brand-50 text-brand-600" },
-  group_join: { icon: Users, cls: "bg-brand-50 text-brand-600" },
+  group_invite: { icon: Users, cls: "bg-brand-50 text-brand-700" },
+  group_join: { icon: Users, cls: "bg-brand-50 text-brand-700" },
   welcome: { icon: Sparkles, cls: "bg-accent-50 text-accent-800" },
 };
 
@@ -34,7 +34,7 @@ function List() {
   }, []);
 
   return (
-    <section className="rounded-card border border-line bg-white">
+    <section className="rounded-card border border-line bg-card">
       <h1 className="border-b border-line px-5 py-4 text-xl font-bold">Notificaciones</h1>
       {items === null ? (
         <div className="space-y-2 p-4">
@@ -58,9 +58,9 @@ function List() {
                   {n.actor ? (
                     <Avatar name={n.actor.name} src={n.actor.avatar_url} size="md" square={n.actor.role === "company"} />
                   ) : (
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-600 text-lg font-extrabold text-white">S</span>
+                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-600 text-lg font-extrabold text-on-brand">S</span>
                   )}
-                  <span className={`absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white ${cls}`}>
+                  <span className={`absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-card ${cls}`}>
                     <Icon className="h-3.5 w-3.5" aria-hidden />
                   </span>
                 </span>

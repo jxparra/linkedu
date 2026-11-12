@@ -109,7 +109,7 @@ export function PostModal({ post: initial, onClose, onUpdate, onDelete }: Props)
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-stretch justify-center bg-ink/50 sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-stretch justify-center bg-black/50 sm:items-center sm:p-4"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
       data-testid="post-modal-backdrop"
     >
@@ -117,7 +117,7 @@ export function PostModal({ post: initial, onClose, onUpdate, onDelete }: Props)
         role="dialog"
         aria-modal="true"
         aria-labelledby="post-modal-title"
-        className="flex h-full w-full flex-col overflow-hidden bg-white shadow-2xl sm:h-auto sm:max-h-[94vh] sm:max-w-[720px] sm:rounded-card"
+        className="flex h-full w-full flex-col overflow-hidden bg-card shadow-2xl sm:h-auto sm:max-h-[94vh] sm:max-w-[720px] sm:rounded-card"
       >
         <div className="relative flex h-16 shrink-0 items-center justify-center border-b border-line px-16">
           <h2 id="post-modal-title" className="truncate text-xl font-bold">
@@ -155,7 +155,7 @@ export function PostModal({ post: initial, onClose, onUpdate, onDelete }: Props)
                 <ChevronDown className={`h-4 w-4 transition-transform ${sortOpen ? "rotate-180" : ""}`} aria-hidden />
               </button>
               {sortOpen && (
-                <ul role="listbox" aria-label="Ordenar comentarios" className="absolute left-0 z-20 mt-1 w-[min(360px,90vw)] rounded-xl border border-line bg-white p-2 shadow-xl">
+                <ul role="listbox" aria-label="Ordenar comentarios" className="absolute left-0 z-20 mt-1 w-[min(360px,90vw)] rounded-xl border border-line bg-card p-2 shadow-xl">
                   {SORTS.map((s) => (
                     <li key={s.value} role="option" aria-selected={s.value === sort}>
                       <button
@@ -216,7 +216,7 @@ export function PostModal({ post: initial, onClose, onUpdate, onDelete }: Props)
 
         {toast && (
           <div role="status" className="pointer-events-none fixed inset-x-0 bottom-24 z-[60] flex justify-center px-4">
-            <p className="rounded-full bg-ink px-4 py-2.5 text-sm font-medium text-white shadow-lg">{toast}</p>
+            <p className="rounded-full bg-ink px-4 py-2.5 text-sm font-medium text-inverse shadow-lg">{toast}</p>
           </div>
         )}
       </div>

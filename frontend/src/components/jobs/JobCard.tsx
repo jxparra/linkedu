@@ -15,7 +15,7 @@ export function JobCard({ job, showStatus = true }: { job: Job; showStatus?: boo
   const closed = job.status === "cerrada";
 
   return (
-    <article className="relative rounded-card border border-line bg-white p-4 transition-colors hover:border-ink-subtle sm:p-5">
+    <article className="relative rounded-card border border-line bg-card p-4 transition-colors hover:border-ink-subtle sm:p-5">
       <div className="flex gap-4">
         <Avatar name={job.company.name} src={job.company.logo_url ? mediaUrl(job.company.logo_url) : null} size="md" square />
         <div className="min-w-0 flex-1">
@@ -34,7 +34,7 @@ export function JobCard({ job, showStatus = true }: { job: Job; showStatus?: boo
           </h2>
           <p className="mt-0.5 flex items-center gap-1 text-[15px] text-ink">
             {job.company.name}
-            {job.company.verified && <BadgeCheck className="h-4 w-4 text-brand-600" aria-label="Empresa verificada" />}
+            {job.company.verified && <BadgeCheck className="h-4 w-4 text-brand-700" aria-label="Empresa verificada" />}
           </p>
 
           <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink-muted">
@@ -66,5 +66,5 @@ export function JobCard({ job, showStatus = true }: { job: Job; showStatus?: boo
 }
 
 export function JobCardSkeleton() {
-  return <div className="h-40 animate-pulse rounded-card border border-line bg-white" />;
+  return <div className="h-40 animate-pulse rounded-card border border-line bg-card" />;
 }

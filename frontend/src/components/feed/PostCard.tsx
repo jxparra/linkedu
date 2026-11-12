@@ -165,7 +165,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
 
   return (
     <article
-      className={inModal ? "" : "rounded-card border border-line bg-white"}
+      className={inModal ? "" : "rounded-card border border-line bg-card"}
       aria-labelledby={`post-${post.id}-${variant}-author`}
     >
       <header className="flex items-start gap-3 p-4 pb-2">
@@ -234,7 +234,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
               <MoreHorizontal className="h-5 w-5" aria-hidden />
             </button>
             {menu && (
-              <div role="menu" className="absolute right-0 z-10 mt-1 w-52 overflow-hidden rounded-xl border border-line bg-white py-1 shadow-lg">
+              <div role="menu" className="absolute right-0 z-10 mt-1 w-52 overflow-hidden rounded-xl border border-line bg-card py-1 shadow-lg">
                 <button role="menuitemcheckbox" aria-checked={saved} type="button" className={`${menuItem} ${saved ? "font-semibold" : ""}`} onClick={toggleSave}>
                   <Bookmark className={`h-4 w-4 ${saved ? "fill-ink text-ink" : ""}`} aria-hidden /> {saved ? "Guardado" : "Guardar"}
                 </button>
@@ -304,7 +304,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
           <span className="relative flex">
             <ThumbsUp
               key={`icon-${burst}`}
-              className={`h-5 w-5 text-brand-600 ${liked ? "fill-brand-600" : ""} ${burst && liked ? "animate-like-pop" : ""}`}
+              className={`h-5 w-5 text-brand-700 ${liked ? "fill-brand-600" : ""} ${burst && liked ? "animate-like-pop" : ""}`}
               aria-hidden
             />
             {burst > 0 && liked && <LikeBurst key={`burst-${burst}`} />}
@@ -332,7 +332,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
           <span className="relative flex">
             <Repeat2
               key={`share-${shareBurst}`}
-              className={`h-5 w-5 ${shared ? "text-accent-800" : "text-accent-400"} ${shareBurst && shared ? "animate-share-spin" : ""}`}
+              className={`h-5 w-5 text-accent-800 ${shareBurst && shared ? "animate-share-spin" : ""}`}
               strokeWidth={shared ? 2.75 : 2}
               aria-hidden
             />

@@ -40,7 +40,7 @@ function GifIcon({ className = "" }: { className?: string }) {
 /** Opciones de "Añadir a tu publicación". Sin "Recaudar dinero" ni "Acontecimiento importante". */
 const OPTIONS: { panel: ComposerPanel; label: string; icon: ReactNode }[] = [
   { panel: "photo", label: "Foto/vídeo", icon: <ImagePlus className="h-6 w-6 text-success" aria-hidden /> },
-  { panel: "tag", label: "Etiquetar personas", icon: <UserPlus className="h-6 w-6 text-brand-600" aria-hidden /> },
+  { panel: "tag", label: "Etiquetar personas", icon: <UserPlus className="h-6 w-6 text-brand-700" aria-hidden /> },
   { panel: "feeling", label: "Sentimiento/actividad", icon: <Smile className="h-6 w-6 text-accent-400" aria-hidden /> },
   { panel: "location", label: "Registrar visita", icon: <MapPin className="h-6 w-6 text-danger" aria-hidden /> },
   { panel: "gif", label: "GIF", icon: <GifIcon className="h-6 w-7" /> },
@@ -167,7 +167,7 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-ink/50 sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center sm:p-4"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
       data-testid="create-post-backdrop"
     >
@@ -175,7 +175,7 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
         role="dialog"
         aria-modal="true"
         aria-labelledby="create-post-title"
-        className="flex max-h-[92vh] w-full flex-col overflow-hidden rounded-t-[20px] bg-white shadow-2xl sm:max-w-[540px] sm:rounded-card"
+        className="flex max-h-[92vh] w-full flex-col overflow-hidden rounded-t-[20px] bg-card shadow-2xl sm:max-w-[540px] sm:rounded-card"
       >
         <input
           ref={fileInput}
@@ -252,18 +252,18 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
                         <img src={m.preview} alt="Vista previa" className={`w-full object-cover ${media.length === 1 ? "max-h-72" : "aspect-square"}`} />
                       )}
                       {!m.url && (
-                        <div className="absolute inset-0 flex items-center justify-center gap-2 bg-white/70 text-sm font-semibold">
+                        <div className="absolute inset-0 flex items-center justify-center gap-2 bg-card/70 text-sm font-semibold">
                           <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Subiendo…
                         </div>
                       )}
                       {m.type === "video" && media.length > 1 && (
-                        <span className="absolute bottom-1.5 left-1.5 rounded-md bg-ink/70 px-1.5 py-0.5 text-[11px] font-semibold text-white">Vídeo</span>
+                        <span className="absolute bottom-1.5 left-1.5 rounded-md bg-black/70 px-1.5 py-0.5 text-[11px] font-semibold text-white">Vídeo</span>
                       )}
                       <button
                         type="button"
                         onClick={() => setMedia((all) => all.filter((x) => x.preview !== m.preview))}
                         aria-label="Quitar archivo"
-                        className="absolute right-1.5 top-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow hover:bg-white"
+                        className="absolute right-1.5 top-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-card/90 text-ink shadow hover:bg-card"
                       >
                         <X className="h-4 w-4" aria-hidden />
                       </button>
@@ -323,7 +323,7 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
                 type="button"
                 onClick={publish}
                 disabled={!canPublish || publishing}
-                className="mt-4 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand-600 font-semibold text-white transition-colors hover:bg-brand-700 disabled:cursor-not-allowed disabled:bg-page disabled:text-ink-subtle"
+                className="mt-4 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand-600 font-semibold text-on-brand transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:bg-page disabled:text-ink-subtle"
               >
                 {publishing && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
                 Publicar
@@ -378,7 +378,7 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
               <button
                 type="button"
                 onClick={() => gifInput.current?.click()}
-                className="mt-5 min-h-11 rounded-full bg-brand-600 px-6 font-semibold text-white hover:bg-brand-700"
+                className="mt-5 min-h-11 rounded-full bg-brand-600 px-6 font-semibold text-on-brand hover:bg-brand-hover"
               >
                 Elegir GIF
               </button>
@@ -439,7 +439,7 @@ function SearchField({ value, onChange, placeholder }: { value: string; onChange
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="h-11 w-full rounded-full bg-page pl-10 pr-4 text-[15px] placeholder:text-ink-subtle focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600/30"
+        className="h-11 w-full rounded-full bg-page pl-10 pr-4 text-[15px] placeholder:text-ink-subtle focus:bg-card focus:outline-none focus:ring-2 focus:ring-brand-600/30"
       />
     </label>
   );
@@ -536,13 +536,13 @@ function TagPanel({ value, onBack, onDone }: { value: Author[]; onBack: () => vo
                     <span className="block truncate font-semibold">{a.name}</span>
                     {a.headline && <span className="block truncate text-[13px] text-ink-muted">{a.headline}</span>}
                   </span>
-                  {on && <Check className="h-5 w-5 text-brand-600" aria-hidden />}
+                  {on && <Check className="h-5 w-5 text-brand-700" aria-hidden />}
                 </button>
               </li>
             );
           })}
         </ul>
-        <button type="button" onClick={() => onDone(selected)} className="mt-3 min-h-11 rounded-xl bg-brand-600 font-semibold text-white hover:bg-brand-700">
+        <button type="button" onClick={() => onDone(selected)} className="mt-3 min-h-11 rounded-xl bg-brand-600 font-semibold text-on-brand hover:bg-brand-hover">
           Listo
         </button>
       </div>
@@ -711,19 +711,19 @@ function CameraPanel({ onBack, onRecorded }: { onBack: () => void; onRecorded: (
             <video ref={videoRef} autoPlay muted playsInline className="aspect-video w-full object-cover" />
             {recording && (
               <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-danger px-2.5 py-1 text-xs font-bold text-white">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-white" /> REC 0:{String(seconds).padStart(2, "0")}
+                <span className="h-2 w-2 animate-pulse rounded-full bg-card" /> REC 0:{String(seconds).padStart(2, "0")}
               </span>
             )}
           </div>
         )}
         <div className="mt-4 flex justify-center">
           {recording ? (
-            <button type="button" onClick={stop} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-6 font-semibold text-white">
+            <button type="button" onClick={stop} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-6 font-semibold text-inverse">
               <Square className="h-4 w-4 fill-current" aria-hidden /> Detener y añadir
             </button>
           ) : (
             <button type="button" onClick={start} disabled={!!error} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-danger px-6 font-semibold text-white disabled:opacity-50">
-              <span className="h-3 w-3 rounded-full bg-white" aria-hidden /> Empezar a grabar
+              <span className="h-3 w-3 rounded-full bg-card" aria-hidden /> Empezar a grabar
             </button>
           )}
         </div>

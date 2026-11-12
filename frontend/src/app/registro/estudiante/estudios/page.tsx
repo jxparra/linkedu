@@ -81,7 +81,7 @@ export default function EstudianteEstudios() {
               aria-pressed={course === c}
               onClick={() => setCourse(course === c ? null : c)}
               className={`h-11 min-w-11 rounded-full border px-4 text-[15px] font-medium transition-colors ${
-                course === c ? "border-brand-600 bg-brand-600 text-white" : "border-line hover:border-ink-subtle"
+                course === c ? "border-brand-600 bg-brand-600 text-on-brand" : "border-line hover:border-ink-subtle"
               }`}
             >
               {c}º

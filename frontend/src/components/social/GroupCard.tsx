@@ -51,7 +51,7 @@ export function GroupCard({ group, dismissible = false }: { group: Group; dismis
 
   if (dismissed) {
     return (
-      <div className="flex h-full min-h-[200px] flex-col items-center justify-center gap-1 rounded-card border border-dashed border-line bg-white p-6 text-center">
+      <div className="flex h-full min-h-[200px] flex-col items-center justify-center gap-1 rounded-card border border-dashed border-line bg-card p-6 text-center">
         <p className="font-semibold">Has quitado «{group.name}»</p>
         <p className="text-sm text-ink-muted">No volverá a salir en tus sugerencias.</p>
         <button type="button" onClick={() => dismiss(true)} className="mt-1 min-h-11 px-3 font-semibold text-brand-700">
@@ -62,7 +62,7 @@ export function GroupCard({ group, dismissible = false }: { group: Group; dismis
   }
 
   return (
-    <article className="relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+    <article className="relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-card shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
       <Link href={href} tabIndex={-1} aria-hidden className="block">
         <GroupCover src={group.cover_url} topic={coverTopic(group)} className="aspect-[16/9] w-full" />
       </Link>
@@ -120,7 +120,7 @@ export function GroupCard({ group, dismissible = false }: { group: Group; dismis
 
 export function GroupCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-card border border-line bg-white">
+    <div className="overflow-hidden rounded-card border border-line bg-card">
       <div className="aspect-[16/9] w-full animate-pulse bg-page" />
       <div className="space-y-2 p-4">
         <div className="h-4 w-2/3 animate-pulse rounded bg-page" />

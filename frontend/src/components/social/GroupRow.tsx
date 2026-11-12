@@ -64,7 +64,7 @@ export function GroupRow({
     if (el) el.scrollBy({ left: dir * el.clientWidth * 0.9, behavior: "smooth" });
   };
 
-  const arrow = "absolute top-[28%] z-10 hidden h-12 w-12 items-center justify-center rounded-full border border-line bg-white text-ink shadow-md transition-colors hover:bg-page sm:flex";
+  const arrow = "absolute top-[28%] z-10 hidden h-12 w-12 items-center justify-center rounded-full border border-line bg-card text-ink shadow-md transition-colors hover:bg-page sm:flex";
   const card = "w-[82%] shrink-0 snap-start sm:w-[calc((100%-16px)/2)] xl:w-[calc((100%-32px)/3)]";
 
   return (

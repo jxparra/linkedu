@@ -25,7 +25,7 @@ const SLUGS: Record<string, Section> = { "para-ti": "for_you", cerca: "nearby", 
 
 function Retry({ onRetry }: { onRetry: () => void }) {
   return (
-    <div className="rounded-card border border-line bg-white p-6 text-center">
+    <div className="rounded-card border border-line bg-card p-6 text-center">
       <p className="text-ink-muted">No hemos podido cargar las sugerencias.</p>
       <button type="button" onClick={onRetry} className="mt-3 inline-flex min-h-11 items-center gap-2 font-semibold text-brand-700">
         <RotateCcw className="h-4 w-4" aria-hidden /> Reintentar
@@ -61,7 +61,7 @@ function FullSection({ section }: { section: Section }) {
         {groups === null && !error && [0, 1, 2, 3, 4, 5].map((i) => <GroupCardSkeleton key={i} />)}
         {groups?.map((g) => <GroupCard key={g.id} group={g} dismissible />)}
       </div>
-      {groups?.length === 0 && <p className="rounded-card border border-line bg-white p-8 text-center text-ink-muted">No hay más grupos en este apartado.</p>}
+      {groups?.length === 0 && <p className="rounded-card border border-line bg-card p-8 text-center text-ink-muted">No hay más grupos en este apartado.</p>}
     </div>
   );
 }
@@ -100,7 +100,7 @@ function Suggestions() {
         href="/social?ver=para-ti"
         groups={data?.for_you ?? null}
         empty={
-          <div className="flex items-center gap-4 rounded-card border border-line bg-white p-5">
+          <div className="flex items-center gap-4 rounded-card border border-line bg-card p-5">
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
               <Compass className="h-6 w-6" aria-hidden />
             </span>
@@ -119,7 +119,7 @@ function Suggestions() {
           {data === null ? [0, 1, 2].map((i) => <GroupCardSkeleton key={i} />) : data.more.map((g) => <GroupCard key={g.id} group={g} dismissible />)}
         </div>
         {data?.more.length === 0 && (
-          <p className="rounded-card border border-line bg-white p-6 text-center text-ink-muted">Ya has visto todos los grupos. ¿Por qué no creas uno?</p>
+          <p className="rounded-card border border-line bg-card p-6 text-center text-ink-muted">Ya has visto todos los grupos. ¿Por qué no creas uno?</p>
         )}
       </section>
     </div>

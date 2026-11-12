@@ -35,7 +35,7 @@ export function SettingsNav({ user }: { user: User | null }) {
   const current = path === "/ajustes/idioma" ? "/ajustes" : path;
 
   return (
-    <nav aria-label={t("Ajustes")} className="rounded-card border border-line bg-white py-4">
+    <nav aria-label={t("Ajustes")} className="rounded-card border border-line bg-card py-4">
       <div className="mb-3 flex items-center gap-3 px-4">
         <Avatar name={name || "?"} src={avatar} size="md" square={user?.role === "company"} />
         <h1 className="text-[28px] font-semibold">{t("Ajustes")}</h1>
@@ -63,7 +63,7 @@ export function SettingsNav({ user }: { user: User | null }) {
 /** Tarjeta con un título y filas. */
 export function SettingsCard({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="overflow-hidden rounded-card border border-line bg-white">
+    <section className="overflow-hidden rounded-card border border-line bg-card">
       <h2 className="px-6 pb-2 pt-5 text-xl font-semibold">{title}</h2>
       <ul>{children}</ul>
     </section>

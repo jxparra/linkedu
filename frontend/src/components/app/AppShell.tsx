@@ -55,7 +55,7 @@ export function AppShell({
             </div>
           </aside>
         )}
-        <main className="min-w-0">{user ? children(user) : <div className="h-64 animate-pulse rounded-card bg-white" />}</main>
+        <main className="min-w-0">{user ? children(user) : <div className="h-64 animate-pulse rounded-card bg-card" />}</main>
         {!wide && !bare && (
           <aside className="hidden xl:block">
             <div className="sticky top-[88px]">

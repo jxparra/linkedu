@@ -191,7 +191,7 @@ function CommentItem({
               <MoreHorizontal className="h-[18px] w-[18px]" aria-hidden />
             </button>
             {menu && (
-              <div role="menu" className="absolute right-0 top-9 z-20 w-60 overflow-hidden rounded-xl border border-line bg-white py-1 shadow-xl sm:left-0 sm:right-auto">
+              <div role="menu" className="absolute right-0 top-9 z-20 w-60 overflow-hidden rounded-xl border border-line bg-card py-1 shadow-xl sm:left-0 sm:right-auto">
                 <button role="menuitem" type="button" onClick={() => { setMenu(false); setHidden(true); }} className="flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-sm hover:bg-page">
                   <EyeOff className="h-4 w-4" aria-hidden /> Ocultar comentario
                 </button>
@@ -221,7 +221,7 @@ function CommentItem({
             aria-pressed={liked}
             className={`${link} inline-flex items-center gap-1 ${liked ? "text-brand-700" : "hover:text-ink"}`}
           >
-            <ThumbsUp key={pop} className={`h-3.5 w-3.5 ${liked ? "fill-brand-600 text-brand-600" : ""} ${pop && liked ? "animate-like-pop" : ""}`} aria-hidden />
+            <ThumbsUp key={pop} className={`h-3.5 w-3.5 ${liked ? "fill-brand-600 text-brand-700" : ""} ${pop && liked ? "animate-like-pop" : ""}`} aria-hidden />
             Me gusta
           </button>
           <button type="button" onClick={() => onReply(comment.is_mine ? "" : firstName)} className={`${link} hover:text-ink`}>
@@ -233,7 +233,7 @@ function CommentItem({
           {likes > 0 && (
             <span className="inline-flex items-center gap-1 font-semibold text-brand-700" aria-label={`${likes} me gusta`}>
               <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-brand-600">
-                <ThumbsUp className="h-2.5 w-2.5 fill-white text-white" aria-hidden />
+                <ThumbsUp className="h-2.5 w-2.5 fill-on-brand text-on-brand" aria-hidden />
               </span>
               {likes}
             </span>

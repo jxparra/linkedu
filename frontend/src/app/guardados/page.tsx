@@ -40,7 +40,7 @@ function Saved() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-ink text-white">
+        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-ink text-inverse">
           <Bookmark className="h-5 w-5 fill-white" aria-hidden />
         </span>
         <div>
@@ -50,7 +50,7 @@ function Saved() {
       </div>
 
       {error && (
-        <div className="rounded-card border border-line bg-white p-6 text-center">
+        <div className="rounded-card border border-line bg-card p-6 text-center">
           <p className="text-ink-muted">No hemos podido cargar tus guardados.</p>
           <button type="button" onClick={load} className="mt-3 inline-flex min-h-11 items-center gap-2 font-semibold text-brand-700">
             <RotateCcw className="h-4 w-4" aria-hidden /> Reintentar
@@ -58,10 +58,10 @@ function Saved() {
         </div>
       )}
 
-      {posts === null && !error && [0, 1].map((i) => <div key={i} className="h-56 animate-pulse rounded-card border border-line bg-white" />)}
+      {posts === null && !error && [0, 1].map((i) => <div key={i} className="h-56 animate-pulse rounded-card border border-line bg-card" />)}
 
       {posts && visible.length === 0 && removed.length === 0 && (
-        <div className="rounded-card border border-line bg-white p-10 text-center">
+        <div className="rounded-card border border-line bg-card p-10 text-center">
           <Bookmark className="mx-auto h-10 w-10 text-ink-subtle" aria-hidden />
           <h2 className="mt-3 text-lg font-semibold">No tienes nada guardado</h2>
           <p className="mx-auto mt-1 max-w-sm text-ink-muted">
@@ -75,7 +75,7 @@ function Saved() {
 
       {posts?.map((p) =>
         removed.includes(p.id) ? (
-          <div key={p.id} className="flex items-center justify-between rounded-card border border-line bg-white px-4 py-3 text-sm text-ink-muted">
+          <div key={p.id} className="flex items-center justify-between rounded-card border border-line bg-card px-4 py-3 text-sm text-ink-muted">
             Quitada de guardados
             <button type="button" onClick={() => undo(p)} className="min-h-11 px-2 font-semibold text-brand-700">
               Deshacer

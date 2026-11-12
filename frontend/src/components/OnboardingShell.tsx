@@ -36,7 +36,7 @@ export function OnboardingShell({
   };
 
   return (
-    <main className="min-h-screen bg-white px-4 py-6">
+    <main className="min-h-screen bg-card px-4 py-6">
       <div className="mx-auto w-full max-w-[480px]">
         <div
           className="h-1 w-full overflow-hidden rounded-full bg-line"

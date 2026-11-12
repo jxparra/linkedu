@@ -25,7 +25,7 @@ export function Field({ label, error, hint, type = "text", className = "", ...re
           type={isPassword && show ? "text" : type}
           aria-invalid={!!error}
           aria-describedby={error ? `${id}-error` : hint ? `${id}-hint` : undefined}
-          className={`h-12 w-full rounded-input border bg-white px-3.5 text-[15px] text-ink placeholder:text-ink-subtle transition-colors focus:outline-none focus:ring-2 ${
+          className={`h-12 w-full rounded-input border bg-card px-3.5 text-[15px] text-ink placeholder:text-ink-subtle transition-colors focus:outline-none focus:ring-2 ${
             error
               ? "border-danger focus:ring-danger/20"
               : "border-line hover:border-ink-subtle focus:border-brand-600 focus:ring-brand-600/20"

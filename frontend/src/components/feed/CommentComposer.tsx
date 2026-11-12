@@ -149,7 +149,7 @@ export const CommentComposer = forwardRef<HTMLTextAreaElement | null, Props>(fun
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={image.url ? mediaUrl(image.url) : image.preview} alt="Imagen adjunta" className="max-h-32 rounded-xl" />
               {uploading && (
-                <span className="absolute inset-0 flex items-center justify-center rounded-xl bg-white/60">
+                <span className="absolute inset-0 flex items-center justify-center rounded-xl bg-card/60">
                   <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
                 </span>
               )}
@@ -157,7 +157,7 @@ export const CommentComposer = forwardRef<HTMLTextAreaElement | null, Props>(fun
                 type="button"
                 onClick={() => setImage(null)}
                 aria-label="Quitar imagen"
-                className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-ink text-white"
+                className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-ink text-inverse"
               >
                 <X className="h-4 w-4" aria-hidden />
               </button>
@@ -170,7 +170,7 @@ export const CommentComposer = forwardRef<HTMLTextAreaElement | null, Props>(fun
                   <Smile className="h-[18px] w-[18px]" aria-hidden />
                 </button>
                 {emojiOpen && (
-                  <div className="absolute bottom-10 left-0 z-30 grid w-64 grid-cols-8 gap-0.5 rounded-xl border border-line bg-white p-2 shadow-xl">
+                  <div className="absolute bottom-10 left-0 z-30 grid w-64 grid-cols-8 gap-0.5 rounded-xl border border-line bg-card p-2 shadow-xl">
                     {EMOJIS.map((e) => (
                       <button key={e} type="button" onClick={() => insert(e)} className="flex h-7 w-7 items-center justify-center rounded-md text-lg hover:bg-page" aria-label={`Emoji ${e}`}>
                         {e}
@@ -212,7 +212,7 @@ export const CommentComposer = forwardRef<HTMLTextAreaElement | null, Props>(fun
               onClick={send}
               disabled={!canSend}
               aria-label={parentId ? "Enviar respuesta" : "Enviar comentario"}
-              className="flex h-8 w-8 items-center justify-center rounded-full text-brand-600 hover:bg-brand-50 disabled:text-ink-subtle disabled:hover:bg-transparent"
+              className="flex h-8 w-8 items-center justify-center rounded-full text-brand-700 hover:bg-brand-50 disabled:text-ink-subtle disabled:hover:bg-transparent"
             >
               {sending ? <Loader2 className="h-[18px] w-[18px] animate-spin" aria-hidden /> : <SendHorizontal className="h-[18px] w-[18px]" aria-hidden />}
             </button>

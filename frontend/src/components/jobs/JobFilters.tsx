@@ -88,7 +88,7 @@ export function JobFilters({
   );
 
   return (
-    <div className="rounded-card border border-line bg-white px-4">
+    <div className="rounded-card border border-line bg-card px-4">
       <div className="flex items-center justify-between border-b border-line py-3">
         <h2 className="text-lg font-semibold">Filtros</h2>
         {activeFilters(filters) > 0 && (

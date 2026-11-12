@@ -23,7 +23,7 @@ export function SideNav({ user }: { user: User | null }) {
 
   return (
     <nav aria-label="Secciones" className="space-y-1">
-      <Link href="/perfil" className={`${item} mb-3 hover:bg-white`}>
+      <Link href="/perfil" className={`${item} mb-3 hover:bg-card`}>
         <Avatar name={name || "?"} size="sm" square={user?.role === "company"} />
         <span className="min-w-0 truncate">{name}</span>
       </Link>
@@ -34,7 +34,7 @@ export function SideNav({ user }: { user: User | null }) {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`${item} ${active ? "bg-brand-50 text-brand-700" : "text-ink hover:bg-white"}`}
+            className={`${item} ${active ? "bg-brand-50 text-brand-700" : "text-ink hover:bg-card"}`}
           >
             <Icon className="h-6 w-6" aria-hidden />
             {t(label)}

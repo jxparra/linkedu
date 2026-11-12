@@ -54,7 +54,7 @@ function Forums() {
 
   return (
     <div className="space-y-4">
-      <section className="rounded-card border border-line bg-white p-5">
+      <section className="rounded-card border border-line bg-card p-5">
         <h1 className="text-2xl font-bold">Foros</h1>
         <p className="mt-1 text-ink-muted">Las comunidades de tus estudios, de tu centro y de temas que interesan a cualquier estudiante.</p>
         <form role="search" onSubmit={submit} className="relative mt-4">
@@ -82,7 +82,7 @@ function Forums() {
       ) : (
         <>
           {mine.length > 0 && (
-            <section className="rounded-card border border-line bg-white p-3">
+            <section className="rounded-card border border-line bg-card p-3">
               <div className="flex items-baseline justify-between gap-2 px-2 pb-1 pt-1">
                 <h2 className="text-lg font-semibold">{q ? "Tus foros que coinciden" : "Tus foros"}</h2>
                 <span className="text-sm text-ink-muted">{mine.length}</span>
@@ -107,7 +107,7 @@ function Forums() {
           <section>
             <h2 className="px-1 pb-3 text-lg font-semibold">{q ? `Resultados para «${q}»` : "Foros para ti"}</h2>
             {data.suggested.length === 0 ? (
-              <p className="rounded-card border border-line bg-white p-8 text-center text-ink-muted">
+              <p className="rounded-card border border-line bg-card p-8 text-center text-ink-muted">
                 {q ? "No hay más foros con ese nombre." : "Ya estás en todos los foros. ¡Bien hecho!"}
               </p>
             ) : (
@@ -121,7 +121,7 @@ function Forums() {
               <button
                 type="button"
                 onClick={() => setShownSuggested((n) => n + SUGGESTED_STEP)}
-                className="mt-4 min-h-11 w-full rounded-lg bg-white text-[15px] font-semibold text-brand-700 ring-1 ring-line hover:bg-page"
+                className="mt-4 min-h-11 w-full rounded-lg bg-card text-[15px] font-semibold text-brand-700 ring-1 ring-line hover:bg-page"
               >
                 Ver más foros
               </button>

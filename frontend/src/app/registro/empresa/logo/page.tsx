@@ -53,7 +53,7 @@ export default function EmpresaLogo() {
           ) : (
             <Building2 className="h-12 w-12 text-ink-subtle" aria-hidden />
           )}
-          <span className="absolute inset-0 flex items-center justify-center bg-ink/50 text-white opacity-0 transition-opacity group-hover:opacity-100">
+          <span className="absolute inset-0 flex items-center justify-center bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100">
             <Camera className="h-6 w-6" aria-hidden />
           </span>
         </button>

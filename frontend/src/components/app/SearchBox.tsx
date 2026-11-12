@@ -55,14 +55,14 @@ export function SearchBox({ open, onOpenChange }: { open: boolean; onOpenChange:
         <div
           aria-hidden
           onClick={close}
-          className="fixed inset-0 z-30 bg-ink/45 backdrop-blur-[1px] transition-opacity"
+          className="fixed inset-0 z-30 bg-black/45 backdrop-blur-[1px] transition-opacity"
           data-testid="search-overlay"
         />
       )}
       <div
         className={`${
           open
-            ? "fixed inset-x-0 top-0 z-40 bg-white p-3 md:absolute md:inset-x-auto md:left-[68px] md:top-3 md:w-[420px] md:rounded-card md:p-2 md:shadow-xl"
+            ? "fixed inset-x-0 top-0 z-40 bg-card p-3 md:absolute md:inset-x-auto md:left-[68px] md:top-3 md:w-[420px] md:rounded-card md:p-2 md:shadow-xl"
             : "relative hidden w-72 md:block"
         }`}
       >
@@ -86,7 +86,7 @@ export function SearchBox({ open, onOpenChange }: { open: boolean; onOpenChange:
               onFocus={() => onOpenChange(true)}
               placeholder="Buscar personas, foros, empleo…"
               className={`h-10 w-full rounded-full border pl-10 pr-10 text-[15px] placeholder:text-ink-subtle focus:outline-none ${
-                open ? "border-brand-600 bg-white ring-2 ring-brand-600/20" : "border-transparent bg-field text-field-text placeholder:!text-field-text hover:bg-field-hover"
+                open ? "border-brand-600 bg-card ring-2 ring-brand-600/20" : "border-transparent bg-field text-field-text placeholder:!text-field-text hover:bg-field-hover"
               }`}
             />
             {q && (
@@ -127,7 +127,7 @@ export function SearchBox({ open, onOpenChange }: { open: boolean; onOpenChange:
                   {results.communities.map((c) => (
                     <li key={c.id}>
                       <Link href={`/social/grupo/${c.id}`} onClick={close} className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-page">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
                           <MessagesSquare className="h-4 w-4" aria-hidden />
                         </span>
                         <span className="min-w-0">

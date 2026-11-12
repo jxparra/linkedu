@@ -34,7 +34,7 @@ import {
  * Las claves son las de backend/app/services/groups.py (TOPICS).
  */
 export const TOPIC_STYLE: Record<string, { icon: LucideIcon; from: string; to: string }> = {
-  programacion: { icon: Code2, from: "#1F3FB8", to: "#2952E3" },
+  programacion: { icon: Code2, from: "#111111", to: "#FF6B4A" },
   tecnologia: { icon: Cpu, from: "#312E81", to: "#4F46E5" },
   diseno: { icon: Palette, from: "#9D174D", to: "#DB2777" },
   salud: { icon: HeartPulse, from: "#B91C1C", to: "#EF4444" },
@@ -50,17 +50,17 @@ export const TOPIC_STYLE: Record<string, { icon: LucideIcon; from: string; to: s
   viajes: { icon: Plane, from: "#0369A1", to: "#38BDF8" },
   pisos: { icon: House, from: "#92400E", to: "#F59E0B" },
   idiomas: { icon: Languages, from: "#0F766E", to: "#2DD4BF" },
-  estudio: { icon: Library, from: "#1F3FB8", to: "#60A5FA" },
-  empleo: { icon: Briefcase, from: "#14161F", to: "#2952E3" },
+  estudio: { icon: Library, from: "#0F766E", to: "#2EC4B6" },
+  empleo: { icon: Briefcase, from: "#111111", to: "#2EC4B6" },
   voluntariado: { icon: HandHeart, from: "#BE123C", to: "#FB7185" },
   fotografia: { icon: Camera, from: "#374151", to: "#9CA3AF" },
   cocina: { icon: ChefHat, from: "#B45309", to: "#FBBF24" },
   lectura: { icon: BookOpen, from: "#78350F", to: "#D97706" },
   arte: { icon: Brush, from: "#A21CAF", to: "#F472B6" },
   // Foros (comunidades de estudios, de centros y generales): no tienen temática
-  "foro-degree": { icon: GraduationCap, from: "#1F3FB8", to: "#2952E3" },
-  "foro-school": { icon: School, from: "#0F766E", to: "#2952E3" },
-  "foro-general": { icon: MessagesSquare, from: "#14161F", to: "#2952E3" },
+  "foro-degree": { icon: GraduationCap, from: "#6D28D9", to: "#A78BFA" },
+  "foro-school": { icon: School, from: "#0F766E", to: "#2EC4B6" },
+  "foro-general": { icon: MessagesSquare, from: "#111111", to: "#8B5CF6" },
 };
 
 /** Los foros son comunidades de tipo degree | school | general. Los grupos de Social son type "group". */
@@ -80,7 +80,7 @@ export function coverTopic(g: { topic: string | null; type?: string | null }): s
   return g.topic ?? (isForum(g.type) ? `foro-${g.type}` : null);
 }
 
-export const DEFAULT_TOPIC_STYLE = { icon: Users, from: "#1F3FB8", to: "#5B6070" };
+export const DEFAULT_TOPIC_STYLE = { icon: Users, from: "#E5482A", to: "#FF8466" };
 
 export function topicStyle(topic: string | null | undefined) {
   return (topic && TOPIC_STYLE[topic]) || DEFAULT_TOPIC_STYLE;

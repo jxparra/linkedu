@@ -48,7 +48,7 @@ const EMPTY: Form = {
 };
 
 const inputCls =
-  "w-full rounded-input border border-line bg-white px-3.5 text-[15px] text-ink placeholder:text-ink-subtle transition-colors hover:border-ink-subtle focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20";
+  "w-full rounded-input border border-line bg-card px-3.5 text-[15px] text-ink placeholder:text-ink-subtle transition-colors hover:border-ink-subtle focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20";
 
 function Label({ htmlFor, children, optional }: { htmlFor?: string; children: ReactNode; optional?: boolean }) {
   return (
@@ -162,7 +162,7 @@ function JobForm({ initial, editId }: { initial: Form; editId: number | null }) 
 
   return (
     <form onSubmit={submit} noValidate className="space-y-4">
-      <section className="space-y-4 rounded-card border border-line bg-white p-5 sm:p-6">
+      <section className="space-y-4 rounded-card border border-line bg-card p-5 sm:p-6">
         <h2 className="text-lg font-semibold">El puesto</h2>
         <Field label="Puesto" value={f.title} onChange={(e) => set("title", e.target.value)} placeholder="Ej.: Camarero/a fines de semana" maxLength={150} error={errors.title} />
         <div className="grid gap-4 sm:grid-cols-2">
@@ -176,7 +176,7 @@ function JobForm({ initial, editId }: { initial: Form; editId: number | null }) 
         </div>
       </section>
 
-      <section className="space-y-4 rounded-card border border-line bg-white p-5 sm:p-6">
+      <section className="space-y-4 rounded-card border border-line bg-card p-5 sm:p-6">
         <h2 className="text-lg font-semibold">Dónde</h2>
         <fieldset>
           <legend className="mb-1.5 text-sm font-medium">Modalidad</legend>
@@ -206,7 +206,7 @@ function JobForm({ initial, editId }: { initial: Form; editId: number | null }) 
         </div>
       </section>
 
-      <section className="space-y-4 rounded-card border border-line bg-white p-5 sm:p-6">
+      <section className="space-y-4 rounded-card border border-line bg-card p-5 sm:p-6">
         <h2 className="text-lg font-semibold">Condiciones</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
@@ -235,7 +235,7 @@ function JobForm({ initial, editId }: { initial: Form; editId: number | null }) 
         <p className="-mt-2 text-[13px] text-ink-muted">Se recomendará la oferta a quienes estudian esto.</p>
       </section>
 
-      <section className="space-y-4 rounded-card border border-line bg-white p-5 sm:p-6">
+      <section className="space-y-4 rounded-card border border-line bg-card p-5 sm:p-6">
         <h2 className="text-lg font-semibold">Descripción</h2>
         <div>
           <Label htmlFor="desc">Qué hay que hacer</Label>
@@ -294,7 +294,7 @@ function Publicar({ user }: { user: User }) {
 
   if (user.role !== "company") {
     return (
-      <div className="rounded-card border border-line bg-white p-10 text-center">
+      <div className="rounded-card border border-line bg-card p-10 text-center">
         <h1 className="text-xl font-semibold">Publicar ofertas es para empresas</h1>
         <p className="mt-1 text-ink-muted">Con tu cuenta de estudiante puedes buscar ofertas e inscribirte.</p>
         <Link href="/empleo" className="mt-4 inline-flex min-h-11 items-center font-semibold text-brand-700">
@@ -311,7 +311,7 @@ function Publicar({ user }: { user: User }) {
         {editId ? "Volver a la oferta" : "Mis ofertas"}
       </Link>
       <h1 className="text-[28px] font-semibold">{editId ? "Editar oferta" : "Publicar una oferta"}</h1>
-      {error ? <ErrorBanner message={error} /> : initial ? <JobForm initial={initial} editId={editId} /> : <div className="h-96 animate-pulse rounded-card bg-white" />}
+      {error ? <ErrorBanner message={error} /> : initial ? <JobForm initial={initial} editId={editId} /> : <div className="h-96 animate-pulse rounded-card bg-card" />}
     </div>
   );
 }

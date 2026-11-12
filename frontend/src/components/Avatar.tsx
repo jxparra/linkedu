@@ -26,7 +26,7 @@ export function Avatar({
     <span
       aria-hidden
       className={`${sizes[size]} ${shape} flex shrink-0 items-center justify-center font-semibold ${
-        square ? "bg-ink text-white" : "bg-brand-50 text-brand-700"
+        square ? "bg-ink text-inverse" : "bg-brand-50 text-brand-700"
       }`}
     >
       {initials || "?"}

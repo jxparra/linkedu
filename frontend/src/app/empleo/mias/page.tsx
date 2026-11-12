@@ -12,11 +12,11 @@ import { timeAgo } from "@/lib/time";
 
 function Empty({ title, text, href, cta }: { title: string; text: string; href: string; cta: string }) {
   return (
-    <div className="rounded-card border border-line bg-white p-10 text-center">
+    <div className="rounded-card border border-line bg-card p-10 text-center">
       <Briefcase className="mx-auto h-8 w-8 text-ink-subtle" aria-hidden />
       <h2 className="mt-3 text-lg font-semibold">{title}</h2>
       <p className="mt-1 text-ink-muted">{text}</p>
-      <Link href={href} className="mt-4 inline-flex min-h-11 items-center rounded-full bg-brand-600 px-6 font-semibold text-white hover:bg-brand-700">
+      <Link href={href} className="mt-4 inline-flex min-h-11 items-center rounded-full bg-brand-600 px-6 font-semibold text-on-brand hover:bg-brand-hover">
         {cta}
       </Link>
     </div>
@@ -51,7 +51,7 @@ function MyApplications() {
               aria-pressed={filter === s}
               onClick={() => setFilter(s)}
               className={`min-h-10 rounded-full border px-4 text-sm font-semibold ${
-                filter === s ? "border-brand-600 bg-brand-50 text-brand-700" : "border-line bg-white hover:border-ink-subtle"
+                filter === s ? "border-brand-600 bg-brand-50 text-brand-700" : "border-line bg-card hover:border-ink-subtle"
               }`}
             >
               {s === "todas" ? `Todas (${items.length})` : `${APPLICATION_STATUS[s].label} (${counts[s]})`}
@@ -94,7 +94,7 @@ function MyJobs() {
           <JobCard job={j} showStatus={false} />
           <Link
             href={`/empleo/${j.id}#candidatos`}
-            className="relative z-10 -mt-2 ml-auto mr-4 flex w-fit items-center gap-1.5 rounded-b-xl border border-t-0 border-line bg-white px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-page"
+            className="relative z-10 -mt-2 ml-auto mr-4 flex w-fit items-center gap-1.5 rounded-b-xl border border-t-0 border-line bg-card px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-page"
           >
             <Users className="h-4 w-4" aria-hidden />
             {j.applicants === 0 ? "Sin candidatos" : `Ver ${j.applicants} ${j.applicants === 1 ? "candidato" : "candidatos"}`}

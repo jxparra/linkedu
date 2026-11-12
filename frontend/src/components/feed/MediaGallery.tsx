@@ -13,7 +13,7 @@ export function MediaGallery({ media, onOpen, full = false }: { media: MediaItem
 
   if (full) {
     return (
-      <div className="space-y-1 bg-ink/95">
+      <div className="space-y-1 bg-black/95">
         {media.map((m, i) => (
           <MediaView key={i} item={m} className="max-h-[70vh] w-full object-contain" controls />
         ))}
@@ -46,14 +46,14 @@ export function MediaGallery({ media, onOpen, full = false }: { media: MediaItem
         >
           <MediaView item={m} className="h-full w-full object-cover" />
           {m.type === "video" && (
-            <span className="absolute inset-0 flex items-center justify-center bg-ink/20">
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-ink shadow-lg">
+            <span className="absolute inset-0 flex items-center justify-center bg-black/20">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-card/90 text-ink shadow-lg">
                 <Play className="ml-1 h-6 w-6 fill-current" aria-hidden />
               </span>
             </span>
           )}
           {extra > 0 && i === shown.length - 1 && (
-            <span className="absolute inset-0 flex items-center justify-center bg-ink/55 text-3xl font-bold text-white">+{extra}</span>
+            <span className="absolute inset-0 flex items-center justify-center bg-black/55 text-3xl font-bold text-white">+{extra}</span>
           )}
         </button>
       ))}

@@ -45,7 +45,7 @@ export function GroupHeader({
 }) {
   const PrivacyIcon = privacy === "private" ? Lock : Globe;
   return (
-    <div className="overflow-hidden rounded-card border border-line bg-white">
+    <div className="overflow-hidden rounded-card border border-line bg-card">
       {placeholder && !cover && !topic ? (
         <div aria-hidden className={`w-full bg-gradient-to-br from-page to-line ${compact ? "aspect-[2/1]" : "aspect-[3/1]"}`} />
       ) : (

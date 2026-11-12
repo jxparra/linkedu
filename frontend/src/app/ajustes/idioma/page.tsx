@@ -20,7 +20,7 @@ function Idioma() {
   };
 
   return (
-    <section className="mx-auto max-w-3xl rounded-card border border-line bg-white p-6 sm:p-8">
+    <section className="mx-auto max-w-3xl rounded-card border border-line bg-card p-6 sm:p-8">
       <Link href="/ajustes" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-ink-muted hover:text-ink">
         <ArrowLeft className="h-4 w-4" aria-hidden />
         {t("Volver")}
@@ -38,7 +38,7 @@ function Idioma() {
         aria-describedby="idioma-desc idioma-help"
         value={lang}
         onChange={(e) => change(e.target.value as Lang)}
-        className="mt-5 h-14 w-full max-w-md rounded-input border border-ink-subtle bg-white px-3.5 text-[17px] hover:border-ink focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+        className="mt-5 h-14 w-full max-w-md rounded-input border border-ink-subtle bg-card px-3.5 text-[17px] hover:border-ink focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
       >
         {LANGS.map((l) => (
           <option key={l.code} value={l.code}>

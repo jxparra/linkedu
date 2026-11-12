@@ -49,7 +49,7 @@ export function PeoplePicker({
           {value.map((p) => (
             <li key={p.id} className="flex items-center gap-1 rounded-full bg-brand-50 py-1 pl-3 pr-1 text-sm font-semibold text-brand-700">
               {p.name}
-              <button type="button" onClick={() => toggle(p)} aria-label={`Quitar a ${p.name}`} className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-white">
+              <button type="button" onClick={() => toggle(p)} aria-label={`Quitar a ${p.name}`} className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-card">
                 <X className="h-3.5 w-3.5" aria-hidden />
               </button>
             </li>
@@ -63,10 +63,10 @@ export function PeoplePicker({
         onChange={(e) => setQ(e.target.value)}
         placeholder="Escribe un nombre o @usuario"
         autoComplete="off"
-        className="h-12 w-full rounded-input border border-line bg-white px-3.5 text-[15px] placeholder:text-ink-subtle hover:border-ink-subtle focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+        className="h-12 w-full rounded-input border border-line bg-card px-3.5 text-[15px] placeholder:text-ink-subtle hover:border-ink-subtle focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
       />
       {results.length > 0 && (
-        <ul className="mt-1 max-h-60 overflow-y-auto rounded-xl border border-line bg-white p-1">
+        <ul className="mt-1 max-h-60 overflow-y-auto rounded-xl border border-line bg-card p-1">
           {results.map((p) => (
             <li key={p.id}>
               <button

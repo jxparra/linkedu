@@ -17,7 +17,7 @@ import { GroupHeader } from "./GroupHeader";
 import { PeoplePicker } from "./PeoplePicker";
 
 const selectCls =
-  "h-12 w-full appearance-none rounded-input border border-line bg-white pl-3.5 pr-10 text-[15px] hover:border-ink-subtle focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20";
+  "h-12 w-full appearance-none rounded-input border border-line bg-card pl-3.5 pr-10 text-[15px] hover:border-ink-subtle focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20";
 
 function SelectField({ label, hint, value, onChange, children }: { label: string; hint?: string; value: string; onChange: (v: string) => void; children: ReactNode }) {
   const id = useId();
@@ -114,7 +114,7 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
 
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[380px_minmax(0,1fr)]">
-      <form onSubmit={submit} className="flex flex-col rounded-card border border-line bg-white lg:sticky lg:top-[88px] lg:max-h-[calc(100vh-112px)]">
+      <form onSubmit={submit} className="flex flex-col rounded-card border border-line bg-card lg:sticky lg:top-[88px] lg:max-h-[calc(100vh-112px)]">
         <div className="space-y-4 overflow-y-auto p-5">
           <nav aria-label="Ruta" className="flex items-center gap-1 text-[13px] text-ink-muted">
             <Link href="/social" className="hover:underline">
@@ -204,7 +204,7 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
               maxLength={1000}
               rows={3}
               placeholder="¿De qué va el grupo? ¿Quién debería unirse?"
-              className="w-full resize-y rounded-input border border-line bg-white px-3.5 py-3 text-[15px] placeholder:text-ink-subtle hover:border-ink-subtle focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+              className="w-full resize-y rounded-input border border-line bg-card px-3.5 py-3 text-[15px] placeholder:text-ink-subtle hover:border-ink-subtle focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
             />
           </div>
 
@@ -245,7 +245,7 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
         </div>
       </form>
 
-      <section aria-label="Vista previa" className="rounded-card border border-line bg-white p-4 sm:p-5">
+      <section aria-label="Vista previa" className="rounded-card border border-line bg-card p-4 sm:p-5">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-semibold">Vista previa para {mobile ? "móvil" : "ordenador"}</h2>
           <div className="flex gap-1" role="group" aria-label="Tamaño de la vista previa">
@@ -284,7 +284,7 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
             tab="informacion"
           />
           <div className={`mt-3 grid gap-3 ${mobile ? "" : "md:grid-cols-[minmax(0,1fr)_240px]"}`}>
-            <div className={`rounded-card border border-line bg-white p-4 ${mobile ? "order-2" : ""}`}>
+            <div className={`rounded-card border border-line bg-card p-4 ${mobile ? "order-2" : ""}`}>
               <div className="flex items-center gap-3">
                 <Avatar name={me || "?"} size="sm" square={user.role === "company"} />
                 <span className="flex-1 truncate rounded-full bg-field px-4 py-2.5 text-[15px] text-field-text">¿Qué quieres compartir?</span>
@@ -295,7 +295,7 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
                 {!mobile && <span>Sentimiento</span>}
               </div>
             </div>
-            <div className="rounded-card border border-line bg-white p-4">
+            <div className="rounded-card border border-line bg-card p-4">
               <p className="font-semibold">Información</p>
               <p className={`mt-1 whitespace-pre-line break-words text-sm ${description.trim() ? "text-ink" : "text-ink-subtle"}`}>
                 {description.trim() || "Aquí saldrá la descripción del grupo."}

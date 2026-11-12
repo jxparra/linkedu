@@ -84,7 +84,7 @@ export function Autocomplete({ label, placeholder, endpoint, value, onChange, er
               pick(options[active]);
             } else if (e.key === "Escape") setOpen(false);
           }}
-          className={`h-12 w-full rounded-input border bg-white pl-10 pr-3.5 text-[15px] placeholder:text-ink-subtle focus:outline-none focus:ring-2 ${
+          className={`h-12 w-full rounded-input border bg-card pl-10 pr-3.5 text-[15px] placeholder:text-ink-subtle focus:outline-none focus:ring-2 ${
             error
               ? "border-danger focus:ring-danger/20"
               : "border-line hover:border-ink-subtle focus:border-brand-600 focus:ring-brand-600/20"
@@ -95,7 +95,7 @@ export function Autocomplete({ label, placeholder, endpoint, value, onChange, er
         <ul
           id={`${id}-list`}
           role="listbox"
-          className="absolute z-10 mt-1 max-h-64 w-full overflow-auto rounded-input border border-line bg-white py-1 shadow-lg"
+          className="absolute z-10 mt-1 max-h-64 w-full overflow-auto rounded-input border border-line bg-card py-1 shadow-lg"
         >
           {options.map((o, i) => (
             <li

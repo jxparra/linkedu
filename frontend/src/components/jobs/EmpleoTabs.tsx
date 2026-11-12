@@ -25,7 +25,7 @@ export function EmpleoTabs({ user }: { user: User }) {
               href={t.href}
               aria-current={active ? "page" : undefined}
               className={`flex min-h-11 items-center rounded-full px-4 text-[15px] font-semibold transition-colors ${
-                active ? "bg-brand-50 text-brand-700" : "text-ink-muted hover:bg-white hover:text-ink"
+                active ? "bg-brand-50 text-brand-700" : "text-ink-muted hover:bg-card hover:text-ink"
               }`}
             >
               {t.label}
@@ -36,7 +36,7 @@ export function EmpleoTabs({ user }: { user: User }) {
       {company && (
         <Link
           href="/empleo/publicar"
-          className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-line bg-white px-4 text-[15px] font-semibold text-ink transition-colors hover:border-ink-subtle"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-line bg-card px-4 text-[15px] font-semibold text-ink transition-colors hover:border-ink-subtle"
         >
           <Plus className="h-4 w-4" aria-hidden />
           Publicar oferta

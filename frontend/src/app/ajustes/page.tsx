@@ -4,6 +4,42 @@ import { AppShell } from "@/components/app/AppShell";
 import { SettingsCard, SettingsNav, SettingsRow } from "@/components/settings/Settings";
 import { logout, type User } from "@/lib/api";
 import { LANGS, useLang, useT } from "@/lib/i18n";
+import { useTheme, type ThemePref } from "@/lib/theme";
+
+const THEMES: { value: ThemePref; label: string }[] = [
+  { value: "light", label: "Claro" },
+  { value: "dark", label: "Oscuro" },
+  { value: "system", label: "Como el sistema" },
+];
+
+/** Modo claro / oscuro / el del sistema, en tres botones */
+function ThemePicker() {
+  const t = useT();
+  const { pref, change } = useTheme();
+  return (
+    <li className="flex flex-wrap items-center justify-between gap-3 px-6 py-3">
+      <span id="tema" className="text-[15px]">
+        {t("Modo oscuro")}
+      </span>
+      <div role="radiogroup" aria-labelledby="tema" className="flex flex-wrap gap-2">
+        {THEMES.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            role="radio"
+            aria-checked={pref === o.value}
+            onClick={() => change(o.value)}
+            className={`min-h-10 rounded-full border px-4 text-sm font-semibold transition-colors ${
+              pref === o.value ? "border-edge bg-ink text-inverse" : "border-line text-ink hover:border-edge"
+            }`}
+          >
+            {t(o.label)}
+          </button>
+        ))}
+      </div>
+    </li>
+  );
+}
 
 /** Ajustes → Preferencias de la cuenta */
 function Cuenta({ user }: { user: User }) {
@@ -19,7 +55,7 @@ function Cuenta({ user }: { user: User }) {
       </SettingsCard>
 
       <SettingsCard title={t("Visualización")}>
-        <SettingsRow label={t("Modo oscuro")} soon />
+        <ThemePicker />
       </SettingsCard>
 
       <SettingsCard title={t("Preferencias generales")}>

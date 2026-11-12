@@ -1,7 +1,7 @@
 # ADR-002 — Paleta: cobalto + ámbar en lugar de rojo
 
 - **Fecha:** 2026-11-05
-- **Estado:** propuesta
+- **Estado:** sustituida por [[decisiones/ADR-010-estetica-carpeta-profesional]] (2026-11-12)
 
 ## Contexto
 El diseño v1 usaba rojo puro (#FF0000) como color principal, con verde y azul también como colores de marca.

@@ -124,12 +124,12 @@ function Search({ user }: { user: User }) {
 
         <section className="min-w-0 space-y-3" aria-live="polite" aria-busy={data === null && !error}>
           <div className="flex flex-wrap items-center justify-between gap-3">
-            {data ? <Heading total={data.total} q={state.q} province={state.province} category={state.filters.category.length === 1 ? state.filters.category[0] : null} /> : <div className="h-7 w-64 animate-pulse rounded bg-white" />}
+            {data ? <Heading total={data.total} q={state.q} province={state.province} category={state.filters.category.length === 1 ? state.filters.category[0] : null} /> : <div className="h-7 w-64 animate-pulse rounded bg-card" />}
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => setShowFilters(true)}
-                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-semibold lg:hidden"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-card px-4 text-sm font-semibold lg:hidden"
               >
                 <SlidersHorizontal className="h-4 w-4" aria-hidden />
                 Filtros{nFilters > 0 && ` (${nFilters})`}
@@ -139,7 +139,7 @@ function Search({ user }: { user: User }) {
                 <select
                   value={state.sort}
                   onChange={(e) => go({ sort: e.target.value })}
-                  className="h-11 rounded-input border border-line bg-white px-3 text-sm font-semibold text-ink hover:border-ink-subtle"
+                  className="h-11 rounded-input border border-line bg-card px-3 text-sm font-semibold text-ink hover:border-ink-subtle"
                 >
                   {Object.entries(SORTS).map(([v, l]) => (
                     <option key={v} value={v}>
@@ -152,7 +152,7 @@ function Search({ user }: { user: User }) {
           </div>
 
           {error && (
-            <div className="rounded-card border border-line bg-white p-6 text-center">
+            <div className="rounded-card border border-line bg-card p-6 text-center">
               <p className="text-ink-muted">No hemos podido cargar las ofertas.</p>
               <button type="button" onClick={load} className="mt-3 inline-flex min-h-11 items-center gap-2 font-semibold text-brand-700">
                 <RotateCcw className="h-4 w-4" aria-hidden /> Reintentar
@@ -163,7 +163,7 @@ function Search({ user }: { user: User }) {
           {data === null && !error && [0, 1, 2].map((i) => <JobCardSkeleton key={i} />)}
 
           {data?.items.length === 0 && (
-            <div className="rounded-card border border-line bg-white p-10 text-center">
+            <div className="rounded-card border border-line bg-card p-10 text-center">
               <SearchX className="mx-auto h-8 w-8 text-ink-subtle" aria-hidden />
               <h2 className="mt-3 text-lg font-semibold">No hay ofertas con esta búsqueda</h2>
               <p className="mt-1 text-ink-muted">Prueba con otras palabras, otra provincia o quita algún filtro.</p>
@@ -188,7 +188,7 @@ function Search({ user }: { user: User }) {
                 disabled={state.page <= 1}
                 onClick={() => go({ page: state.page - 1 })}
                 aria-label="Página anterior"
-                className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-white disabled:opacity-40"
+                className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-card disabled:opacity-40"
               >
                 <ChevronLeft className="h-5 w-5" aria-hidden />
               </button>
@@ -198,7 +198,7 @@ function Search({ user }: { user: User }) {
                   type="button"
                   onClick={() => go({ page: n })}
                   aria-current={n === state.page ? "page" : undefined}
-                  className={`h-11 min-w-11 rounded-full px-2 font-semibold ${n === state.page ? "bg-brand-50 text-brand-700" : "hover:bg-white"}`}
+                  className={`h-11 min-w-11 rounded-full px-2 font-semibold ${n === state.page ? "bg-brand-50 text-brand-700" : "hover:bg-card"}`}
                 >
                   {n}
                 </button>
@@ -208,7 +208,7 @@ function Search({ user }: { user: User }) {
                 disabled={state.page >= data.pages}
                 onClick={() => go({ page: state.page + 1 })}
                 aria-label="Página siguiente"
-                className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-white disabled:opacity-40"
+                className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-card disabled:opacity-40"
               >
                 <ChevronRight className="h-5 w-5" aria-hidden />
               </button>
@@ -222,7 +222,7 @@ function Search({ user }: { user: User }) {
         <div role="dialog" aria-modal="true" aria-label="Filtros" className="fixed inset-0 z-40 overflow-y-auto bg-page p-4 lg:hidden">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-xl font-semibold">Filtros</h2>
-            <button type="button" onClick={() => setShowFilters(false)} aria-label="Cerrar filtros" className="flex h-11 w-11 items-center justify-center rounded-full bg-white">
+            <button type="button" onClick={() => setShowFilters(false)} aria-label="Cerrar filtros" className="flex h-11 w-11 items-center justify-center rounded-full bg-card">
               <X className="h-5 w-5" aria-hidden />
             </button>
           </div>
@@ -230,7 +230,7 @@ function Search({ user }: { user: User }) {
           <button
             type="button"
             onClick={() => setShowFilters(false)}
-            className="mt-4 h-12 w-full rounded-full bg-brand-600 font-semibold text-white"
+            className="mt-4 h-12 w-full rounded-full bg-brand-600 font-semibold text-on-brand"
           >
             Ver {data?.total ?? ""} ofertas
           </button>

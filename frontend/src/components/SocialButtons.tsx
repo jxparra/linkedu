@@ -27,7 +27,7 @@ function MicrosoftIcon() {
 export function SocialButtons() {
   const [notice, setNotice] = useState(false);
   const cls =
-    "flex min-h-11 w-full items-center justify-center gap-3 rounded-full border border-line bg-white px-6 text-[15px] font-medium text-ink transition-colors hover:border-ink-subtle";
+    "flex min-h-11 w-full items-center justify-center gap-3 rounded-full border border-line bg-card px-6 text-[15px] font-medium text-ink transition-colors hover:border-ink-subtle";
   return (
     <div className="space-y-3">
       <button type="button" className={cls} onClick={() => setNotice(true)}>

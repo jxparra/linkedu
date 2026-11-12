@@ -17,10 +17,10 @@ function Edit({ user }: { user: User }) {
       .catch(() => setGroup(false));
   }, [id]);
 
-  if (group === null) return <div className="h-96 animate-pulse rounded-card bg-white" />;
+  if (group === null) return <div className="h-96 animate-pulse rounded-card bg-card" />;
   if (group === false)
     return (
-      <div className="rounded-card border border-line bg-white p-10 text-center">
+      <div className="rounded-card border border-line bg-card p-10 text-center">
         <h1 className="text-xl font-semibold">Solo los administradores pueden editar el grupo</h1>
         <ButtonLink href={`/social/grupo/${id}`} variant="secondary" className="mt-4">
           Volver al grupo

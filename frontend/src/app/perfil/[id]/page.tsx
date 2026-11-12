@@ -71,8 +71,8 @@ function ProfileView({ id, me }: { id: number; me: User }) {
     await api(`/users/${id}/follow`, { method: next ? "POST" : "DELETE" }).catch(() => setProfile(profile));
   };
 
-  if (missing) return <div className="rounded-card border border-line bg-white p-10 text-center text-ink-muted">No encontramos este perfil.</div>;
-  if (!profile) return <div className="h-64 animate-pulse rounded-card bg-white" />;
+  if (missing) return <div className="rounded-card border border-line bg-card p-10 text-center text-ink-muted">No encontramos este perfil.</div>;
+  if (!profile) return <div className="h-64 animate-pulse rounded-card bg-card" />;
 
   const { user } = profile;
   const isCompany = user.role === "company";
@@ -93,11 +93,11 @@ function ProfileView({ id, me }: { id: number; me: User }) {
           onCancel={() => setConfirmUnfollow(false)}
         />
       )}
-      <section className="overflow-hidden rounded-card border border-line bg-white">
-        <div className="h-28 bg-brand-600 sm:h-36" />
+      <section className="overflow-hidden rounded-card border border-line bg-card">
+        <div className="h-28 bg-gradient-to-br from-banner-from to-banner-to sm:h-36" />
         <div className="px-5 pb-5">
           <div className="-mt-12 flex items-end justify-between gap-3">
-            <span className={`border-4 border-white bg-white ${isCompany ? "rounded-[14px]" : "rounded-full"}`}>
+            <span className={`border-4 border-card bg-card ${isCompany ? "rounded-[14px]" : "rounded-full"}`}>
               <Avatar name={user.name} src={user.avatar_url} size="xl" square={isCompany} />
             </span>
             {!profile.is_me && (
@@ -109,7 +109,7 @@ function ProfileView({ id, me }: { id: number; me: User }) {
                   type="button"
                   onClick={() => (profile.followed_by_me ? setConfirmUnfollow(true) : toggleFollow())}
                   className={`inline-flex min-h-11 items-center gap-1.5 rounded-full px-5 font-semibold ${
-                    profile.followed_by_me ? "border border-line hover:border-ink-subtle" : "bg-brand-600 text-white hover:bg-brand-700"
+                    profile.followed_by_me ? "border border-line hover:border-ink-subtle" : "bg-brand-600 text-on-brand hover:bg-brand-hover"
                   }`}
                 >
                   {profile.followed_by_me ? <Check className="h-4 w-4" aria-hidden /> : <Plus className="h-4 w-4" aria-hidden />}
@@ -144,9 +144,9 @@ function ProfileView({ id, me }: { id: number; me: User }) {
       {profile.is_me && <Composer user={me} onPublished={(p) => setPosts((ps) => [p, ...(ps ?? [])])} />}
 
       <h2 className="px-1 pt-2 text-lg font-bold">Publicaciones</h2>
-      {posts === null && <div className="h-40 animate-pulse rounded-card bg-white" />}
+      {posts === null && <div className="h-40 animate-pulse rounded-card bg-card" />}
       {posts?.length === 0 && (
-        <p className="rounded-card border border-line bg-white p-8 text-center text-ink-muted">
+        <p className="rounded-card border border-line bg-card p-8 text-center text-ink-muted">
           {profile.is_me ? "Aún no has publicado nada. ¡Cuéntale algo a tu comunidad!" : "Todavía no ha publicado nada."}
         </p>
       )}

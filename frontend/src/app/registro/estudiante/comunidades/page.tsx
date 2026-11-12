@@ -75,7 +75,7 @@ export default function EstudianteComunidades() {
             const on = selected.has(c.id);
             return (
               <li key={c.id} className="flex items-center gap-4 rounded-card border border-line p-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
                   <Users className="h-5 w-5" aria-hidden />
                 </span>
                 <span className="min-w-0 flex-1">
@@ -87,7 +87,7 @@ export default function EstudianteComunidades() {
                   aria-pressed={on}
                   onClick={() => toggle(c.id)}
                   className={`inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-4 text-sm font-semibold transition-colors ${
-                    on ? "bg-brand-600 text-white hover:bg-brand-700" : "border border-line hover:border-ink-subtle"
+                    on ? "bg-brand-600 text-on-brand hover:bg-brand-hover" : "border border-line hover:border-ink-subtle"
                   }`}
                 >
                   {on ? <Check className="h-4 w-4" aria-hidden /> : <Plus className="h-4 w-4" aria-hidden />}

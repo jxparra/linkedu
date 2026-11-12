@@ -79,7 +79,7 @@ function ApplyDialog({ job, onClose, onDone }: { job: Job; onClose: () => void; 
         aria-modal="true"
         aria-labelledby="apply-title"
         onSubmit={submit}
-        className="w-full max-w-lg rounded-t-card bg-white p-5 shadow-xl sm:rounded-card sm:p-6"
+        className="w-full max-w-lg rounded-t-card bg-card p-5 shadow-xl sm:rounded-card sm:p-6"
       >
         <div className="flex items-start justify-between gap-3">
           <div>
@@ -136,7 +136,7 @@ function Tracker({ job, onWithdraw }: { job: Job; onWithdraw: () => void }) {
   const reached = APPLICATION_STEPS.indexOf(status);
 
   return (
-    <section className="rounded-card border border-line bg-white p-5">
+    <section className="rounded-card border border-line bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-lg font-semibold">Tu candidatura</h2>
         <Chip className={APPLICATION_STATUS[status].cls}>{APPLICATION_STATUS[status].label}</Chip>
@@ -157,7 +157,7 @@ function Tracker({ job, onWithdraw }: { job: Job; onWithdraw: () => void }) {
                   <span className={`h-[3px] flex-1 ${i === 0 ? "invisible" : done ? "bg-brand-600" : "bg-line"}`} />
                   <span
                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold ${
-                      done ? "bg-brand-600 text-white" : "border-2 border-line bg-white text-ink-muted"
+                      done ? "bg-brand-600 text-on-brand" : "border-2 border-line bg-card text-ink-muted"
                     }`}
                   >
                     {done ? <Check className="h-4 w-4" aria-hidden /> : i + 1}
@@ -207,7 +207,7 @@ function Applicants({ jobId }: { jobId: number }) {
   };
 
   return (
-    <section id="candidatos" className="scroll-mt-24 rounded-card border border-line bg-white">
+    <section id="candidatos" className="scroll-mt-24 rounded-card border border-line bg-card">
       <h2 className="border-b border-line px-5 py-4 text-lg font-semibold">
         Candidatos{items && items.length > 0 && <span className="font-normal text-ink-muted"> · {items.length}</span>}
       </h2>
@@ -282,7 +282,7 @@ function Detail({ id, user }: { id: number; user: User }) {
 
   if (missing) {
     return (
-      <div className="rounded-card border border-line bg-white p-10 text-center">
+      <div className="rounded-card border border-line bg-card p-10 text-center">
         <p className="text-ink-muted">{missing}</p>
         <Link href="/empleo" className="mt-4 inline-flex min-h-11 items-center font-semibold text-brand-700">
           Ver otras ofertas
@@ -290,7 +290,7 @@ function Detail({ id, user }: { id: number; user: User }) {
       </div>
     );
   }
-  if (!job) return <div className="h-80 animate-pulse rounded-card bg-white" />;
+  if (!job) return <div className="h-80 animate-pulse rounded-card bg-card" />;
 
   const pay = formatPay(job.pay, job.pay_period);
   const closed = job.status === "cerrada";
@@ -336,7 +336,7 @@ function Detail({ id, user }: { id: number; user: User }) {
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
         <div className="min-w-0 space-y-4">
           {/* Cabecera */}
-          <section className="rounded-card border border-line bg-white p-5 sm:p-6">
+          <section className="rounded-card border border-line bg-card p-5 sm:p-6">
             <div className="flex gap-4">
               <Avatar name={job.company.name} src={job.company.logo_url ? mediaUrl(job.company.logo_url) : null} size="lg" square />
               <div className="min-w-0 flex-1">
@@ -408,7 +408,7 @@ function Detail({ id, user }: { id: number; user: User }) {
           {isStudent && job.my_status && <Tracker job={job} onWithdraw={withdraw} />}
           {job.is_mine && <Applicants jobId={job.id} />}
 
-          <section className="rounded-card border border-line bg-white p-5 sm:p-6">
+          <section className="rounded-card border border-line bg-card p-5 sm:p-6">
             <h2 className="text-lg font-semibold">Descripción de la oferta</h2>
             <p className="mt-2 whitespace-pre-line text-[15px] leading-relaxed">{job.description}</p>
             {job.requirements && (
@@ -429,7 +429,7 @@ function Detail({ id, user }: { id: number; user: User }) {
         </div>
 
         <aside className="space-y-4">
-          <section className="rounded-card border border-line bg-white p-5">
+          <section className="rounded-card border border-line bg-card p-5">
             <h2 className="text-lg font-semibold">Detalles</h2>
             <dl className="mt-3 space-y-3">
               {details.map(({ icon: Icon, label, value }) => (
@@ -444,7 +444,7 @@ function Detail({ id, user }: { id: number; user: User }) {
             </dl>
           </section>
 
-          <section className="rounded-card border border-line bg-white p-5">
+          <section className="rounded-card border border-line bg-card p-5">
             <h2 className="text-lg font-semibold">Sobre la empresa</h2>
             <Link href={`/perfil/${job.company.id}`} className="mt-3 flex items-center gap-3">
               <Avatar name={job.company.name} src={job.company.logo_url ? mediaUrl(job.company.logo_url) : null} square />

@@ -36,7 +36,7 @@ function About({ group, full = false }: { group: Group; full?: boolean }) {
   const PrivacyIcon = group.privacy === "private" ? Lock : Globe;
   const row = "flex gap-3";
   return (
-    <section className="rounded-card border border-line bg-white p-5">
+    <section className="rounded-card border border-line bg-card p-5">
       <h2 className="text-lg font-bold">Información</h2>
       {group.description && <p className={`mt-2 whitespace-pre-line break-words text-[15px] ${full ? "" : "line-clamp-6"}`}>{group.description}</p>}
       <ul className="mt-4 space-y-4 text-[15px]">
@@ -93,7 +93,7 @@ function Members({ group }: { group: Group }) {
 
   if (!group.can_see_content) return <Locked group={group} what="quién está en el grupo" />;
   return (
-    <section className="rounded-card border border-line bg-white p-5">
+    <section className="rounded-card border border-line bg-card p-5">
       <h2 className="text-lg font-bold">
         Miembros <span className="font-normal text-ink-muted">· {group.members}</span>
       </h2>
@@ -113,7 +113,7 @@ function Members({ group }: { group: Group }) {
 
 function Locked({ group, what }: { group: Group; what: string }) {
   return (
-    <div className="rounded-card border border-line bg-white p-10 text-center">
+    <div className="rounded-card border border-line bg-card p-10 text-center">
       <Lock className="mx-auto h-10 w-10 text-ink-subtle" aria-hidden />
       <h2 className="mt-3 text-lg font-semibold">Este grupo es privado</h2>
       <p className="mx-auto mt-1 max-w-sm text-ink-muted">Únete para ver {what}.</p>
@@ -138,9 +138,9 @@ function Posts({ group, user }: { group: Group; user: User }) {
   return (
     <div className="space-y-4">
       {group.is_member && <Composer user={user} community={{ id: group.id, name: group.name }} onPublished={(p) => setPosts((ps) => [p, ...(ps ?? [])])} />}
-      {posts === null && [0, 1].map((i) => <div key={i} className="h-48 animate-pulse rounded-card border border-line bg-white" />)}
+      {posts === null && [0, 1].map((i) => <div key={i} className="h-48 animate-pulse rounded-card border border-line bg-card" />)}
       {posts?.length === 0 && (
-        <div className="rounded-card border border-line bg-white p-8 text-center">
+        <div className="rounded-card border border-line bg-card p-8 text-center">
           <h2 className="text-lg font-semibold">Todavía no hay publicaciones</h2>
           <p className="mt-1 text-ink-muted">{group.is_member ? "Rompe el hielo: preséntate o propón un plan." : "Únete y sé quien publique primero."}</p>
         </div>
@@ -181,7 +181,7 @@ function InviteDialog({ group, onClose }: { group: Group; onClose: () => void })
 
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 p-0 sm:items-center sm:p-4" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <div role="dialog" aria-modal="true" aria-labelledby="invite-title" className="w-full max-w-md rounded-t-2xl bg-white p-5 shadow-xl sm:rounded-2xl">
+      <div role="dialog" aria-modal="true" aria-labelledby="invite-title" className="w-full max-w-md rounded-t-2xl bg-card p-5 shadow-xl sm:rounded-2xl">
         <h2 id="invite-title" className="text-xl font-bold">
           Invitar a «{group.name}»
         </h2>
@@ -247,14 +247,14 @@ function GroupPage({ user }: { user: User }) {
 
   if (error)
     return (
-      <div className="rounded-card border border-line bg-white p-10 text-center">
+      <div className="rounded-card border border-line bg-card p-10 text-center">
         <h1 className="text-xl font-semibold">{error}</h1>
         <ButtonLink href="/social" variant="secondary" className="mt-4">
           Ver sugerencias
         </ButtonLink>
       </div>
     );
-  if (!group) return <div className="h-[420px] animate-pulse rounded-card border border-line bg-white" />;
+  if (!group) return <div className="h-[420px] animate-pulse rounded-card border border-line bg-card" />;
 
   const noun = groupNoun(group.type);
 
@@ -290,7 +290,7 @@ function GroupPage({ user }: { user: User }) {
         <button type="button" onClick={() => setTab("miembros")} className="flex items-center gap-2" aria-label="Ver miembros">
           <span className="flex -space-x-2">
             {group.member_preview.slice(0, 6).map((m) => (
-              <span key={m.id} className="rounded-full ring-2 ring-white">
+              <span key={m.id} className="rounded-full ring-2 ring-card">
                 <Avatar name={m.name} src={m.avatar_url ? mediaUrl(m.avatar_url) : null} size="sm" square={m.role === "company"} />
               </span>
             ))}
@@ -313,7 +313,7 @@ function GroupPage({ user }: { user: User }) {
                 <ChevronDown className="h-4 w-4" aria-hidden />
               </Button>
               {menu && (
-                <div role="menu" className="absolute right-0 z-10 mt-1 w-56 rounded-xl border border-line bg-white p-1 shadow-lg">
+                <div role="menu" className="absolute right-0 z-10 mt-1 w-56 rounded-xl border border-line bg-card p-1 shadow-lg">
                   {group.role === "admin" && (
                     <Link role="menuitem" href={`/social/grupo/${group.id}/editar`} className={item}>
                       <Pencil className="h-5 w-5" aria-hidden /> Editar grupo

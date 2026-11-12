@@ -38,7 +38,7 @@ export function UnfollowDialog({
         aria-modal="true"
         aria-labelledby="unfollow-title"
         aria-describedby="unfollow-text"
-        className="w-full max-w-sm rounded-card bg-white p-6 text-center shadow-xl"
+        className="w-full max-w-sm rounded-card bg-card p-6 text-center shadow-xl"
       >
         <span className="mx-auto block w-fit">
           <Avatar name={name} src={avatarUrl} size="lg" square={square} />

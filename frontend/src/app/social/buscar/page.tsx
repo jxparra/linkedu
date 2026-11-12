@@ -26,7 +26,7 @@ function Results() {
         {groups === null ? "Buscando…" : `${groups.length} ${groups.length === 1 ? "resultado" : "resultados"}, de más a menos populares`}
       </p>
       {groups?.length === 0 ? (
-        <div className="rounded-card border border-line bg-white p-10 text-center">
+        <div className="rounded-card border border-line bg-card p-10 text-center">
           <SearchX className="mx-auto h-10 w-10 text-ink-subtle" aria-hidden />
           <h3 className="mt-3 text-lg font-semibold">No hay grupos con ese nombre</h3>
           <p className="mx-auto mt-1 max-w-sm text-ink-muted">Prueba con otra palabra o con una temática, como «deportes» o «idiomas». O crea tú el grupo.</p>

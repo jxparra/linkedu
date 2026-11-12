@@ -188,14 +188,14 @@ export function JobSearchBar({
             onKeyDown={onKey}
             placeholder="Puesto"
             maxLength={100}
-            className="h-[45px] w-full rounded-[3px] border border-ink-subtle bg-white px-2.5 text-[17px] font-semibold text-ink placeholder:text-ink-muted focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+            className="h-[45px] w-full rounded-[3px] border border-ink-subtle bg-card px-2.5 text-[17px] font-semibold text-ink placeholder:text-ink-muted focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
           />
           {open && typedEnough && (
             <ul
               ref={listRef}
               id={`${id}-list`}
               role="listbox"
-              className="absolute inset-x-0 top-full z-30 mt-0.5 max-h-72 overflow-y-auto rounded-[3px] border border-ink-subtle bg-white py-1"
+              className="absolute inset-x-0 top-full z-30 mt-0.5 max-h-72 overflow-y-auto rounded-[3px] border border-ink-subtle bg-card py-1"
             >
               {renderGroup(null, groups.typed)}
               {renderGroup("Puestos", groups.occupations)}
@@ -221,7 +221,7 @@ export function JobSearchBar({
         </div>
         <button
           type="submit"
-          className="h-[45px] rounded-[3px] bg-brand-600 px-9 text-[17px] font-bold uppercase text-white transition-colors hover:bg-brand-700 md:mb-[3px] md:ml-10"
+          className="h-[45px] rounded-[3px] bg-brand-600 px-9 text-[17px] font-bold uppercase text-on-brand transition-colors hover:bg-brand-hover md:mb-[3px] md:ml-10"
         >
           Buscar
         </button>

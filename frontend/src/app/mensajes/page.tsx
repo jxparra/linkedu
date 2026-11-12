@@ -65,7 +65,7 @@ function Thread({ other, onBack, onSent }: { other: Author; onBack: () => void; 
           <div key={m.id} className={`flex ${m.from_me ? "justify-end" : "justify-start"}`}>
             <p
               className={`max-w-[78%] whitespace-pre-line rounded-[18px] px-3.5 py-2 text-[15px] ${
-                m.from_me ? "rounded-br-md bg-brand-600 text-white" : "rounded-bl-md border border-line bg-white"
+                m.from_me ? "rounded-br-md bg-brand-600 text-on-brand" : "rounded-bl-md border border-line bg-card"
               }`}
               title={timeAgo(m.created_at)}
             >
@@ -83,10 +83,10 @@ function Thread({ other, onBack, onSent }: { other: Author; onBack: () => void; 
             onChange={(e) => setText(e.target.value)}
             placeholder="Escribe un mensaje…"
             maxLength={2000}
-            className="h-11 w-full rounded-full bg-page px-4 text-[15px] placeholder:text-ink-subtle focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600/30"
+            className="h-11 w-full rounded-full bg-page px-4 text-[15px] placeholder:text-ink-subtle focus:bg-card focus:outline-none focus:ring-2 focus:ring-brand-600/30"
           />
         </label>
-        <button type="submit" disabled={sending || !text.trim()} aria-label="Enviar" className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-600 text-white disabled:bg-page disabled:text-ink-subtle">
+        <button type="submit" disabled={sending || !text.trim()} aria-label="Enviar" className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-600 text-on-brand disabled:bg-page disabled:text-ink-subtle">
           <Send className="h-5 w-5" aria-hidden />
         </button>
       </form>
@@ -118,7 +118,7 @@ function Inbox() {
   }, [params, convs, active?.id]);
 
   return (
-    <section className="grid h-[calc(100vh-150px)] min-h-[480px] overflow-hidden rounded-card border border-line bg-white md:grid-cols-[300px_minmax(0,1fr)]">
+    <section className="grid h-[calc(100vh-150px)] min-h-[480px] overflow-hidden rounded-card border border-line bg-card md:grid-cols-[300px_minmax(0,1fr)]">
       <div className={`min-h-0 flex-col border-r border-line ${active ? "hidden md:flex" : "flex"}`}>
         <h1 className="border-b border-line px-5 py-4 text-xl font-bold">Mensajes</h1>
         <ul className="min-h-0 flex-1 overflow-y-auto">

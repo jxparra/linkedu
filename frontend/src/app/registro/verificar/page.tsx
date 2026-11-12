@@ -106,7 +106,7 @@ export default function Verificar() {
       </div>
       <details className="rounded-input border border-line px-4 py-3 text-sm">
         <summary className="flex cursor-pointer items-center gap-2 font-medium">
-          <ShieldCheck className="h-4 w-4 text-brand-600" aria-hidden /> Cómo usamos tus datos
+          <ShieldCheck className="h-4 w-4 text-brand-700" aria-hidden /> Cómo usamos tus datos
         </summary>
         <p className="mt-2 text-ink-muted">
           Solo usamos tu email para que puedas entrar en tu cuenta y para avisarte de lo que te interesa. Nunca lo

@@ -24,10 +24,10 @@ const pillars = [
 function PreviewStack() {
   return (
     <div className="relative mx-auto w-full max-w-[420px] space-y-4" aria-hidden>
-      <div className="rounded-card border border-line bg-white p-5">
+      <div className="rounded-card border border-line bg-card p-5">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-ink text-sm font-bold text-white">AC</div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-ink text-sm font-bold text-inverse">AC</div>
             <div>
               <p className="font-semibold">Diseño de cartelería para evento</p>
               <p className="text-sm text-ink-muted">Acme Eventos · Granada</p>
@@ -44,13 +44,13 @@ function PreviewStack() {
         </div>
       </div>
 
-      <div className="ml-8 rounded-card border border-line bg-white p-5">
+      <div className="ml-8 rounded-card border border-line bg-card p-5">
         <p className="text-xs font-semibold uppercase tracking-wide text-brand-700">DAW · Bases de datos</p>
         <p className="mt-1.5 font-semibold">¿Alguien tiene ejercicios resueltos de normalización?</p>
         <p className="mt-2 text-sm text-ink-muted">12 respuestas · 34 me gusta</p>
       </div>
 
-      <div className="rounded-card border border-line bg-white p-5">
+      <div className="rounded-card border border-line bg-card p-5">
         <div className="flex items-center justify-between">
           <p className="font-semibold">Ingeniería Informática · UGR</p>
           <div className="flex items-center gap-0.5 text-accent-400">
@@ -68,7 +68,7 @@ function PreviewStack() {
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-card">
       <header className="border-b border-line">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
           <Logo />
@@ -110,8 +110,8 @@ export default function Landing() {
         <section className="bg-page">
           <div className="mx-auto grid max-w-6xl gap-4 px-4 py-14 sm:grid-cols-3">
             {pillars.map(({ icon: Icon, title, text }) => (
-              <div key={title} className="rounded-card border border-line bg-white p-6">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+              <div key={title} className="rounded-card border border-line bg-card p-6">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
                   <Icon className="h-5 w-5" aria-hidden />
                 </div>
                 <h2 className="mt-4 text-lg font-semibold">{title}</h2>
@@ -123,7 +123,7 @@ export default function Landing() {
 
         <section className="mx-auto grid max-w-6xl gap-4 px-4 py-14 sm:grid-cols-2">
           <div className="rounded-card border border-line p-6">
-            <GraduationCap className="h-6 w-6 text-brand-600" aria-hidden />
+            <GraduationCap className="h-6 w-6 text-brand-700" aria-hidden />
             <h2 className="mt-3 text-xl font-semibold">Para estudiantes</h2>
             <p className="mt-1.5 text-ink-muted">Gana experiencia sin dejar de estudiar y apóyate en tu comunidad.</p>
             <Link href="/registro" className="mt-4 inline-block font-semibold text-brand-700 underline">
@@ -131,7 +131,7 @@ export default function Landing() {
             </Link>
           </div>
           <div className="rounded-card border border-line p-6">
-            <Building2 className="h-6 w-6 text-brand-600" aria-hidden />
+            <Building2 className="h-6 w-6 text-brand-700" aria-hidden />
             <h2 className="mt-3 text-xl font-semibold">Para empresas</h2>
             <p className="mt-1.5 text-ink-muted">Publica encargos y encuentra estudiantes por estudios, centro y zona.</p>
             <Link href="/registro" className="mt-4 inline-block font-semibold text-brand-700 underline">

@@ -56,7 +56,7 @@ export function UserMenu({ user, name }: { user: User | null; name: string }) {
       </button>
 
       {open && (
-        <div role="menu" className="absolute right-0 top-full z-40 mt-2 w-[340px] rounded-card border border-line bg-white p-4 shadow-xl">
+        <div role="menu" className="absolute right-0 top-full z-40 mt-2 w-[340px] rounded-card border border-line bg-card p-4 shadow-xl">
           <Link role="menuitem" href="/perfil" className={`${card} items-start`}>
             <span className="flex min-w-0 gap-3">
               <Avatar name={name || "?"} src={avatar} size="md" square={company} />

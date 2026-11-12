@@ -13,7 +13,7 @@ export function TrendsPanel() {
   }, []);
 
   return (
-    <section aria-labelledby="trends-title" className="rounded-card border border-line bg-white p-5">
+    <section aria-labelledby="trends-title" className="rounded-card border border-line bg-card p-5">
       <h2 id="trends-title" className="text-lg font-bold">
         Tendencias en StudyHub
       </h2>

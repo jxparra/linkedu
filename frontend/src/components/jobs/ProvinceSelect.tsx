@@ -106,7 +106,7 @@ export function ProvinceSelect({
         aria-labelledby={labelledBy ? `${labelledBy} ${id}-value` : undefined}
         onClick={() => setOpen((o) => !o)}
         onKeyDown={onKey}
-        className={`flex w-full items-center justify-between gap-2 border bg-white text-left transition-colors ${
+        className={`flex w-full items-center justify-between gap-2 border bg-card text-left transition-colors ${
           flat ? "h-[45px] rounded-[3px] px-2.5 text-[17px] font-semibold" : "h-12 rounded-input px-3.5 text-[15px]"
         } ${open ? "border-brand-600 ring-2 ring-brand-600/20" : flat ? "border-ink-subtle" : "border-line hover:border-ink-subtle"}`}
       >
@@ -128,7 +128,7 @@ export function ProvinceSelect({
           id={`${id}-list`}
           role="listbox"
           aria-activedescendant={`${id}-opt-${active}`}
-          className={`absolute inset-x-0 top-full z-30 mt-0.5 max-h-60 overflow-y-auto border bg-white py-1 ${
+          className={`absolute inset-x-0 top-full z-30 mt-0.5 max-h-60 overflow-y-auto border bg-card py-1 ${
             flat ? "rounded-[3px] border-ink-subtle" : "rounded-input border-line shadow-lg"
           }`}
         >
