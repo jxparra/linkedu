@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useT } from "@/lib/i18n";
 import { mainNav } from "./TopBar";
 
-const items = [...mainNav, { href: "/foros", label: "Foros", icon: MessagesSquare }, { href: "/perfil", label: "Perfil", icon: UserIcon }];
+const items = [...mainNav, { href: "/social/foros", label: "Foros", icon: MessagesSquare }, { href: "/perfil", label: "Perfil", icon: UserIcon }];
 
 export function MobileNav() {
   const path = usePathname();
@@ -15,7 +15,9 @@ export function MobileNav() {
     <nav aria-label="Principal" className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-white pb-[env(safe-area-inset-bottom)] sm:hidden">
       <ul className="grid grid-cols-5">
         {items.map(({ href, label, icon: Icon }) => {
-          const active = path === href || path.startsWith(`${href}/`);
+          // La opción más concreta gana: en /social/foros se marca Foros y no Social
+          const matches = (h: string) => path === h || path.startsWith(`${h}/`);
+          const active = matches(href) && !items.some((o) => o.href.length > href.length && o.href.startsWith(href) && matches(o.href));
           return (
             <li key={href}>
               <Link

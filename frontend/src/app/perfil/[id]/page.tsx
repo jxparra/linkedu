@@ -11,6 +11,45 @@ import { UnfollowDialog } from "@/components/UnfollowDialog";
 import { PostCard } from "@/components/feed/PostCard";
 import { api, type Post, type Profile, type User } from "@/lib/api";
 
+const COMMUNITIES_PREVIEW = 5;
+
+/** Comunidades del perfil: solo las 5 más recientes y "Ver todas" para desplegar el resto. */
+function ProfileCommunities({ communities, isMe }: { communities: Profile["communities"]; isMe: boolean }) {
+  const [all, setAll] = useState(false);
+  const shown = all ? communities : communities.slice(0, COMMUNITIES_PREVIEW);
+  const hidden = communities.length - COMMUNITIES_PREVIEW;
+  return (
+    <div className="mt-4">
+      <p className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-ink-muted">
+        <Users className="h-4 w-4" aria-hidden /> Comunidades
+        <span className="font-normal">· {communities.length}</span>
+      </p>
+      <div className="flex flex-wrap items-center gap-2">
+        {shown.map((c) => (
+          <Link key={c.id} href={`/social/grupo/${c.id}`} className="rounded-full bg-page px-3 py-1 text-sm transition-colors hover:bg-field-hover">
+            {c.name}
+          </Link>
+        ))}
+        {hidden > 0 && (
+          <button
+            type="button"
+            onClick={() => setAll((v) => !v)}
+            aria-expanded={all}
+            className="inline-flex min-h-8 items-center rounded-full px-2 text-sm font-semibold text-brand-700 hover:underline"
+          >
+            {all ? "Ver menos" : `Ver todas (+${hidden})`}
+          </button>
+        )}
+        {isMe && (
+          <Link href="/social/foros" className="inline-flex min-h-8 items-center px-2 text-sm font-semibold text-ink-muted hover:underline">
+            Gestionar
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function ProfileView({ id, me }: { id: number; me: User }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [posts, setPosts] = useState<Post[] | null>(null);
@@ -98,20 +137,7 @@ function ProfileView({ id, me }: { id: number; me: User }) {
               </div>
             ))}
           </dl>
-          {profile.communities.length > 0 && (
-            <div className="mt-4">
-              <p className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-ink-muted">
-                <Users className="h-4 w-4" aria-hidden /> Comunidades
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {profile.communities.map((c) => (
-                  <span key={c.id} className="rounded-full bg-page px-3 py-1 text-sm">
-                    {c.name}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+          {profile.communities.length > 0 && <ProfileCommunities communities={profile.communities} isMe={profile.is_me} />}
         </div>
       </section>
 

@@ -7,7 +7,6 @@ import { ButtonLink } from "@/components/Button";
 
 const SECTIONS: Record<string, { title: string; text: string }> = {
   reels: { title: "Reels", text: "Vídeos cortos de estudiantes: consejos, experiencias y cómo es por dentro cada carrera." },
-  foros: { title: "Foros", text: "Las comunidades de tus estudios, tu centro y tus asignaturas." },
   eventos: { title: "Eventos", text: "Jornadas, ferias de empleo y quedadas de estudio cerca de ti." },
 };
 

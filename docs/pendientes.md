@@ -1,6 +1,6 @@
 # Pendientes
 
-> Actualizado: 2026-11-12. Marca lo que vayas haciendo. Último día → [[diario/2026-11-10]]
+> Actualizado: 2026-11-12. Marca lo que vayas haciendo. Último día → [[diario/2026-11-12]]
 
 ## 🔴 Primero (antes de seguir programando)
 - [ ] **Confirmar con el tutor qué se entrega en ~2 semanas** y en qué formato (¿demo, memoria, presentación?)
@@ -11,7 +11,7 @@
 ## 🟡 Siguiente bloque de código (elige uno)
 - [x] **Empleo** (al estilo InfoJobs) → [[diseno/empleo]]
 - [x] **Social: grupos** (sugerencias para ti, cerca de ti y más; crear, unirse, publicar dentro) → [[diseno/social]]
-- [ ] **Foros / comunidades:** página de cada comunidad con sus publicaciones, unirse/salir, publicar dentro
+- [x] **Foros / comunidades** dentro de Social → [[decisiones/ADR-009-foros-dentro-de-social]]
 - [ ] **Reseñas** de carreras, centros y asignaturas con criterios fijos (tabla `reviews` ya existe)
 
 ## 🟢 Mejoras pendientes de lo que ya hay
@@ -25,7 +25,9 @@
 - [ ] Login con Google y Microsoft
 - [ ] Eventos, Reels (ahora "Próximamente")
 - [ ] Grupos: pedir permiso para entrar en los privados, nombrar más administradores, quitar miembros
-- [ ] Foros: decidir si las comunidades de estudios y centros son "foros" aparte o grupos de Social
+- [x] Foros: van dentro de Social (ADR-009)
+- [ ] Foros de **asignaturas** (`type = "subject"`): aún no se crean en los datos de prueba
+- [ ] Perfil: ¿ocultar los grupos **privados** cuando lo ve otra persona?
 - [ ] Guardar también ofertas de empleo en Guardados
 - [ ] Traducir al inglés el resto de pantallas (inicio, empleo, registro…) → [[decisiones/ADR-007-idioma]]
 - [ ] Modo oscuro y el resto de ajustes que salen como "Próximamente"

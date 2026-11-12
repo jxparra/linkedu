@@ -27,6 +27,7 @@ class GroupCard(BaseModel):
     posts_week: int
     reason: str | None = None  # "Porque estudias DAW", "12 personas de Granada", "Algo nuevo: Música"
     is_member: bool = False
+    type: str = "group"  # group | degree | school | general (los tres últimos son foros)
 
 
 class SuggestionsOut(BaseModel):
@@ -34,6 +35,13 @@ class SuggestionsOut(BaseModel):
     for_you: list[GroupCard]
     nearby: list[GroupCard]
     more: list[GroupCard]
+
+
+class ForumsOut(BaseModel):
+    """Pantalla Foros: los foros en los que estás y los que te pueden interesar."""
+
+    mine: list[GroupCard]
+    suggested: list[GroupCard]
 
 
 class MyGroup(BaseModel):

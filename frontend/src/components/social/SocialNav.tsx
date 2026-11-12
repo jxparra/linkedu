@@ -1,6 +1,6 @@
 "use client";
 
-import { Compass, Newspaper, Plus, Search, Users, type LucideIcon } from "lucide-react";
+import { Compass, MessagesSquare, Newspaper, Plus, Search, Users, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState, type FormEvent, type ReactNode } from "react";
@@ -14,6 +14,7 @@ export const SOCIAL_NAV: { href: string; label: string; icon: LucideIcon }[] = [
   { href: "/social/feed", label: "Tu feed", icon: Newspaper },
   { href: "/social", label: "Sugerencias", icon: Compass },
   { href: "/social/grupos", label: "Tus grupos", icon: Users },
+  { href: "/social/foros", label: "Foros", icon: MessagesSquare },
 ];
 
 /** Lista "Grupos a los que te has unido". Se recarga cuando te unes o sales de un grupo. */

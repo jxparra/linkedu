@@ -1,10 +1,10 @@
 "use client";
 
-import { Check, GraduationCap, Loader2, Lock, MapPin, Sparkles, Users, X } from "lucide-react";
+import { Check, GraduationCap, Loader2, Lock, MapPin, School, Sparkles, Users, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { api, refreshGroups, type GroupCard as Group } from "@/lib/api";
-import { groupStats } from "@/lib/groups";
+import { coverTopic, groupNoun, groupStats } from "@/lib/groups";
 import { GroupCover } from "./GroupCover";
 
 /** Icono según el motivo de la sugerencia */
@@ -13,7 +13,8 @@ function ReasonIcon({ reason }: { reason: string }) {
   if (reason.startsWith("Algo nuevo")) return <Sparkles className={cls} aria-hidden />;
   if (reason.startsWith("Porque estudias")) return <GraduationCap className={cls} aria-hidden />;
   if (/personas? de |Popular en/.test(reason)) return <MapPin className={cls} aria-hidden />;
-  if (reason.includes("que sigues")) return <Users className={cls} aria-hidden />;
+  if (reason.includes("que sigues") || reason.startsWith("Para todos")) return <Users className={cls} aria-hidden />;
+  if (reason.startsWith("Tu centro")) return <School className={cls} aria-hidden />;
   return <Check className={cls} aria-hidden />;
 }
 
@@ -27,6 +28,7 @@ export function GroupCard({ group, dismissible = false }: { group: Group; dismis
   const [busy, setBusy] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const href = `/social/grupo/${group.id}`;
+  const noun = groupNoun(group.type);
 
   const join = async () => {
     setBusy(true);
@@ -62,7 +64,7 @@ export function GroupCard({ group, dismissible = false }: { group: Group; dismis
   return (
     <article className="relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
       <Link href={href} tabIndex={-1} aria-hidden className="block">
-        <GroupCover src={group.cover_url} topic={group.topic} className="aspect-[16/9] w-full" />
+        <GroupCover src={group.cover_url} topic={coverTopic(group)} className="aspect-[16/9] w-full" />
       </Link>
       {dismissible && !joined && (
         <button
@@ -97,7 +99,7 @@ export function GroupCard({ group, dismissible = false }: { group: Group; dismis
               href={href}
               className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-brand-50 text-[15px] font-semibold text-brand-700 transition-colors hover:bg-brand-50/70"
             >
-              <Check className="h-4 w-4" aria-hidden /> Ver grupo
+              <Check className="h-4 w-4" aria-hidden /> Ver {noun}
             </Link>
           ) : (
             <button
@@ -107,7 +109,7 @@ export function GroupCard({ group, dismissible = false }: { group: Group; dismis
               className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-field text-[15px] font-semibold text-ink transition-colors hover:bg-field-hover"
             >
               {busy && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
-              Unirte al grupo
+              Unirte al {noun}
             </button>
           )}
         </div>

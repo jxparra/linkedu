@@ -10,17 +10,20 @@ import {
   Cpu,
   Dumbbell,
   FlaskConical,
+  GraduationCap,
   Gamepad2,
   HandHeart,
   HeartPulse,
   House,
   Languages,
   Library,
+  MessagesSquare,
   Music,
   Palette,
   PartyPopper,
   Plane,
   Scale,
+  School,
   TrendingUp,
   Users,
   type LucideIcon,
@@ -54,7 +57,28 @@ export const TOPIC_STYLE: Record<string, { icon: LucideIcon; from: string; to: s
   cocina: { icon: ChefHat, from: "#B45309", to: "#FBBF24" },
   lectura: { icon: BookOpen, from: "#78350F", to: "#D97706" },
   arte: { icon: Brush, from: "#A21CAF", to: "#F472B6" },
+  // Foros (comunidades de estudios, de centros y generales): no tienen temática
+  "foro-degree": { icon: GraduationCap, from: "#1F3FB8", to: "#2952E3" },
+  "foro-school": { icon: School, from: "#0F766E", to: "#2952E3" },
+  "foro-general": { icon: MessagesSquare, from: "#14161F", to: "#2952E3" },
 };
+
+/** Los foros son comunidades de tipo degree | school | general. Los grupos de Social son type "group". */
+export const FORUM_LABEL: Record<string, string> = { degree: "Foro de estudios", school: "Foro de centro", general: "Foro general" };
+
+export function isForum(type: string | null | undefined): boolean {
+  return !!type && type in FORUM_LABEL;
+}
+
+/** "foro" o "grupo", para los textos de los botones. */
+export function groupNoun(type: string | null | undefined): "foro" | "grupo" {
+  return isForum(type) ? "foro" : "grupo";
+}
+
+/** Clave de TOPIC_STYLE para la portada: la temática del grupo o el tipo de foro. */
+export function coverTopic(g: { topic: string | null; type?: string | null }): string | null {
+  return g.topic ?? (isForum(g.type) ? `foro-${g.type}` : null);
+}
 
 export const DEFAULT_TOPIC_STYLE = { icon: Users, from: "#1F3FB8", to: "#5B6070" };
 

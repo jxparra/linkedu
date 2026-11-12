@@ -14,6 +14,7 @@ Cómo se eligen las sugerencias → [[decisiones/ADR-008-sugerencias-grupos]]
 | `/social/grupo/{id}` | **Página del grupo**: Publicaciones · Información · Miembros | `social-grupo.png` |
 | `/social/grupo/{id}/editar` | Editar (solo administradores) | — |
 | `/social/buscar?q=` | Buscar grupos por nombre, descripción o temática | `social-buscar.png` |
+| `/social/foros` | **Foros**: Tus foros y Foros para ti, con buscador → [[decisiones/ADR-009-foros-dentro-de-social]] | `pantallas-v5/foros.png` |
 
 ## Menú izquierdo (como la referencia)
 Título "Grupos" · buscador "Buscar grupos" · **Tu feed / Sugerencias / Tus grupos**. El icono de la opción activa va en un círculo azul. Después, el botón **+ Crear nuevo grupo** (azul claro, para no competir con el botón principal) y la lista **Grupos a los que te has unido** con "Ver todo" y la última actividad. En móvil no hay columna: arriba salen el buscador y unas pestañas.
@@ -54,3 +55,16 @@ Campos: nombre*, privacidad*, temática* (agrupadas en «De estudios y trabajo»
 ![[assets/pantallas-v4/social-movil.png|300]]
 
 Referencias originales (`Escritorio/Tfc interfaz/Social`): `assets/referencias/social/` (`Sugerencias.png`, `Sugerencias-1.png`, `Sugerencias-2.png`, `Tusgrupos.png`, `Crear grupo.png`).
+
+## Foros (2026-11-12)
+Los foros son las comunidades de **estudios**, de **centros** y **generales**. Están en el menú de Social y cada uno se abre con la página de grupo → [[decisiones/ADR-009-foros-dentro-de-social]].
+- **Tus foros:** filas compactas (portada, nombre, «Foro de estudios · N miembros»). Se ven 6 y el resto con «Ver todos».
+- **Foros para ti:** tarjetas como las de grupos, con «Unirte al foro». Se ven 6 y el resto con «Ver más foros». Motivos: «Porque estudias DAW», «Tu centro de estudios», «Para todos los estudiantes».
+- **Portada sin foto:** birrete (estudios), edificio (centro) o bocadillos (general).
+
+## Comunidades en el perfil
+Solo salen **las 5 últimas** a las que se ha unido la persona, como enlaces a su página. Al lado aparecen el total y el botón «Ver todas (+N)», que despliega el resto. En tu propio perfil hay además un enlace «Gestionar» que lleva a Foros.
+
+![[assets/pantallas-v5/foros.png]]
+![[assets/pantallas-v5/perfil-comunidades.png]]
+![[assets/pantallas-v5/foros-movil.png|300]]

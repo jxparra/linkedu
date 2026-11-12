@@ -10,7 +10,7 @@ import { displayName } from "./TopBar";
 
 export const sideNav = [
   { href: "/reels", label: "Reels", icon: Clapperboard },
-  { href: "/foros", label: "Foros", icon: MessagesSquare },
+  { href: "/social/foros", label: "Foros", icon: MessagesSquare },
   { href: "/eventos", label: "Eventos", icon: CalendarDays },
   { href: "/guardados", label: "Guardados", icon: Bookmark },
 ];

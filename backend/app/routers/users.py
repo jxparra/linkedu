@@ -28,7 +28,10 @@ def profile(user_id: int, me: VerifiedUser, db: DB):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "No encontramos a ese usuario.")
     count = lambda stmt: db.scalar(stmt) or 0  # noqa: E731
     communities = db.scalars(
-        select(Community).join(CommunityMember, CommunityMember.community_id == Community.id).where(CommunityMember.user_id == user_id)
+        select(Community)
+        .join(CommunityMember, CommunityMember.community_id == Community.id)
+        .where(CommunityMember.user_id == user_id)
+        .order_by(CommunityMember.joined_at.desc(), Community.id.desc())
     ).all()
     if user_id != me.id:
         record(db, "profile_view", [user_id], me.id)
@@ -40,5 +43,5 @@ def profile(user_id: int, me: VerifiedUser, db: DB):
         following=count(select(func.count()).select_from(Follow).where(Follow.follower_id == user_id)),
         is_me=user_id == me.id,
         followed_by_me=bool(db.get(Follow, (me.id, user_id))),
-        communities=[CommunityRef(id=c.id, name=c.name) for c in communities],
+        communities=[CommunityRef(id=c.id, name=c.name, is_group=c.type == "group") for c in communities],
     )

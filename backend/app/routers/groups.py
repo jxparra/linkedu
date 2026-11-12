@@ -15,10 +15,12 @@ from app.models import (
     Post,
     SavedPost,
     Share,
+    StudentProfile,
     User,
 )
 from app.routers.posts import serialize
 from app.schemas.groups import (
+    ForumsOut,
     GroupCard,
     GroupIn,
     GroupOut,
@@ -55,6 +57,7 @@ def _card(info: svc.GroupInfo, reason: str | None = None, is_member: bool = Fals
         posts_week=info.posts_week,
         reason=reason,
         is_member=is_member,
+        type=g.type,
     )
 
 
@@ -143,6 +146,50 @@ def search_groups(user: VerifiedUser, db: DB, q: str = Query(default="", max_len
     mine = set(db.scalars(select(CommunityMember.community_id).where(CommunityMember.user_id == user.id)))
     ordered = sorted(stats.values(), key=lambda g: g.popularity, reverse=True)[:40]
     return [_card(g, is_member=g.group.id in mine) for g in ordered]
+
+
+FORUM_TYPES = ("degree", "school", "general")
+
+
+@router.get("/forums", response_model=ForumsOut)
+def forums(user: VerifiedUser, db: DB, q: str = Query(default="", max_length=100)):
+    """Foros (comunidades de estudios, de centros y generales). Primero los de tus estudios y tu centro."""
+    stmt = select(Community).where(Community.type.in_(FORUM_TYPES))
+    text = q.strip()
+    if text:
+        stmt = stmt.where(Community.name.ilike(f"%{text}%") | Community.description.ilike(f"%{text}%"))
+    all_forums = list(db.scalars(stmt))
+    stats = svc.group_stats(db, all_forums)
+    joined = dict(
+        db.execute(
+            select(CommunityMember.community_id, CommunityMember.joined_at).where(
+                CommunityMember.user_id == user.id, CommunityMember.community_id.in_([f.id for f in all_forums])
+            )
+        ).all()
+    )
+    sp = db.get(StudentProfile, user.id)
+    degree_id, school_id = (sp.degree_id, sp.school_id) if sp else (None, None)
+
+    def reason(c: Community) -> str | None:
+        if c.type == "degree" and c.target_id == degree_id:
+            return f"Porque estudias {svc.degree_short_label(c.name)}"
+        if c.type == "school" and c.target_id == school_id:
+            return "Tu centro de estudios"
+        if c.type == "general":
+            return "Para todos los estudiantes"
+        return None
+
+    def score(info: svc.GroupInfo) -> tuple:
+        c = info.group
+        mine = (c.type == "degree" and c.target_id == degree_id) or (c.type == "school" and c.target_id == school_id)
+        return (2 if mine else 1 if c.type == "general" else 0, info.popularity)
+
+    mine = sorted((stats[f.id] for f in all_forums if f.id in joined), key=lambda i: str(joined[i.group.id] or ""), reverse=True)
+    others = sorted((stats[f.id] for f in all_forums if f.id not in joined), key=score, reverse=True)[:30]
+    return ForumsOut(
+        mine=[_card(i, reason(i.group), is_member=True) for i in mine],
+        suggested=[_card(i, reason(i.group)) for i in others],
+    )
 
 
 @router.get("/mine", response_model=list[MyGroup])

@@ -28,7 +28,7 @@ Trabajo de Fin de Ciclo (TFC) de Joaquín Parra.
 - **Mensajes** privados y **notificaciones** (me gusta, seguidores, etiquetas…), con contador rojo solo cuando hay algo sin leer
 - **Comentarios**: al pulsar "Comentar" se abre el panel de la publicación con los comentarios. Respuestas, "me gusta" en comentarios, ordenar (más pertinentes, más recientes, todos), ocultar, denunciar, eliminar, compartir enlace, emojis y fotos/GIF en comentarios
 - **Varias fotos y vídeos por publicación** (hasta 10), con galería en el feed
-- **Perfil** propio y de otros usuarios: publicaciones, seguidores, comunidades, seguir y enviar mensaje
+- **Perfil** propio y de otros usuarios: publicaciones, seguidores, seguir y enviar mensaje. Muestra las 5 comunidades más recientes, con «Ver todas»
 - **Empleo** (al estilo InfoJobs): el campo "Busco oferta de..." va sugiriendo puestos conforme escribes (desde 2 letras), sacados de ESCO, la clasificación europea de ocupaciones (con una lista local si no hay internet), y las categorías de InfoJobs que coinciden; buscador por puesto/empresa y provincia (Toda España, el extranjero, más comunes y todas), filtros con contador (fecha, tipo de contrato, modalidad, jornada, categoría, "para mis estudios"), orden por relevancia, fecha o sueldo, y paginación. La búsqueda se guarda en la URL
 - **Oferta**: detalle con descripción, requisitos y datos de la empresa. El estudiante se inscribe con carta de presentación opcional y sigue su candidatura (Inscrito → CV leído → En proceso → Seleccionado/Descartado). La empresa ve los candidatos, les cambia el estado y puede editar, cerrar o eliminar la oferta
 - **Publicar oferta** (empresas), **Mis ofertas** y **Mis candidaturas**, con notificaciones de inscripción y de cambios de estado
@@ -38,7 +38,8 @@ Trabajo de Fin de Ciclo (TFC) de Joaquín Parra.
 - **Ajustes**: preferencias de la cuenta, inicio de sesión y seguridad, visibilidad, privacidad y notificaciones (lo que aún no está hecho sale como "Próximamente")
 - **Idioma**: español o inglés, se guarda en el navegador. Por ahora están traducidos la barra superior, los menús, el menú de tu foto, Ajustes y Estadísticas
 - **Social (grupos)**, al estilo de Grupos de Facebook: **Sugerencias** en tres apartados. «Para ti» sale de tus estudios, tus grupos y la gente que sigues; «Populares cerca de ti», de temas para cualquiera en tu provincia; «Más sugerencias» mezcla grupos relacionados contigo con temas nuevos. Cada tarjeta dice por qué se sugiere y se puede quitar con la «X». Además: **Tu feed**, **Tus grupos**, **buscar**, **crear grupo** con vista previa (ordenador/móvil), página del grupo con publicaciones, información y miembros, grupos públicos y privados, invitar, editar y eliminar. Ver `docs/decisiones/ADR-008-sugerencias-grupos.md`
-- Secciones Foros, Eventos y Reels con página de "Próximamente"
+- **Foros**, dentro de Social (`/social/foros`): las comunidades de tus estudios, de tu centro y generales. Primero salen las tuyas, con buscador, y cada foro se abre como la página de un grupo. Ver `docs/decisiones/ADR-009-foros-dentro-de-social.md`
+- Secciones Eventos y Reels con página de "Próximamente"
 - Todas las tablas del modelo de datos creadas (trabajos, comunidades, publicaciones, reseñas, notificaciones…)
 
 ## Cómo arrancarlo
@@ -162,6 +163,6 @@ Contraseña de todas las cuentas de prueba: `Demo1234`
 - Recuperar contraseña
 - Búsqueda de GIF en un catálogo (ahora se sube un GIF propio)
 - Feed personalizado (ahora muestra todas las publicaciones recientes)
-- Foros, reseñas, perfil
+- Reseñas, editar perfil, foros de asignaturas
 - Guardar ofertas en Guardados
 - Migraciones con Alembic (ahora las tablas y columnas nuevas se crean solas al arrancar, ver `backend/app/migrate.py`)

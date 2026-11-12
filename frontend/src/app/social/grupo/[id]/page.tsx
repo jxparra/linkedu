@@ -12,7 +12,7 @@ import { GroupHeader, type GroupTab } from "@/components/social/GroupHeader";
 import { PeoplePicker } from "@/components/social/PeoplePicker";
 import { SocialShell } from "@/components/social/SocialNav";
 import { api, ApiError, mediaUrl, refreshGroups, type Author, type Group, type GroupMember, type Post, type User } from "@/lib/api";
-import { groupStats, ONLINE, PRIVACY } from "@/lib/groups";
+import { coverTopic, FORUM_LABEL, groupNoun, groupStats, ONLINE, PRIVACY } from "@/lib/groups";
 
 const dateFmt = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "long", year: "numeric" });
 
@@ -256,6 +256,8 @@ function GroupPage({ user }: { user: User }) {
     );
   if (!group) return <div className="h-[420px] animate-pulse rounded-card border border-line bg-white" />;
 
+  const noun = groupNoun(group.type);
+
   const join = async () => {
     setBusy(true);
     await api(`/groups/${group.id}/join`, { method: "POST" }).catch(() => {});
@@ -267,7 +269,7 @@ function GroupPage({ user }: { user: User }) {
   const leave = async () => {
     setMenu(false);
     const admin = group.role === "admin";
-    if (!window.confirm(`¿Salir de «${group.name}»?${admin ? " Eres administrador: lo será quien lleve más tiempo en el grupo." : ""}`)) return;
+    if (!window.confirm(`¿Salir de «${group.name}»?${admin ? " Eres administrador: lo será quien lleve más tiempo en el ${noun}." : ""}`)) return;
     await api(`/groups/${group.id}/join`, { method: "DELETE" }).catch(() => {});
     refreshGroups();
     load();
@@ -318,7 +320,7 @@ function GroupPage({ user }: { user: User }) {
                     </Link>
                   )}
                   <button type="button" role="menuitem" onClick={leave} className={item}>
-                    <LogOut className="h-5 w-5" aria-hidden /> Salir del grupo
+                    <LogOut className="h-5 w-5" aria-hidden /> Salir del {noun}
                   </button>
                   {group.role === "admin" && (
                     <button type="button" role="menuitem" onClick={remove} className={`${item} text-danger`}>
@@ -334,7 +336,7 @@ function GroupPage({ user }: { user: User }) {
           </>
         ) : (
           <Button onClick={join} loading={busy}>
-            <Users className="h-4 w-4" aria-hidden /> Unirte al grupo
+            <Users className="h-4 w-4" aria-hidden /> Unirte al {noun}
           </Button>
         )}
       </div>
@@ -348,8 +350,8 @@ function GroupPage({ user }: { user: User }) {
         privacy={group.privacy}
         members={group.members}
         cover={group.cover_url}
-        topic={group.topic}
-        topicLabel={group.topic_label}
+        topic={coverTopic(group)}
+        topicLabel={group.topic_label ?? FORUM_LABEL[group.type] ?? null}
         province={group.type === "group" ? group.province : undefined}
         actions={actions}
         tab={tab}

@@ -153,7 +153,8 @@ export type Profile = {
   following: number;
   is_me: boolean;
   followed_by_me: boolean;
-  communities: { id: number; name: string }[];
+  /** Las más recientes primero */
+  communities: { id: number; name: string; is_group: boolean }[];
 };
 
 /** Las subidas se guardan como "/uploads/…" en el backend: aquí se convierten en URL completa. */
@@ -233,9 +234,13 @@ export type GroupCard = {
   /** Por qué se sugiere: "Porque estudias DAW", "12 personas de Granada", "Algo nuevo: Música" */
   reason: string | null;
   is_member: boolean;
+  /** group | degree | school | general (los tres últimos son foros) */
+  type: string;
 };
 
 export type GroupSuggestions = { province: string | null; for_you: GroupCard[]; nearby: GroupCard[]; more: GroupCard[] };
+
+export type ForumsList = { mine: GroupCard[]; suggested: GroupCard[] };
 
 export type MyGroup = {
   id: number;
