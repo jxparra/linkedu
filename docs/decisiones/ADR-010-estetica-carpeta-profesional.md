@@ -8,8 +8,8 @@ Con el azul cobalto ([[decisiones/ADR-002-paleta-cobalto]]), StudyHub se confund
 
 ## Decisión
 - **Seguir con Next.js + Tailwind.** El aspecto lo dan los tokens, las fuentes y los componentes, no el framework. Pasar a Angular obligaría a rehacer todo el frontend sin ninguna mejora visible.
-- **Coral como color de marca** (nadie lo usa en empleo), con texto blanco (contraste 4,96:1), y **fondo cálido**.
-- **Un color por sección:** coral (Social), turquesa (Empleo) y violeta (Foros), solo como fondo suave en la navegación y las etiquetas.
+- **Azul petróleo como color de marca** (#1F6F8B, texto blanco encima con contraste 5,67:1). Al principio era coral; el usuario prefirió un tono azulado. Se eligió petróleo, más verdoso y apagado que el azul de LinkedIn, para no volver al problema de la primera versión. **Fondo gris claro** en modo claro, con tarjetas blancas.
+- **Un color por sección:** azul petróleo (Social), verde (Empleo) y violeta (Foros), solo como fondo suave en la navegación y las etiquetas. Empleo pasó de turquesa a verde porque el turquesa casi no se distinguía del azul petróleo.
 - **Ruido controlado:** borde fino, sombras suaves y barra superior blanca. Títulos en Plus Jakarta Sans y texto en DM Sans.
 - **Modo oscuro con tokens:** cada color tiene su valor oscuro en `globals.css`. Se elige en Ajustes (Claro / Oscuro / Como el sistema).
 - Las reglas quedan en la skill del proyecto `.claude/skills/studyhub-ui`, para aplicarlas en cada pantalla nueva.

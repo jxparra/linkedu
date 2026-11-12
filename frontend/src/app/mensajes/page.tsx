@@ -149,7 +149,7 @@ function Inbox() {
                   </span>
                 </span>
                 {c.unread > 0 && (
-                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-danger px-1 text-[11px] font-bold text-white" aria-label={`${c.unread} sin leer`}>
+                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-danger px-1 text-[11px] font-bold text-on-danger" aria-label={`${c.unread} sin leer`}>
                     {c.unread}
                   </span>
                 )}

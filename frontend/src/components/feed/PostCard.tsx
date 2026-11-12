@@ -1,12 +1,14 @@
 "use client";
 
-import { Bookmark, Check, EyeOff, Flag, MessageCircle, MoreHorizontal, Plus, Repeat2, Send, ThumbsUp, Trash2, X } from "lucide-react";
+import { Bookmark, Check, EyeOff, Flag, MessageCircle, MoreHorizontal, Plus, Repeat2, Send, ThumbsUp, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { api, type Post } from "@/lib/api";
+import { announceRelation, api, onRelation, refreshGroups, type Post } from "@/lib/api";
+import { coverTopic, groupNoun } from "@/lib/groups";
 import { feelingPhrase } from "@/lib/feelings";
 import { timeAgo } from "@/lib/time";
 import { Avatar } from "../Avatar";
+import { GroupCover } from "../social/GroupCover";
 import { UnfollowDialog } from "../UnfollowDialog";
 import { LikeBurst } from "./LikeBurst";
 import { MediaGallery } from "./MediaGallery";
@@ -43,6 +45,21 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
   const [burst, setBurst] = useState(0);
   const [shareBurst, setShareBurst] = useState(0);
   const [following, setFollowing] = useState(post.following_author);
+  const community = post.community;
+  const groupHref = community ? `/social/grupo/${community.id}` : "";
+  const [joined, setJoined] = useState(community?.is_member ?? false);
+  const [joining, setJoining] = useState(false);
+  const [confirmLeave, setConfirmLeave] = useState(false);
+
+  // Si sigues a esta persona o entras en este grupo desde otra tarjeta o desde el panel, esta se actualiza también
+  useEffect(
+    () =>
+      onRelation(({ kind, id, on }) => {
+        if (kind === "user" && id === post.author.id) setFollowing(on);
+        if (kind === "group" && id === post.community?.id) setJoined(on);
+      }),
+    [post.author.id, post.community?.id],
+  );
   const [confirmUnfollow, setConfirmUnfollow] = useState(false);
   const [expanded, setExpanded] = useState(variant === "modal");
   const [clamped, setClamped] = useState(false);
@@ -124,6 +141,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
     onUpdate?.({ ...post, following_author: next });
     try {
       await api(`/users/${author.id}/follow`, { method: next ? "POST" : "DELETE" });
+      announceRelation({ kind: "user", id: author.id, on: next });
     } catch {
       setFollowing(!next);
       onFollowChange?.(author.id, !next);
@@ -140,6 +158,34 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
       onUpdate?.({ ...post, saved_by_me: res.saved, liked_by_me: liked, likes, shared_by_me: shared, shares });
     } catch {
       setSaved(!next);
+    }
+  };
+
+  const join = async () => {
+    if (!community) return;
+    setJoining(true);
+    try {
+      await api(`/groups/${community.id}/join`, { method: "POST" });
+      setJoined(true);
+      announceRelation({ kind: "group", id: community.id, on: true });
+      refreshGroups();
+    } catch {
+      /* se queda el botón */
+    } finally {
+      setJoining(false);
+    }
+  };
+
+  const leave = async () => {
+    if (!community) return;
+    setConfirmLeave(false);
+    setJoined(false);
+    try {
+      await api(`/groups/${community.id}/join`, { method: "DELETE" });
+      announceRelation({ kind: "group", id: community.id, on: false });
+      refreshGroups();
+    } catch {
+      setJoined(true);
     }
   };
 
@@ -165,45 +211,86 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
 
   return (
     <article
-      className={inModal ? "" : "rounded-card border border-line bg-card"}
+      className={inModal ? "" : "rounded-card border border-line bg-card transition-[border-color,box-shadow] hover:border-edge"}
       aria-labelledby={`post-${post.id}-${variant}-author`}
     >
       <header className="flex items-start gap-3 p-4 pb-2">
-        <Link href={`/perfil/${author.id}`} aria-hidden tabIndex={-1} className="shrink-0">
-          <Avatar name={author.name} src={author.avatar_url} size="md" square={isCompany} />
-        </Link>
+        {community ? (
+          // Publicación de un grupo o foro: manda el grupo, y quien la publicó va debajo, más pequeño
+          <Link href={groupHref} aria-hidden tabIndex={-1} className="relative shrink-0">
+            <GroupCover src={community.cover_url} topic={coverTopic(community)} iconSize="sm" className="h-12 w-12 rounded-xl" />
+            <span className="absolute -bottom-1.5 -right-1.5 rounded-full ring-2 ring-card">
+              <Avatar name={author.name} src={author.avatar_url} size="xs" square={isCompany} />
+            </span>
+          </Link>
+        ) : (
+          <Link href={`/perfil/${author.id}`} aria-hidden tabIndex={-1} className="shrink-0">
+            <Avatar name={author.name} src={author.avatar_url} size="md" square={isCompany} />
+          </Link>
+        )}
         <div className="min-w-0 flex-1">
-          <p className="leading-snug">
-            <Link href={`/perfil/${author.id}`} id={`post-${post.id}-${variant}-author`} className="font-semibold hover:underline">
-              {author.name}
-            </Link>
-            {author.badge && (
-              <span
-                className={`ml-2 inline-block rounded-full px-2 py-0.5 align-[2px] text-[11px] font-semibold ${
-                  isCompany ? "bg-page text-ink-muted" : "bg-brand-50 text-brand-700"
-                }`}
-              >
-                {author.badge}
-              </span>
-            )}
-            {extras.length > 0 && <span className="text-[15px] text-ink-muted"> {extras.join(" · ")}</span>}
-          </p>
-          {author.headline && <p className="truncate text-[13px] text-ink-muted">{author.headline}</p>}
+          {community ? (
+            <>
+              <p className="leading-snug">
+                <Link href={groupHref} className="text-base font-bold text-ink hover:underline">
+                  {community.name}
+                </Link>
+              </p>
+              <p className="truncate text-[13px] text-ink-muted">
+                <Link href={`/perfil/${author.id}`} id={`post-${post.id}-${variant}-author`} className="font-medium hover:underline">
+                  {author.name}
+                </Link>
+                {extras.length > 0 && ` ${extras.join(" · ")}`}
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="leading-snug">
+                <Link href={`/perfil/${author.id}`} id={`post-${post.id}-${variant}-author`} className="text-base font-bold text-ink hover:underline">
+                  {author.name}
+                </Link>
+                {author.badge && (
+                  <span
+                    className={`ml-2 inline-block rounded-full px-2 py-0.5 align-[2px] text-[11px] font-semibold ${
+                      isCompany ? "bg-page text-ink-muted" : "bg-brand-50 text-brand-700"
+                    }`}
+                  >
+                    {author.badge}
+                  </span>
+                )}
+                {extras.length > 0 && <span className="text-[15px] text-ink-muted"> {extras.join(" · ")}</span>}
+              </p>
+              {author.headline && <p className="truncate text-[13px] text-ink-muted">{author.headline}</p>}
+            </>
+          )}
           <p className="truncate text-[13px] text-ink-subtle">
             <time dateTime={post.created_at}>{timeAgo(post.created_at)}</time>
             {post.edited && " · Editado"}
-            {post.community && (
-              <>
-                {" · en "}
-                <Link href={`/social/grupo/${post.community.id}`} className="font-medium text-ink-muted hover:underline">
-                  {post.community.name}
-                </Link>
-              </>
-            )}
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-1">
-          {!post.is_mine && !following && (
+          {community && !post.is_mine && !joined && (
+            <button
+              type="button"
+              onClick={join}
+              disabled={joining}
+              aria-label={`Unirme a ${community.name}`}
+              className="inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-full text-sm font-semibold text-brand-700 hover:bg-brand-50 sm:mr-1 sm:px-3"
+            >
+              <Plus className="h-5 w-5 sm:h-4 sm:w-4" aria-hidden /> <span className="hidden sm:inline">Unirme</span>
+            </button>
+          )}
+          {community && !post.is_mine && joined && (
+            <button
+              type="button"
+              onClick={() => setConfirmLeave(true)}
+              aria-label={`Estás en ${community.name}. Pulsa para salir`}
+              className="inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-full text-sm font-semibold text-ink-muted hover:bg-page hover:text-ink sm:mr-1 sm:px-3"
+            >
+              <Check className="h-5 w-5 sm:h-4 sm:w-4" aria-hidden /> <span className="hidden sm:inline">Unido</span>
+            </button>
+          )}
+          {!community && !post.is_mine && !following && (
             <button
               type="button"
               onClick={() => setFollow(true)}
@@ -213,7 +300,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
               <Plus className="h-5 w-5 sm:h-4 sm:w-4" aria-hidden /> <span className="hidden sm:inline">Seguir</span>
             </button>
           )}
-          {!post.is_mine && following && (
+          {!community && !post.is_mine && following && (
             <button
               type="button"
               onClick={() => setConfirmUnfollow(true)}
@@ -256,16 +343,6 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
               </div>
             )}
           </div>
-          {!post.is_mine && !inModal && (
-            <button
-              type="button"
-              aria-label="Ocultar publicación"
-              onClick={() => onHide?.(post.id)}
-              className="hidden h-9 w-9 items-center justify-center rounded-full text-ink-muted hover:bg-page hover:text-ink sm:flex"
-            >
-              <X className="h-5 w-5" aria-hidden />
-            </button>
-          )}
         </div>
       </header>
 
@@ -293,7 +370,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
 
       <MediaGallery media={post.media} onOpen={openPost} full={inModal} />
 
-      <footer className={`mx-2 flex gap-1 py-1.5 ${inModal ? "" : "mt-1 border-t border-line"}`}>
+      <footer className={`flex gap-1 px-2 py-1.5 ${inModal ? "" : "mt-1 border-t border-line"}`}>
         <button
           type="button"
           aria-pressed={liked}
@@ -346,6 +423,16 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
           <span className="hidden sm:inline">Enviar</span>
         </button>
       </footer>
+
+      {confirmLeave && community && (
+        <UnfollowDialog
+          kind={groupNoun(community.type) === "foro" ? "forum" : "group"}
+          name={community.name}
+          picture={<GroupCover src={community.cover_url} topic={coverTopic(community)} iconSize="sm" className="h-16 w-16 rounded-2xl" />}
+          onConfirm={leave}
+          onCancel={() => setConfirmLeave(false)}
+        />
+      )}
 
       {confirmUnfollow && (
         <UnfollowDialog

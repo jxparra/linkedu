@@ -710,7 +710,7 @@ function CameraPanel({ onBack, onRecorded }: { onBack: () => void; onRecorded: (
           <div className="relative overflow-hidden rounded-xl bg-ink">
             <video ref={videoRef} autoPlay muted playsInline className="aspect-video w-full object-cover" />
             {recording && (
-              <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-danger px-2.5 py-1 text-xs font-bold text-white">
+              <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-danger px-2.5 py-1 text-xs font-bold text-on-danger">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-card" /> REC 0:{String(seconds).padStart(2, "0")}
               </span>
             )}
@@ -722,7 +722,7 @@ function CameraPanel({ onBack, onRecorded }: { onBack: () => void; onRecorded: (
               <Square className="h-4 w-4 fill-current" aria-hidden /> Detener y añadir
             </button>
           ) : (
-            <button type="button" onClick={start} disabled={!!error} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-danger px-6 font-semibold text-white disabled:opacity-50">
+            <button type="button" onClick={start} disabled={!!error} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-danger px-6 font-semibold text-on-danger disabled:opacity-50">
               <span className="h-3 w-3 rounded-full bg-card" aria-hidden /> Empezar a grabar
             </button>
           )}

@@ -13,7 +13,8 @@ if hasattr(sys.stdout, "reconfigure"):
 CHECKS = [
     ("bg-white (usa bg-card)", re.compile(r"\bbg-white\b(?![/\w-])")),
     ("border-white / ring-white (usa border-card / ring-card)", re.compile(r"\b(border|ring)-white\b(?![/\w-])")),
-    ("text-white sobre coral (usa text-on-brand)", re.compile(r"bg-brand-600[^\"`]*\btext-white\b|\btext-white\b[^\"`]*bg-brand-600")),
+    ("text-white sobre brand-600 (usa text-on-brand)", re.compile(r"bg-brand-600[^\"`]*\btext-white\b|\btext-white\b[^\"`]*bg-brand-600")),
+    ("bg-danger + text-white (usa text-on-danger)", re.compile(r"bg-danger[^\"`]*text-white|text-white[^\"`]*bg-danger")),
     ("bg-ink + text-white (usa text-inverse)", re.compile(r"\bbg-ink\b(?!/)[^\"`]*\btext-white\b|\btext-white\b[^\"`]*\bbg-ink\b(?!/)")),
     ("text-brand-600 como texto (usa text-brand-700)", re.compile(r"\btext-brand-600\b")),
     ("color de Tailwind por defecto", re.compile(r"\b(?:bg|text|border|ring|fill|stroke)-(?:gray|slate|zinc|neutral|stone|blue|sky|indigo|purple|pink|rose|orange|amber|yellow|lime|emerald|teal|cyan)-\d{2,3}\b")),

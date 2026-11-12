@@ -2,7 +2,7 @@
 
 import { useMemo, type CSSProperties } from "react";
 
-const COLORS = ["#FF6B4A", "#FFD23F", "#2EC4B6", "#A78BFA", "#FF6B4A", "#FFD23F"]; // colores de las secciones
+const COLORS = ["#1F6F8B", "#FFD23F", "#1F9D57", "#A78BFA", "#5FB3D0", "#FFD23F"]; // colores de las secciones
 const PIECES = 14;
 
 /** Pequeña explosión de confeti alrededor del icono de "me gusta". Se monta de nuevo en cada like (cambia `key`). */

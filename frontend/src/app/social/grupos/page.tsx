@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GroupCover } from "@/components/social/GroupCover";
 import { SocialShell } from "@/components/social/SocialNav";
+import { UnfollowDialog } from "@/components/UnfollowDialog";
 import { api, refreshGroups, type MyGroup } from "@/lib/api";
 import { membersText } from "@/lib/groups";
 import { timeAgo } from "@/lib/time";
@@ -107,8 +108,10 @@ function YourGroups() {
   }, [sort]);
   useEffect(load, [load]);
 
+  const [leaving, setLeaving] = useState<MyGroup | null>(null);
+
   const leave = async (g: MyGroup) => {
-    if (!window.confirm(`¿Salir de «${g.name}»?${g.role === "admin" ? " Eres administrador: lo será quien lleve más tiempo en el grupo." : ""}`)) return;
+    setLeaving(null);
     setGroups((gs) => gs?.filter((x) => x.id !== g.id) ?? gs);
     await api(`/groups/${g.id}/join`, { method: "DELETE" }).catch(load);
     refreshGroups();
@@ -152,6 +155,16 @@ function YourGroups() {
         </div>
       </div>
 
+      {leaving && (
+        <UnfollowDialog
+          kind="group"
+          name={leaving.name}
+          picture={<GroupCover src={leaving.cover_url} topic={leaving.topic} iconSize="sm" className="h-16 w-16 rounded-2xl" />}
+          note={leaving.role === "admin" ? "Eres administrador: lo será quien lleve más tiempo en el grupo." : undefined}
+          onConfirm={() => leave(leaving)}
+          onCancel={() => setLeaving(null)}
+        />
+      )}
       {groups === null && (
         <div className="grid gap-4 sm:grid-cols-2">
           {[0, 1, 2, 3].map((i) => (
@@ -174,7 +187,7 @@ function YourGroups() {
       {groups && groups.length > 0 && (
         <ul className="grid gap-4 sm:grid-cols-2">
           {groups.map((g) => (
-            <GroupItem key={g.id} group={g} onLeave={leave} />
+            <GroupItem key={g.id} group={g} onLeave={setLeaving} />
           ))}
         </ul>
       )}

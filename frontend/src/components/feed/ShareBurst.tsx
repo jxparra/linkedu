@@ -22,7 +22,7 @@ export function ShareBurst() {
           className="share-burst absolute left-0 top-0 h-2.5 w-[3px] rounded-full"
           style={
             {
-              background: i % 2 ? "#2EC4B6" : "#FFD23F",
+              background: i % 2 ? "#5FB3D0" : "#FFD23F",
               "--a": `${(360 / RAYS) * i + 22.5}deg`,
               animation: `share-ray 520ms cubic-bezier(0.2, 0.8, 0.3, 1) ${i % 2 ? 60 : 0}ms forwards`,
               opacity: 0,

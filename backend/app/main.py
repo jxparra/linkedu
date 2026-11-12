@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from app import models  # noqa: F401  (registra los modelos)
 from app.config import settings
 from app.migrate import ensure_schema
-from app.routers import auth, catalog, comments, groups, jobs, messages, notifications, onboarding, posts, search, stats, uploads, users
+from app.routers import auth, catalog, comments, discover, groups, jobs, messages, notifications, onboarding, posts, search, stats, uploads, users
 
 logging.basicConfig(level=logging.INFO)
 
@@ -78,6 +78,7 @@ app.include_router(uploads.router)
 app.include_router(jobs.router)
 app.include_router(stats.router)
 app.include_router(groups.router)
+app.include_router(discover.router)
 
 settings.upload_path.mkdir(parents=True, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=settings.upload_path), name="uploads")

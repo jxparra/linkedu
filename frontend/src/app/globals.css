@@ -4,12 +4,12 @@
    Cada color tiene versión clara (aquí) y oscura (más abajo, en :root[data-theme="dark"]).
    Las utilidades de Tailwind leen estas variables, así que cambiar el tema solo cambia los valores. */
 @theme {
-  /* Principal: coral oscuro con texto blanco (contraste AA 4,96:1) */
-  --color-brand-50: #ffe9e2;
-  --color-brand-100: #ffd6c9;
-  --color-brand-600: #c9401c;
-  --color-brand-hover: #b23a1e;
-  --color-brand-700: #a8361a; /* textos y enlaces */
+  /* Principal: azul petróleo con texto blanco (contraste AA 5,67:1) */
+  --color-brand-50: #e3f1f6;
+  --color-brand-100: #cbe5ee;
+  --color-brand-600: #1f6f8b;
+  --color-brand-hover: #195d75;
+  --color-brand-700: #175a72; /* textos y enlaces (7,66:1 sobre blanco) */
   --color-on-brand: #ffffff;
 
   --color-accent-50: #fff4d1;
@@ -17,28 +17,28 @@
   --color-accent-800: #6e5200;
 
   /* Un color por sección: fondo suave (-50) y tono fuerte para icono y texto (-ink) */
-  --color-social: #c9401c;
-  --color-social-50: #ffe9e2;
-  --color-social-ink: #b23a1e;
-  --color-empleo: #14a395;
-  --color-empleo-50: #ddf5f2;
-  --color-empleo-ink: #0b6e66;
+  --color-social: #1f6f8b;
+  --color-social-50: #e3f1f6;
+  --color-social-ink: #175a72;
+  --color-empleo: #1f9d57;
+  --color-empleo-50: #e2f5ea;
+  --color-empleo-ink: #17703f;
   --color-foros: #7c5ce6;
   --color-foros-50: #eee8fe;
   --color-foros-ink: #5b3cc4;
   --color-on-section: #ffffff;
 
-  /* Cabeceras de perfil y de Estadísticas: degradado coral → ámbar, apagado en oscuro */
-  --color-banner-from: #b23a1e;
-  --color-banner-to: #e0892b;
+  /* Cabeceras de perfil y de Estadísticas: degradado azul petróleo, apagado en oscuro */
+  --color-banner-from: #175a72;
+  --color-banner-to: #3a9bb5;
 
   --color-ink: #16151a;
   --color-ink-muted: #57545e;
-  --color-ink-subtle: #7a7682;
+  --color-ink-subtle: #6b6773;
   --color-inverse: #ffffff;
-  --color-edge: #d6d2ca;
-  --color-line: #e7e3dc;
-  --color-page: #f7f6f3;
+  --color-edge: #c9ccd3;
+  --color-line: #e2e4e9;
+  --color-page: #eef0f3; /* gris claro: las tarjetas blancas destacan encima */
   --color-card: #ffffff;
   --color-topbar: #ffffff;
   --color-field: rgba(22, 21, 26, 0.05);
@@ -48,6 +48,7 @@
   --color-success: #15803d;
   --color-warning: #c2410c;
   --color-danger: #dc2626;
+  --color-on-danger: #ffffff; /* texto sobre bg-danger */
 
   --font-sans: var(--font-dm-sans), system-ui, sans-serif;
   --font-display: var(--font-jakarta), var(--font-dm-sans), system-ui, sans-serif;
@@ -55,34 +56,34 @@
   --radius-input: 10px;
   --radius-card: 14px;
 
-  --shadow-card: 0 1px 2px rgba(22, 21, 26, 0.04), 0 6px 20px -12px rgba(22, 21, 26, 0.12);
+  --shadow-card: 0 1px 2px rgba(22, 24, 32, 0.05), 0 2px 8px -4px rgba(22, 24, 32, 0.06);
   --shadow-pop: 0 1px 2px rgba(22, 21, 26, 0.12);
 }
 
 /* Modo oscuro: por elección (Ajustes) o, si no se ha elegido, según el sistema */
 @layer base {
   :root[data-theme="dark"] {
-    --color-brand-50: #3a221c;
-    --color-brand-100: #4a2a21;
-    --color-brand-600: #ff8466;
-    --color-brand-hover: #ff9c84;
-    --color-brand-700: #ff9c84;
+    --color-brand-50: #16303a;
+    --color-brand-100: #1c3c48;
+    --color-brand-600: #5fb3d0;
+    --color-brand-hover: #7ec4dc;
+    --color-brand-700: #7ec4dc;
     --color-on-brand: #15141a;
     --color-accent-50: #3a3216;
     --color-accent-400: #f5c542;
     --color-accent-800: #f5c542;
-    --color-social: #ff8466;
-    --color-social-50: #3b231d;
-    --color-social-ink: #ff9c84;
-    --color-empleo: #3fd1c3;
-    --color-empleo-50: #12302d;
-    --color-empleo-ink: #5ee0d3;
+    --color-social: #5fb3d0;
+    --color-social-50: #16303a;
+    --color-social-ink: #7ec4dc;
+    --color-empleo: #4ade80;
+    --color-empleo-50: #14301f;
+    --color-empleo-ink: #6edc9a;
     --color-foros: #a78bfa;
     --color-foros-50: #2a2340;
     --color-foros-ink: #c4b1ff;
     --color-on-section: #15141a;
-    --color-banner-from: #4a2a21;
-    --color-banner-to: #3d3418;
+    --color-banner-from: #16303a;
+    --color-banner-to: #1d2a3d;
     --color-ink: #f2f0ec;
     --color-ink-muted: #adaab6;
     --color-ink-subtle: #8a8796;
@@ -98,6 +99,7 @@
     --color-success: #4ade80;
     --color-warning: #fb923c;
     --color-danger: #f87171;
+    --color-on-danger: #15141a;
     /* Colores de Tailwind que se usan sueltos (avisos de error, "seleccionado"…) */
     --color-red-50: #3a1d20;
     --color-green-50: #16301f;
@@ -181,9 +183,8 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
   transform: translateY(1px);
 }
 
-/* Tarjetas: borde fino y sombra suave */
+/* Tarjetas: sombra suave (el color del borde lo pone la clase, así funciona hover:border-…) */
 .rounded-card.border {
-  border-color: var(--color-line);
   box-shadow: var(--shadow-card);
 }
 

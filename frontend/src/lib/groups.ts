@@ -34,7 +34,7 @@ import {
  * Las claves son las de backend/app/services/groups.py (TOPICS).
  */
 export const TOPIC_STYLE: Record<string, { icon: LucideIcon; from: string; to: string }> = {
-  programacion: { icon: Code2, from: "#111111", to: "#FF6B4A" },
+  programacion: { icon: Code2, from: "#111111", to: "#1F6F8B" },
   tecnologia: { icon: Cpu, from: "#312E81", to: "#4F46E5" },
   diseno: { icon: Palette, from: "#9D174D", to: "#DB2777" },
   salud: { icon: HeartPulse, from: "#B91C1C", to: "#EF4444" },
@@ -59,7 +59,7 @@ export const TOPIC_STYLE: Record<string, { icon: LucideIcon; from: string; to: s
   arte: { icon: Brush, from: "#A21CAF", to: "#F472B6" },
   // Foros (comunidades de estudios, de centros y generales): no tienen temática
   "foro-degree": { icon: GraduationCap, from: "#6D28D9", to: "#A78BFA" },
-  "foro-school": { icon: School, from: "#0F766E", to: "#2EC4B6" },
+  "foro-school": { icon: School, from: "#175A72", to: "#3A9BB5" },
   "foro-general": { icon: MessagesSquare, from: "#111111", to: "#8B5CF6" },
 };
 
@@ -80,7 +80,7 @@ export function coverTopic(g: { topic: string | null; type?: string | null }): s
   return g.topic ?? (isForum(g.type) ? `foro-${g.type}` : null);
 }
 
-export const DEFAULT_TOPIC_STYLE = { icon: Users, from: "#E5482A", to: "#FF8466" };
+export const DEFAULT_TOPIC_STYLE = { icon: Users, from: "#175A72", to: "#3A9BB5" };
 
 export function topicStyle(topic: string | null | undefined) {
   return (topic && TOPIC_STYLE[topic]) || DEFAULT_TOPIC_STYLE;

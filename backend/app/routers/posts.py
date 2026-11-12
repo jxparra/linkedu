@@ -32,6 +32,7 @@ def serialize(db: DB, posts: list[Post], me: User) -> list[PostOut]:
     mine_shared = set(db.scalars(select(Share.post_id).where(Share.user_id == me.id, Share.post_id.in_(ids))))
     mine_saved = set(db.scalars(select(SavedPost.post_id).where(SavedPost.user_id == me.id, SavedPost.post_id.in_(ids))))
     following = set(db.scalars(select(Follow.followed_id).where(Follow.follower_id == me.id)))
+    my_communities = set(db.scalars(select(CommunityMember.community_id).where(CommunityMember.user_id == me.id)))
     tagged_ids = {uid for p in posts for uid in (p.tagged_user_ids or [])}
     people = authors(db, {p.user_id for p in posts} | tagged_ids)
     communities = {
@@ -55,7 +56,17 @@ def serialize(db: DB, posts: list[Post], me: User) -> list[PostOut]:
                 created_at=p.created_at,
                 edited=edited,
                 author=people[p.user_id],
-                community=CommunityRef(id=c.id, name=c.name, is_group=c.type == "group") if c else None,
+                community=CommunityRef(
+                    id=c.id,
+                    name=c.name,
+                    is_group=c.type == "group",
+                    type=c.type,
+                    topic=c.topic,
+                    cover_url=c.cover_url,
+                    is_member=c.id in my_communities,
+                )
+                if c
+                else None,
                 likes=likes.get(p.id, 0),
                 comments=comments.get(p.id, 0),
                 shares=shares.get(p.id, 0),

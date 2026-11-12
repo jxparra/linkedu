@@ -21,7 +21,16 @@
 - Me gusta · Comentar · Compartir · Enviar
 
 ## Cambios respecto al diseño
-- **"Noticias" → "Tendencias en StudyHub".** No hay una fuente real de noticias, y poner titulares inventados en la demo confundiría al tribunal. El panel muestra las comunidades con más publicaciones, con datos reales de la base de datos. Más adelante se puede añadir un feed RSS de noticias educativas.
+- **"Noticias" → "Publicaciones de interés"** (antes "Tendencias en StudyHub"). No hay una fuente real de noticias, y poner titulares inventados en la demo confundiría al tribunal. El panel usa publicaciones reales de StudyHub y se calcula para cada usuario (`GET /discover`):
+  - **Publicaciones de interés** (3): de tu foro de estudios o de tu centro, de grupos de tus temas, de gente de tu carrera… Pesa más que estén relacionadas con tu perfil que lo populares que sean, y como mucho sale una por comunidad. Cada una dice por qué sale («De tu foro de DAW», «En Comunidad de IA»).
+  - **Personas que quizá conozcas** (3): foto, nombre, el motivo (misma carrera, mismo centro, la siguen personas que sigues, grupos en común) y un botón «+» para seguir.
+  - **Foros y grupos para ti** (3): alterna grupos de «Para ti» y foros de tus estudios o tu centro, con un botón «+» para unirte.
+
+### Cabecera de las publicaciones (2026-11-12)
+- **De una persona:** foto, **nombre en negro y más grande** (16 px, negrita), su etiqueta, sus estudios y la hora. Botón «+ Seguir».
+- **De un grupo o foro:** la portada del grupo con la foto del autor pequeña en la esquina. Arriba, **el nombre del grupo**; debajo, más pequeño y más claro, quién lo publicó. En vez de «Seguir» sale **«+ Unirme»** si no eres miembro.
+- Se quitó la «X» de ocultar, porque ya está «No me interesa» en el menú de los tres puntos.
+- Tarjeta: borde fino que se oscurece al pasar el ratón, sombra muy suave y la línea de las acciones de lado a lado.
 - **Caja para publicar** arriba del feed, que no estaba en el diseño.
 - **Botón de mensajes**: icono de bocadillo en lugar del teléfono.
 - **Rango de 768 a 1279 px:** el panel derecho se oculta para que el feed no quede estrecho.

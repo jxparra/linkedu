@@ -37,7 +37,7 @@ function IconButton({ href, label, icon: Icon, count, active }: { href: string; 
     >
       <Icon className="h-5 w-5" aria-hidden />
       {count > 0 && (
-        <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-card bg-danger px-1 text-[11px] font-bold leading-none text-white">
+        <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-card bg-danger px-1 text-[11px] font-bold leading-none text-on-danger">
           {count > 9 ? "9+" : count}
         </span>
       )}

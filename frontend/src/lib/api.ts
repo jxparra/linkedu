@@ -116,7 +116,16 @@ export type Post = {
   created_at: string;
   edited: boolean;
   author: Author;
-  community: { id: number; name: string; is_group: boolean } | null;
+  community: {
+    id: number;
+    name: string;
+    is_group: boolean;
+    /** group | degree | school | general */
+    type: string | null;
+    topic: string | null;
+    cover_url: string | null;
+    is_member: boolean;
+  } | null;
   likes: number;
   comments: number;
   shares: number;
@@ -127,7 +136,6 @@ export type Post = {
   is_mine: boolean;
 };
 
-export type Trend = { id: number; name: string; posts: number; members: number; last_activity: string | null };
 
 export type NotificationItem = {
   id: number;
@@ -240,6 +248,13 @@ export type GroupCard = {
 
 export type GroupSuggestions = { province: string | null; for_you: GroupCard[]; nearby: GroupCard[]; more: GroupCard[] };
 
+/** Panel «Publicaciones de interés» (GET /discover) */
+export type Discover = {
+  posts: { id: number; excerpt: string; author: string; community: string | null; created_at: string; likes: number; comments: number; reason: string }[];
+  people: { user: Author; reason: string }[];
+  communities: GroupCard[];
+};
+
 export type ForumsList = { mine: GroupCard[]; suggested: GroupCard[] };
 
 export type MyGroup = {
@@ -279,6 +294,20 @@ export type GroupMember = { user: Author; role: "admin" | "member"; joined_at: s
 export type Topic = { key: string; label: string; universal: boolean };
 
 /** Avisa al menú de Grupos de que vuelva a cargar "Grupos a los que te has unido". */
+/** Avisa a todas las tarjetas de que has entrado o salido de un grupo/foro, o has seguido o dejado de seguir a alguien. */
+export type RelationChange = { kind: "group" | "user"; id: number; on: boolean };
+
+export function announceRelation(change: RelationChange) {
+  window.dispatchEvent(new CustomEvent<RelationChange>("studyhub:relation", { detail: change }));
+}
+
+/** Escucha esos avisos (devuelve la función para dejar de escuchar). */
+export function onRelation(handler: (change: RelationChange) => void) {
+  const listener = (e: Event) => handler((e as CustomEvent<RelationChange>).detail);
+  window.addEventListener("studyhub:relation", listener);
+  return () => window.removeEventListener("studyhub:relation", listener);
+}
+
 export function refreshGroups() {
   window.dispatchEvent(new Event("studyhub:groups"));
 }

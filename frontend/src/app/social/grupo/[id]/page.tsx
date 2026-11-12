@@ -8,9 +8,11 @@ import { Avatar } from "@/components/Avatar";
 import { Button, ButtonLink } from "@/components/Button";
 import { Composer } from "@/components/feed/Composer";
 import { PostCard } from "@/components/feed/PostCard";
+import { GroupCover } from "@/components/social/GroupCover";
 import { GroupHeader, type GroupTab } from "@/components/social/GroupHeader";
 import { PeoplePicker } from "@/components/social/PeoplePicker";
 import { SocialShell } from "@/components/social/SocialNav";
+import { UnfollowDialog } from "@/components/UnfollowDialog";
 import { api, ApiError, mediaUrl, refreshGroups, type Author, type Group, type GroupMember, type Post, type User } from "@/lib/api";
 import { coverTopic, FORUM_LABEL, groupNoun, groupStats, ONLINE, PRIVACY } from "@/lib/groups";
 
@@ -224,6 +226,7 @@ function GroupPage({ user }: { user: User }) {
   const [busy, setBusy] = useState(false);
   const [menu, setMenu] = useState(false);
   const [inviting, setInviting] = useState(false);
+  const [confirmLeave, setConfirmLeave] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const load = useCallback(() => {
@@ -267,9 +270,7 @@ function GroupPage({ user }: { user: User }) {
   };
 
   const leave = async () => {
-    setMenu(false);
-    const admin = group.role === "admin";
-    if (!window.confirm(`¿Salir de «${group.name}»?${admin ? " Eres administrador: lo será quien lleve más tiempo en el ${noun}." : ""}`)) return;
+    setConfirmLeave(false);
     await api(`/groups/${group.id}/join`, { method: "DELETE" }).catch(() => {});
     refreshGroups();
     load();
@@ -319,7 +320,15 @@ function GroupPage({ user }: { user: User }) {
                       <Pencil className="h-5 w-5" aria-hidden /> Editar grupo
                     </Link>
                   )}
-                  <button type="button" role="menuitem" onClick={leave} className={item}>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setMenu(false);
+                      setConfirmLeave(true);
+                    }}
+                    className={item}
+                  >
                     <LogOut className="h-5 w-5" aria-hidden /> Salir del {noun}
                   </button>
                   {group.role === "admin" && (
@@ -376,6 +385,16 @@ function GroupPage({ user }: { user: User }) {
         </div>
       )}
       {inviting && <InviteDialog group={group} onClose={() => setInviting(false)} />}
+      {confirmLeave && (
+        <UnfollowDialog
+          kind={noun === "foro" ? "forum" : "group"}
+          name={group.name}
+          picture={<GroupCover src={group.cover_url} topic={coverTopic(group)} iconSize="sm" className="h-16 w-16 rounded-2xl" />}
+          note={group.role === "admin" ? `Eres administrador: lo será quien lleve más tiempo en el ${noun}.` : undefined}
+          onConfirm={leave}
+          onCancel={() => setConfirmLeave(false)}
+        />
+      )}
     </div>
   );
 }

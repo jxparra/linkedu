@@ -18,6 +18,11 @@ class CommunityRef(BaseModel):
     id: int
     name: str
     is_group: bool = False
+    # Para la cabecera de las publicaciones de grupos y foros (portada + «Unirme»)
+    type: str | None = None  # group | degree | school | general
+    topic: str | None = None
+    cover_url: str | None = None
+    is_member: bool = False
 
 
 class UserRef(BaseModel):

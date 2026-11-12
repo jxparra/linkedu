@@ -8,7 +8,7 @@ import type { User } from "@/lib/api";
 import { MobileNav } from "./MobileNav";
 import { SideNav } from "./SideNav";
 import { TopBar } from "./TopBar";
-import { TrendsPanel } from "./TrendsPanel";
+import { InterestPanel } from "./InterestPanel";
 
 /**
  * Estructura de la app con sesión iniciada: barra superior, menú izquierdo, contenido y panel derecho.
@@ -58,8 +58,8 @@ export function AppShell({
         <main className="min-w-0">{user ? children(user) : <div className="h-64 animate-pulse rounded-card bg-card" />}</main>
         {!wide && !bare && (
           <aside className="hidden xl:block">
-            <div className="sticky top-[88px]">
-              <TrendsPanel />
+            <div className="no-scrollbar sticky top-[88px] max-h-[calc(100vh-112px)] overflow-y-auto p-0.5">
+              <InterestPanel />
             </div>
           </aside>
         )}
