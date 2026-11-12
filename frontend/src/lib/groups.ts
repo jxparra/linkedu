@@ -1,0 +1,85 @@
+import {
+  BookOpen,
+  Brain,
+  Briefcase,
+  Brush,
+  Camera,
+  ChefHat,
+  Clapperboard,
+  Code2,
+  Cpu,
+  Dumbbell,
+  FlaskConical,
+  Gamepad2,
+  HandHeart,
+  HeartPulse,
+  House,
+  Languages,
+  Library,
+  Music,
+  Palette,
+  PartyPopper,
+  Plane,
+  Scale,
+  TrendingUp,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
+
+/**
+ * Aspecto de cada temática: icono y degradado para la portada cuando el grupo no tiene foto.
+ * Las claves son las de backend/app/services/groups.py (TOPICS).
+ */
+export const TOPIC_STYLE: Record<string, { icon: LucideIcon; from: string; to: string }> = {
+  programacion: { icon: Code2, from: "#1F3FB8", to: "#2952E3" },
+  tecnologia: { icon: Cpu, from: "#312E81", to: "#4F46E5" },
+  diseno: { icon: Palette, from: "#9D174D", to: "#DB2777" },
+  salud: { icon: HeartPulse, from: "#B91C1C", to: "#EF4444" },
+  psicologia: { icon: Brain, from: "#6D28D9", to: "#A78BFA" },
+  derecho: { icon: Scale, from: "#334155", to: "#64748B" },
+  empresa: { icon: TrendingUp, from: "#065F46", to: "#10B981" },
+  ciencia: { icon: FlaskConical, from: "#0E7490", to: "#22D3EE" },
+  quedadas: { icon: PartyPopper, from: "#C2410C", to: "#F5A524" },
+  deportes: { icon: Dumbbell, from: "#15803D", to: "#4ADE80" },
+  musica: { icon: Music, from: "#7E22CE", to: "#E879F9" },
+  videojuegos: { icon: Gamepad2, from: "#1E1B4B", to: "#6366F1" },
+  cine: { icon: Clapperboard, from: "#14161F", to: "#5B6070" },
+  viajes: { icon: Plane, from: "#0369A1", to: "#38BDF8" },
+  pisos: { icon: House, from: "#92400E", to: "#F59E0B" },
+  idiomas: { icon: Languages, from: "#0F766E", to: "#2DD4BF" },
+  estudio: { icon: Library, from: "#1F3FB8", to: "#60A5FA" },
+  empleo: { icon: Briefcase, from: "#14161F", to: "#2952E3" },
+  voluntariado: { icon: HandHeart, from: "#BE123C", to: "#FB7185" },
+  fotografia: { icon: Camera, from: "#374151", to: "#9CA3AF" },
+  cocina: { icon: ChefHat, from: "#B45309", to: "#FBBF24" },
+  lectura: { icon: BookOpen, from: "#78350F", to: "#D97706" },
+  arte: { icon: Brush, from: "#A21CAF", to: "#F472B6" },
+};
+
+export const DEFAULT_TOPIC_STYLE = { icon: Users, from: "#1F3FB8", to: "#5B6070" };
+
+export function topicStyle(topic: string | null | undefined) {
+  return (topic && TOPIC_STYLE[topic]) || DEFAULT_TOPIC_STYLE;
+}
+
+const compact = new Intl.NumberFormat("es-ES", { notation: "compact", maximumFractionDigits: 1 });
+
+/** "1 miembro", "152 miembros", "1,2 mil miembros" */
+export function membersText(n: number): string {
+  return `${n >= 10000 ? compact.format(n) : n.toLocaleString("es-ES")} ${n === 1 ? "miembro" : "miembros"}`;
+}
+
+/** "152 miembros · 4 publicaciones a la semana" */
+export function groupStats(members: number, postsWeek: number): string {
+  const parts = [membersText(members)];
+  if (postsWeek > 0) parts.push(`${postsWeek} ${postsWeek === 1 ? "publicación" : "publicaciones"} a la semana`);
+  return parts.join(" · ");
+}
+
+export const PRIVACY = {
+  public: { label: "Grupo público", short: "Público", text: "Cualquier persona puede ver quién está en el grupo y lo que se publica." },
+  private: { label: "Grupo privado", short: "Privado", text: "Solo los miembros ven quién está en el grupo y lo que se publica." },
+} as const;
+
+/** Online o provincia */
+export const ONLINE = "Online · toda España";

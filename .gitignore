@@ -1,0 +1,31 @@
+# Node / Next.js
+node_modules/
+.next/
+out/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Entorno
+.env
+.env.*
+!.env.example
+
+# Obsidian (se sube la config, no el estado de la ventana)
+docs/.obsidian/workspace.json
+docs/.obsidian/workspace-mobile.json
+docs/.obsidian/cache
+docs/.trash/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Bases de datos locales de prueba
+*.db
+
+# Archivos subidos por los usuarios
+backend/uploads/
