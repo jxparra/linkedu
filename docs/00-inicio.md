@@ -4,7 +4,7 @@
 
 ## Estado
 - **Fase:** desarrollo — registro, inicio, publicaciones, comentarios, mensajes, perfil, **empleo**, **grupos (Social)**, **guardados**, **estadísticas**, **ajustes** e **idioma** hechos (ver `README.md` del repo)
-- **Último día de trabajo:** [[diario/2026-11-10]]
+- **Último día de trabajo:** [[diario/2026-11-12]]
 - **Qué falta:** [[pendientes]]
 - **Próxima entrega:** en ~2 semanas (⚠️ confirmar qué se entrega exactamente)
 - **Tareas:** GitHub Projects (enlace pendiente)

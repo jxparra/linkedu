@@ -8,6 +8,19 @@
 - [ ] Decidir edad mínima y reseñas de docentes → [[decisiones/ADR-003-resenas-docentes]]
 - [x] **Guardar el trabajo en Git** → https://github.com/jxparra/StudyHub (2026-11-12)
 
+## 🎨 Estética (rama `estetica-carpeta`) → [[decisiones/ADR-010-estetica-carpeta-profesional]]
+- [x] Elegir estética entre 3 propuestas → «Carpeta», luego versión profesional
+- [x] Modo oscuro (Ajustes → Visualización)
+- [x] Color principal azul petróleo (antes coral), Empleo en verde
+- [x] Fondo gris con tarjetas blancas, cabecera de publicaciones de grupo/foro, panel «Publicaciones de interés»
+- [x] Dejar de seguir y salir de grupos/foros desde tarjetas y panel
+- [ ] **Decidir si la estética se queda** y unir la rama a `main` → https://github.com/jxparra/StudyHub/pull/new/estetica-carpeta
+- [ ] Revisar con la estética nueva las pantallas de **Empresa** (publicar oferta, Mis ofertas, candidatos) con `technova@demo.studyhub`
+- [ ] Revisar el resto de pasos del **registro** (estudios, comunidades, foto, logo) en claro y oscuro
+- [ ] Panel «Publicaciones de interés»: ¿excluir publicaciones de grupos en los que ya estás? (ahora pueden repetirse con el feed)
+- [ ] Panel de interés en **móvil** (ahora solo sale en pantallas anchas)
+- [ ] Traducir al inglés los textos nuevos (panel de interés, diálogos de salir, Foros)
+
 ## 🟡 Siguiente bloque de código (elige uno)
 - [x] **Empleo** (al estilo InfoJobs) → [[diseno/empleo]]
 - [x] **Social: grupos** (sugerencias para ti, cerca de ti y más; crear, unirse, publicar dentro) → [[diseno/social]]
@@ -30,7 +43,8 @@
 - [ ] Perfil: ¿ocultar los grupos **privados** cuando lo ve otra persona?
 - [ ] Guardar también ofertas de empleo en Guardados
 - [ ] Traducir al inglés el resto de pantallas (inicio, empleo, registro…) → [[decisiones/ADR-007-idioma]]
-- [ ] Modo oscuro y el resto de ajustes que salen como "Próximamente"
+- [x] Modo oscuro (rama `estetica-carpeta`)
+- [ ] El resto de ajustes que salen como "Próximamente"
 - [ ] Filtros de Empleo que faltan respecto a InfoJobs: experiencia mínima, estudios mínimos, rango de salario
 
 ## 🧪 Comprobar en local
@@ -47,6 +61,8 @@
 ---
 
 ## Cómo retomarlo
+> ⚠️ Rama de trabajo actual: **`estetica-carpeta`** (`git switch estetica-carpeta`). En `main` está Foros sin la estética nueva.
+
 **Terminal 1 (backend):**
 ```powershell
 cd $HOME\Documents\StudyHub\backend
