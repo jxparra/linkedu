@@ -1,7 +1,7 @@
 "use client";
 
 import { AppShell } from "@/components/app/AppShell";
-import { SettingsCard, SettingsNav, SettingsRow } from "@/components/settings/Settings";
+import { SettingsCard, SettingsMobileNav, SettingsNav, SettingsRow } from "@/components/settings/Settings";
 import { logout, type User } from "@/lib/api";
 import { LANGS, useLang, useT } from "@/lib/i18n";
 import { useTheme, type ThemePref } from "@/lib/theme";
@@ -12,45 +12,42 @@ const THEMES: { value: ThemePref; label: string }[] = [
   { value: "system", label: "Como el sistema" },
 ];
 
-/** Modo claro / oscuro / el del sistema, en tres botones */
+/** Tema: claro, oscuro o el del sistema. Radios de verdad (se manejan con las flechas); el elegido, en fosforito. */
 function ThemePicker() {
   const t = useT();
   const { pref, change } = useTheme();
   return (
-    <li className="flex flex-wrap items-center justify-between gap-3 px-6 py-3">
-      <span id="tema" className="text-[15px]">
-        {t("Modo oscuro")}
-      </span>
-      <div role="radiogroup" aria-labelledby="tema" className="flex flex-wrap gap-2">
-        {THEMES.map((o) => (
-          <button
-            key={o.value}
-            type="button"
-            role="radio"
-            aria-checked={pref === o.value}
-            onClick={() => change(o.value)}
-            className={`min-h-10 rounded-full border px-4 text-sm font-semibold transition-colors ${
-              pref === o.value ? "border-edge bg-ink text-inverse" : "border-line text-ink hover:border-edge"
-            }`}
-          >
-            {t(o.label)}
-          </button>
-        ))}
-      </div>
+    <li className="px-6 py-3">
+      <fieldset className="flex flex-wrap items-center justify-between gap-3">
+        <legend className="float-left text-[15px]">{t("Tema")}</legend>
+        <div className="flex flex-wrap gap-2">
+          {THEMES.map((o) => (
+            <label
+              key={o.value}
+              className={`flex min-h-11 items-center rounded-btn border px-4 text-sm font-semibold transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand-600 ${
+                pref === o.value ? "nav-mark border-transparent" : "border-line text-ink hover:border-edge"
+              }`}
+            >
+              <input type="radio" name="tema" value={o.value} checked={pref === o.value} onChange={() => change(o.value)} className="sr-only" />
+              {t(o.label)}
+            </label>
+          ))}
+        </div>
+      </fieldset>
     </li>
   );
 }
 
-/** Ajustes → Preferencias de la cuenta */
+/** Ajustes → Tu cuenta */
 function Cuenta({ user }: { user: User }) {
   const t = useT();
   const lang = useLang();
   const company = user.role === "company";
 
   return (
-    <div className="mx-auto max-w-3xl space-y-4">
+    <div className="max-w-3xl space-y-4">
       <SettingsCard title={t("Información del perfil")}>
-        <SettingsRow label={company ? t("Nombre, ubicación y sector") : t("Nombre, ubicación y estudios")} href="/perfil" />
+        <SettingsRow label={company ? t("Nombre, ubicación y sector") : t("Nombre, ubicación y estudios")} href="/perfil/editar" />
         <SettingsRow label={t("Verificaciones")} value={user.email_verified ? `✓ ${t("Email verificado")}` : undefined} />
       </SettingsCard>
 
@@ -74,7 +71,12 @@ function Cuenta({ user }: { user: User }) {
 export default function Ajustes() {
   return (
     <AppShell wide left={(user) => <SettingsNav user={user} />}>
-      {(user) => <Cuenta user={user} />}
+      {(user) => (
+        <>
+          <SettingsMobileNav />
+          <Cuenta user={user} />
+        </>
+      )}
     </AppShell>
   );
 }

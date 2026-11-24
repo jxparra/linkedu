@@ -66,14 +66,14 @@ export function PeoplePicker({
         className="h-12 w-full rounded-input border border-line bg-card px-3.5 text-[15px] placeholder:text-ink-subtle hover:border-ink-subtle focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
       />
       {results.length > 0 && (
-        <ul className="mt-1 max-h-60 overflow-y-auto rounded-xl border border-line bg-card p-1">
+        <ul className="mt-1 max-h-60 overflow-y-auto rounded-card border border-line bg-card p-1">
           {results.map((p) => (
             <li key={p.id}>
               <button
                 type="button"
                 onClick={() => toggle(p)}
                 aria-pressed={picked.has(p.id)}
-                className="flex min-h-12 w-full items-center gap-3 rounded-lg px-2 text-left hover:bg-page"
+                className="flex min-h-12 w-full items-center gap-3 rounded-btn px-2 text-left hover:bg-page"
               >
                 <Avatar name={p.name} src={p.avatar_url ? mediaUrl(p.avatar_url) : null} size="sm" square={p.role === "company"} />
                 <span className="min-w-0 flex-1">

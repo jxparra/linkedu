@@ -296,7 +296,7 @@ def suggestions(db: Session, user: User) -> Suggestions:
     if len(nearby) < 4:  # sin zona o con pocos grupos cerca: los más populares de toda la app
         taken = {s.info.group.id for s in nearby}
         rest = sorted((g for g in universal if g.group.id not in taken), key=lambda g: g.popularity, reverse=True)
-        nearby += [Suggestion(g, "Popular en StudyHub") for g in rest[: 6 - len(nearby)]]
+        nearby += [Suggestion(g, "Popular en Linkedu") for g in rest[: 6 - len(nearby)]]
     reserved |= {s.info.group.id for s in nearby[:SECTION_SIZE]}
 
     # 3. Más sugerencias: una relacionada con tu perfil y otra de algo nuevo, alternando

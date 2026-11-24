@@ -14,13 +14,21 @@ export function GroupCover({
   src: string | null | undefined;
   topic: string | null | undefined;
   className?: string;
-  iconSize?: "sm" | "md" | "lg";
+  /** `tile`: cuadrado de la cabecera del grupo (el icono solo, sin adornos ni círculo) */
+  iconSize?: "sm" | "md" | "lg" | "tile";
 }) {
   if (src) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={mediaUrl(src)} alt="" className={`object-cover ${className}`} />;
   }
   const { icon: Icon, from, to } = topicStyle(topic);
+  if (iconSize === "tile") {
+    return (
+      <div aria-hidden className={`flex items-center justify-center ${className}`} style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}>
+        <Icon className="h-1/2 w-1/2 text-white" strokeWidth={1.75} />
+      </div>
+    );
+  }
   const big = { sm: "h-5 w-5", md: "h-14 w-14", lg: "h-20 w-20" }[iconSize];
   const ring = { sm: "h-9 w-9", md: "h-24 w-24", lg: "h-32 w-32" }[iconSize];
   return (

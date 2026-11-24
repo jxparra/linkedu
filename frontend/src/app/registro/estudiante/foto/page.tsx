@@ -44,7 +44,7 @@ export default function EstudianteFoto() {
         <button
           type="button"
           onClick={() => input.current?.click()}
-          className="mt-5 min-h-11 rounded-full border border-line px-5 text-[15px] font-semibold hover:border-ink-subtle"
+          className="mt-5 min-h-11 rounded-btn border border-line px-5 text-[15px] font-semibold hover:border-ink-subtle"
         >
           {preview ? "Cambiar foto" : "Subir foto"}
         </button>

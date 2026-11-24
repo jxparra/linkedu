@@ -1,4 +1,6 @@
 "use client";
+import { Select } from "@/components/Select";
+import { ChalkText } from "@/components/ChalkLine";
 
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -58,7 +60,7 @@ function Label({ htmlFor, children, optional }: { htmlFor?: string; children: Re
   );
 }
 
-function Select({ id, label, value, onChange, options, placeholder }: {
+function SelectField({ id, label, value, onChange, options, placeholder }: {
   id: string;
   label: string;
   value: string;
@@ -69,18 +71,7 @@ function Select({ id, label, value, onChange, options, placeholder }: {
   return (
     <div>
       <Label htmlFor={id}>{label}</Label>
-      <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className={`${inputCls} h-12`}>
-        {placeholder && (
-          <option value="" disabled>
-            {placeholder}
-          </option>
-        )}
-        {Object.entries(options).map(([v, l]) => (
-          <option key={v} value={v}>
-            {l}
-          </option>
-        ))}
-      </select>
+      <Select id={id} value={value} onChange={onChange} placeholder={placeholder} options={Object.entries(options).map(([v, l]) => ({ value: v, label: l }))} />
     </div>
   );
 }
@@ -163,29 +154,29 @@ function JobForm({ initial, editId }: { initial: Form; editId: number | null }) 
   return (
     <form onSubmit={submit} noValidate className="space-y-4">
       <section className="space-y-4 rounded-card border border-line bg-card p-5 sm:p-6">
-        <h2 className="text-lg font-semibold">El puesto</h2>
+        <h2 className="text-lg font-bold">El puesto</h2>
         <Field label="Puesto" value={f.title} onChange={(e) => set("title", e.target.value)} placeholder="Ej.: Camarero/a fines de semana" maxLength={150} error={errors.title} />
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Select id="cat" label="Categoría" value={f.category} onChange={(v) => set("category", v)} placeholder="Elige una categoría" options={Object.fromEntries(CATEGORIES.map((c) => [c, c]))} />
+            <SelectField id="cat" label="Categoría" value={f.category} onChange={(v) => set("category", v)} placeholder="Elige una categoría" options={Object.fromEntries(CATEGORIES.map((c) => [c, c]))} />
             {fieldError("category")}
           </div>
-          <Select id="type" label="Tipo de contrato" value={f.type} onChange={(v) => set("type", v)} options={JOB_TYPES} />
-          <Select id="schedule" label="Jornada" value={f.schedule} onChange={(v) => set("schedule", v)} options={SCHEDULES} />
+          <SelectField id="type" label="Tipo de contrato" value={f.type} onChange={(v) => set("type", v)} options={JOB_TYPES} />
+          <SelectField id="schedule" label="Jornada" value={f.schedule} onChange={(v) => set("schedule", v)} options={SCHEDULES} />
           <Field label="Vacantes" type="number" min={1} max={100} value={f.vacancies} onChange={(e) => set("vacancies", e.target.value)} />
         </div>
       </section>
 
       <section className="space-y-4 rounded-card border border-line bg-card p-5 sm:p-6">
-        <h2 className="text-lg font-semibold">Dónde</h2>
+        <h2 className="text-lg font-bold">Dónde</h2>
         <fieldset>
           <legend className="mb-1.5 text-sm font-medium">Modalidad</legend>
           <div className="flex flex-wrap gap-2">
             {Object.entries(MODALITIES).map(([v, l]) => (
               <label
                 key={v}
-                className={`inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-[15px] font-semibold transition-colors ${
-                  f.modality === v ? "border-brand-600 bg-brand-50 text-brand-700" : "border-line hover:border-ink-subtle"
+                className={`inline-flex min-h-11 items-center gap-2 rounded-btn border px-4 text-[15px] font-semibold transition-colors ${
+                  f.modality === v ? "nav-mark border-transparent" : "border-line hover:border-ink-subtle"
                 }`}
               >
                 <input type="radio" name="modality" value={v} checked={f.modality === v} onChange={() => set("modality", v)} className="sr-only" />
@@ -207,7 +198,7 @@ function JobForm({ initial, editId }: { initial: Form; editId: number | null }) 
       </section>
 
       <section className="space-y-4 rounded-card border border-line bg-card p-5 sm:p-6">
-        <h2 className="text-lg font-semibold">Condiciones</h2>
+        <h2 className="text-lg font-bold">Condiciones</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <Label htmlFor="pay" optional>
@@ -215,11 +206,17 @@ function JobForm({ initial, editId }: { initial: Form; editId: number | null }) 
             </Label>
             <div className="flex gap-2">
               <input id="pay" type="number" min={0} step="0.5" inputMode="decimal" value={f.pay} onChange={(e) => set("pay", e.target.value)} placeholder="Ej.: 10" className={`${inputCls} h-12`} />
-              <select aria-label="Periodo del sueldo" value={f.pay_period} onChange={(e) => set("pay_period", e.target.value)} className={`${inputCls} h-12 w-36 shrink-0`}>
-                <option value="hora">por hora</option>
-                <option value="mes">al mes</option>
-                <option value="total">en total</option>
-              </select>
+              <Select
+                ariaLabel="Periodo del sueldo"
+                value={f.pay_period}
+                onChange={(v) => set("pay_period", v)}
+                className="w-36 shrink-0"
+                options={[
+                  { value: "hora", label: "por hora" },
+                  { value: "mes", label: "al mes" },
+                  { value: "total", label: "en total" },
+                ]}
+              />
             </div>
             {fieldError("pay")}
           </div>
@@ -236,7 +233,7 @@ function JobForm({ initial, editId }: { initial: Form; editId: number | null }) 
       </section>
 
       <section className="space-y-4 rounded-card border border-line bg-card p-5 sm:p-6">
-        <h2 className="text-lg font-semibold">Descripción</h2>
+        <h2 className="text-lg font-bold">Descripción</h2>
         <div>
           <Label htmlFor="desc">Qué hay que hacer</Label>
           <textarea
@@ -310,7 +307,9 @@ function Publicar({ user }: { user: User }) {
         <ArrowLeft className="h-5 w-5" aria-hidden />
         {editId ? "Volver a la oferta" : "Mis ofertas"}
       </Link>
-      <h1 className="text-[28px] font-semibold">{editId ? "Editar oferta" : "Publicar una oferta"}</h1>
+      <h1 className="text-[28px] font-bold leading-tight">
+        <ChalkText>{editId ? "Editar oferta" : "Publicar una oferta"}</ChalkText>
+      </h1>
       {error ? <ErrorBanner message={error} /> : initial ? <JobForm initial={initial} editId={editId} /> : <div className="h-96 animate-pulse rounded-card bg-card" />}
     </div>
   );
@@ -318,7 +317,7 @@ function Publicar({ user }: { user: User }) {
 
 export default function PublicarPage() {
   return (
-    <AppShell wide>
+    <AppShell wide section="empleo">
       {(user) => (
         <Suspense>
           <Publicar user={user} />

@@ -1,4 +1,5 @@
 "use client";
+import { ChalkText } from "@/components/ChalkLine";
 
 import { Bookmark, RotateCcw } from "lucide-react";
 import Link from "next/link";
@@ -44,7 +45,9 @@ function Saved() {
           <Bookmark className="h-5 w-5 fill-white" aria-hidden />
         </span>
         <div>
-          <h1 className="text-xl font-semibold">Guardados</h1>
+          <h1 className="text-[28px] font-bold leading-tight">
+            <ChalkText>Guardados</ChalkText>
+          </h1>
           <p className="text-sm text-ink-muted">Solo tú ves lo que guardas.</p>
         </div>
       </div>
@@ -63,11 +66,11 @@ function Saved() {
       {posts && visible.length === 0 && removed.length === 0 && (
         <div className="rounded-card border border-line bg-card p-10 text-center">
           <Bookmark className="mx-auto h-10 w-10 text-ink-subtle" aria-hidden />
-          <h2 className="mt-3 text-lg font-semibold">No tienes nada guardado</h2>
+          <h2 className="mt-3 text-lg font-bold">No tienes nada guardado</h2>
           <p className="mx-auto mt-1 max-w-sm text-ink-muted">
             Pulsa los tres puntos <span aria-hidden>(···)</span> de cualquier publicación y elige «Guardar» para leerla más tarde.
           </p>
-          <Link href="/inicio" className="mt-4 inline-flex min-h-11 items-center rounded-full border border-line px-5 font-semibold hover:border-ink-subtle">
+          <Link href="/inicio" className="mt-4 inline-flex min-h-11 items-center rounded-btn border border-line px-5 font-semibold hover:border-ink-subtle">
             Ir al inicio
           </Link>
         </div>

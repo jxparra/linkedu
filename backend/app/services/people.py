@@ -39,7 +39,7 @@ def authors(db: Session, user_ids: set[int]) -> dict[int, AuthorOut]:
             if degree and degree.level in LEVEL_BADGE:
                 badge = LEVEL_BADGE[degree.level]
             else:
-                badge = f"{profile.course}º" if profile.course else None
+                badge = f"{profile.course}º curso" if profile.course else None
             avatar = profile.avatar_url
         else:
             name, headline, badge, avatar = user.username or "Usuario", None, None, None

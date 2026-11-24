@@ -10,7 +10,6 @@ import {
   MapPin,
   MoreHorizontal,
   Search,
-  Smile,
   Square,
   UserPlus,
   Users,
@@ -31,20 +30,19 @@ type Community = { id: number; name: string };
 
 function GifIcon({ className = "" }: { className?: string }) {
   return (
-    <span aria-hidden className={`inline-flex items-center justify-center rounded-md bg-[#12A889] px-1 text-[10px] font-extrabold leading-4 text-white ${className}`}>
+    <span aria-hidden className={`inline-flex items-center justify-center rounded-[4px] bg-brand-600 px-1 text-[10px] font-extrabold leading-4 text-on-brand ${className}`}>
       GIF
     </span>
   );
 }
 
-/** Opciones de "Añadir a tu publicación". Sin "Recaudar dinero" ni "Acontecimiento importante". */
+/** Opciones de "Añadir a tu publicación". Sin "Recaudar dinero", "Acontecimiento importante" ni "Sentimiento/actividad" (eran de Facebook). */
 const OPTIONS: { panel: ComposerPanel; label: string; icon: ReactNode }[] = [
-  { panel: "photo", label: "Foto/vídeo", icon: <ImagePlus className="h-6 w-6 text-success" aria-hidden /> },
+  { panel: "photo", label: "Foto/vídeo", icon: <ImagePlus className="h-6 w-6 text-brand-700" aria-hidden /> },
   { panel: "tag", label: "Etiquetar personas", icon: <UserPlus className="h-6 w-6 text-brand-700" aria-hidden /> },
-  { panel: "feeling", label: "Sentimiento/actividad", icon: <Smile className="h-6 w-6 text-accent-400" aria-hidden /> },
-  { panel: "location", label: "Registrar visita", icon: <MapPin className="h-6 w-6 text-danger" aria-hidden /> },
+  { panel: "location", label: "Registrar visita", icon: <MapPin className="h-6 w-6 text-brand-700" aria-hidden /> },
   { panel: "gif", label: "GIF", icon: <GifIcon className="h-6 w-7" /> },
-  { panel: "camera", label: "Grabar vídeo", icon: <Video className="h-6 w-6 text-[#E4405F]" aria-hidden /> },
+  { panel: "camera", label: "Grabar vídeo", icon: <Video className="h-6 w-6 text-brand-700" aria-hidden /> },
 ];
 
 type Props = {
@@ -244,7 +242,7 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
               {media.length > 0 && (
                 <div className={`grid gap-1.5 ${media.length === 1 ? "grid-cols-1" : media.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}>
                   {media.map((m) => (
-                    <div key={m.preview} className="relative overflow-hidden rounded-xl border border-line bg-page">
+                    <div key={m.preview} className="relative overflow-hidden rounded-card border border-line bg-page">
                       {m.type === "video" ? (
                         <video src={m.preview} controls={media.length === 1} muted playsInline className={`w-full bg-ink object-cover ${media.length === 1 ? "max-h-72" : "aspect-square"}`} />
                       ) : (
@@ -273,7 +271,7 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
                     <button
                       type="button"
                       onClick={pickFile}
-                      className={`flex flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-line text-sm font-semibold text-ink-muted hover:border-ink-subtle hover:text-ink ${
+                      className={`flex flex-col items-center justify-center gap-1 rounded-card border-2 border-dashed border-line text-sm font-semibold text-ink-muted hover:border-ink-subtle hover:text-ink ${
                         media.length === 1 ? "min-h-20" : "aspect-square"
                       }`}
                     >
@@ -289,7 +287,7 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
                 </p>
               )}
 
-              <div className="mt-4 flex items-center justify-between rounded-xl border border-line px-4 py-2.5">
+              <div className="mt-4 flex items-center justify-between rounded-card border border-line px-4 py-2.5">
                 <span className="text-[15px] font-semibold">
                   <span className="hidden sm:inline">Añadir a tu publicación</span>
                   <span className="sm:hidden">Añadir</span>
@@ -323,7 +321,7 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
                 type="button"
                 onClick={publish}
                 disabled={!canPublish || publishing}
-                className="mt-4 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand-600 font-semibold text-on-brand transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:bg-page disabled:text-ink-subtle"
+                className="mt-4 flex min-h-11 w-full items-center justify-center gap-2 rounded-card bg-brand-600 font-semibold text-on-brand transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:bg-page disabled:text-ink-subtle"
               >
                 {publishing && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
                 Publicar
@@ -339,7 +337,7 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
                   <button
                     type="button"
                     onClick={() => go(o.panel)}
-                    className="flex min-h-14 w-full items-center gap-3 rounded-xl px-3 text-left text-[15px] font-semibold hover:bg-page"
+                    className="flex min-h-14 w-full items-center gap-3 rounded-card px-3 text-left text-[15px] font-semibold hover:bg-page"
                   >
                     {o.icon}
                     {o.label}
@@ -378,7 +376,7 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
               <button
                 type="button"
                 onClick={() => gifInput.current?.click()}
-                className="mt-5 min-h-11 rounded-full bg-brand-600 px-6 font-semibold text-on-brand hover:bg-brand-hover"
+                className="mt-5 min-h-11 rounded-btn bg-brand-600 px-6 font-semibold text-on-brand hover:bg-brand-hover"
               >
                 Elegir GIF
               </button>
@@ -460,7 +458,7 @@ function FeelingPanel({ value, onBack, onPick }: { value: string | null; onBack:
                 type="button"
                 onClick={() => onPick(f.label)}
                 aria-pressed={value === f.label}
-                className={`flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-left text-[15px] ${
+                className={`flex min-h-12 w-full items-center gap-3 rounded-card px-3 text-left text-[15px] ${
                   value === f.label ? "bg-brand-50 font-semibold text-brand-700" : "hover:bg-page"
                 }`}
               >
@@ -471,14 +469,14 @@ function FeelingPanel({ value, onBack, onPick }: { value: string | null; onBack:
           ))}
           {q.trim() && !list.length && (
             <li className="col-span-2">
-              <button type="button" onClick={() => onPick(q.trim())} className="min-h-12 w-full rounded-xl px-3 text-left text-[15px] hover:bg-page">
+              <button type="button" onClick={() => onPick(q.trim())} className="min-h-12 w-full rounded-card px-3 text-left text-[15px] hover:bg-page">
                 Usar «{q.trim()}»
               </button>
             </li>
           )}
         </ul>
         {value && (
-          <button type="button" onClick={() => onPick(null)} className="mt-2 min-h-11 w-full rounded-xl text-sm font-semibold text-danger hover:bg-red-50">
+          <button type="button" onClick={() => onPick(null)} className="mt-2 min-h-11 w-full rounded-card text-sm font-semibold text-danger hover:bg-red-50">
             Quitar sentimiento
           </button>
         )}
@@ -524,13 +522,13 @@ function TagPanel({ value, onBack, onDone }: { value: Author[]; onBack: () => vo
           </div>
         )}
         <ul className="mt-2 flex-1">
-          {!q.trim() && <li className="px-3 py-4 text-sm text-ink-muted">Escribe el nombre de alguien de StudyHub.</li>}
+          {!q.trim() && <li className="px-3 py-4 text-sm text-ink-muted">Escribe el nombre de alguien de Linkedu.</li>}
           {q.trim() && results.length === 0 && <li className="px-3 py-4 text-sm text-ink-muted">No encontramos a nadie con ese nombre.</li>}
           {results.map((a) => {
             const on = selected.some((x) => x.id === a.id);
             return (
               <li key={a.id}>
-                <button type="button" onClick={() => toggle(a)} aria-pressed={on} className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left hover:bg-page">
+                <button type="button" onClick={() => toggle(a)} aria-pressed={on} className="flex w-full items-center gap-3 rounded-card px-3 py-2 text-left hover:bg-page">
                   <Avatar name={a.name} src={a.avatar_url} size="sm" square={a.role === "company"} />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-semibold">{a.name}</span>
@@ -542,7 +540,7 @@ function TagPanel({ value, onBack, onDone }: { value: Author[]; onBack: () => vo
             );
           })}
         </ul>
-        <button type="button" onClick={() => onDone(selected)} className="mt-3 min-h-11 rounded-xl bg-brand-600 font-semibold text-on-brand hover:bg-brand-hover">
+        <button type="button" onClick={() => onDone(selected)} className="mt-3 min-h-11 rounded-card bg-brand-600 font-semibold text-on-brand hover:bg-brand-hover">
           Listo
         </button>
       </div>
@@ -571,7 +569,7 @@ function LocationPanel({ value, onBack, onPick }: { value: string | null; onBack
         <ul className="mt-2">
           {q.trim() && (
             <li>
-              <button type="button" onClick={() => onPick(q.trim())} className="flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-left hover:bg-page">
+              <button type="button" onClick={() => onPick(q.trim())} className="flex min-h-12 w-full items-center gap-3 rounded-card px-3 text-left hover:bg-page">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red-50 text-danger">
                   <MapPin className="h-4 w-4" aria-hidden />
                 </span>
@@ -583,7 +581,7 @@ function LocationPanel({ value, onBack, onPick }: { value: string | null; onBack
             const label = p.city ? `${p.name}, ${p.city}` : p.name;
             return (
               <li key={p.id}>
-                <button type="button" onClick={() => onPick(label)} className="flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-left hover:bg-page">
+                <button type="button" onClick={() => onPick(label)} className="flex min-h-12 w-full items-center gap-3 rounded-card px-3 text-left hover:bg-page">
                   <span className="flex h-9 w-9 items-center justify-center rounded-full bg-page">
                     <MapPin className="h-4 w-4 text-ink-muted" aria-hidden />
                   </span>
@@ -597,7 +595,7 @@ function LocationPanel({ value, onBack, onPick }: { value: string | null; onBack
           })}
         </ul>
         {value && (
-          <button type="button" onClick={() => onPick(null)} className="mt-2 min-h-11 w-full rounded-xl text-sm font-semibold text-danger hover:bg-red-50">
+          <button type="button" onClick={() => onPick(null)} className="mt-2 min-h-11 w-full rounded-card text-sm font-semibold text-danger hover:bg-red-50">
             Quitar ubicación
           </button>
         )}
@@ -619,7 +617,7 @@ function AudiencePanel({ value, onBack, onPick }: { value: Community | null; onB
   const option = (c: Community | null, label: string, sub: string, icon: ReactNode) => {
     const on = (value?.id ?? null) === (c?.id ?? null);
     return (
-      <button type="button" onClick={() => onPick(c)} aria-pressed={on} className="flex min-h-14 w-full items-center gap-3 rounded-xl px-3 text-left hover:bg-page">
+      <button type="button" onClick={() => onPick(c)} aria-pressed={on} className="flex min-h-14 w-full items-center gap-3 rounded-card px-3 text-left hover:bg-page">
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-page">{icon}</span>
         <span className="min-w-0 flex-1">
           <span className="block truncate font-semibold">{label}</span>
@@ -634,8 +632,8 @@ function AudiencePanel({ value, onBack, onPick }: { value: Community | null; onB
     <>
       <PanelHeader title="¿Dónde lo publicas?" id="create-post-title" onBack={onBack} />
       <div className="max-h-[60vh] overflow-y-auto p-3">
-        {option(null, "Público", "Cualquier persona de StudyHub", <Globe className="h-5 w-5" aria-hidden />)}
-        <p className="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-ink-muted">En una de tus comunidades</p>
+        {option(null, "Público", "Cualquier persona de Linkedu", <Globe className="h-5 w-5" aria-hidden />)}
+        <p className="px-3 pb-1 pt-3 text-[13px] font-semibold text-ink-subtle">En una de tus comunidades</p>
         {mine === null && <p className="px-3 py-3 text-sm text-ink-muted">Cargando…</p>}
         {mine?.length === 0 && <p className="px-3 py-3 text-sm text-ink-muted">Aún no estás en ninguna comunidad.</p>}
         {mine?.map((c) => (
@@ -707,7 +705,7 @@ function CameraPanel({ onBack, onRecorded }: { onBack: () => void; onRecorded: (
             {error}
           </p>
         ) : (
-          <div className="relative overflow-hidden rounded-xl bg-ink">
+          <div className="relative overflow-hidden rounded-card bg-ink">
             <video ref={videoRef} autoPlay muted playsInline className="aspect-video w-full object-cover" />
             {recording && (
               <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-danger px-2.5 py-1 text-xs font-bold text-on-danger">
@@ -718,11 +716,11 @@ function CameraPanel({ onBack, onRecorded }: { onBack: () => void; onRecorded: (
         )}
         <div className="mt-4 flex justify-center">
           {recording ? (
-            <button type="button" onClick={stop} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-6 font-semibold text-inverse">
+            <button type="button" onClick={stop} className="inline-flex min-h-11 items-center gap-2 rounded-btn bg-ink px-6 font-semibold text-inverse">
               <Square className="h-4 w-4 fill-current" aria-hidden /> Detener y añadir
             </button>
           ) : (
-            <button type="button" onClick={start} disabled={!!error} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-danger px-6 font-semibold text-on-danger disabled:opacity-50">
+            <button type="button" onClick={start} disabled={!!error} className="inline-flex min-h-11 items-center gap-2 rounded-btn bg-danger px-6 font-semibold text-on-danger disabled:opacity-50">
               <span className="h-3 w-3 rounded-full bg-card" aria-hidden /> Empezar a grabar
             </button>
           )}

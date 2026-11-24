@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import { api } from "@/lib/api";
 import { ALL_SPAIN, CATEGORIES } from "@/lib/jobs";
@@ -23,7 +23,10 @@ export function JobSearchBar({
   province,
   category,
   onSearch,
+  busy = false,
 }: {
+  /** Hay una búsqueda en curso: el botón lo dice al momento */
+  busy?: boolean;
   q: string;
   province: string;
   category: string | null;
@@ -132,7 +135,7 @@ export function JobSearchBar({
   const renderGroup = (title: string | null, items: Suggestion[]) =>
     items.length > 0 && (
       <li role="presentation" key={title ?? "typed"}>
-        {title && <p className="px-2.5 pt-1.5 text-[10px] text-ink-muted">{title}</p>}
+        {title && <p className="px-3.5 pb-1 pt-2.5 text-[12px] font-semibold text-ink-subtle">{title}</p>}
         <ul role="group" aria-label={title ?? "Tu búsqueda"}>
           {items.map((s) => {
             index += 1;
@@ -149,7 +152,7 @@ export function JobSearchBar({
                   e.preventDefault();
                   pick(s);
                 }}
-                className={`flex min-h-[30px] items-center gap-2 px-2.5 text-[17px] font-semibold ${i === active ? "bg-page text-ink" : "text-ink-muted"}`}
+                className={`flex min-h-10 items-center gap-2 px-3.5 text-[15px] ${i === active ? "bg-brand-50 text-ink" : "text-ink"}`}
               >
                 {s.kind === "text" && <Search className="h-4 w-4 shrink-0" aria-hidden />}
                 <span className="truncate">{s.kind === "text" ? `Buscar «${s.value}»` : s.value}</span>
@@ -162,11 +165,13 @@ export function JobSearchBar({
 
   return (
     <form role="search" onSubmit={submit}>
-      <div className="flex flex-col gap-3 md:flex-row md:items-end md:gap-0">
-        <div ref={boxRef} className="relative md:w-[300px] md:shrink-0">
-          <label htmlFor={`${id}-q`} className="mb-1.5 block text-[17px] font-semibold text-ink-muted">
-            Busco oferta de...
+      {/* Una sola barra: qué buscas, el lugar como un ajuste dentro de ella y el botón. Las etiquetas quedan para lectores de pantalla */}
+      <div className="flex flex-col gap-1 rounded-card border border-line bg-card p-1.5 focus-within:border-edge md:flex-row md:items-center">
+        <div ref={boxRef} className="relative min-w-0 md:flex-1">
+          <label htmlFor={`${id}-q`} className="sr-only">
+            Qué buscas
           </label>
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-subtle" aria-hidden />
           <input
             id={`${id}-q`}
             type="search"
@@ -186,45 +191,52 @@ export function JobSearchBar({
               setOpen(true);
             }}
             onKeyDown={onKey}
-            placeholder="Puesto"
+            placeholder="Puesto, empresa o palabra clave"
             maxLength={100}
-            className="h-[45px] w-full rounded-[3px] border border-ink-subtle bg-card px-2.5 text-[17px] font-semibold text-ink placeholder:text-ink-muted focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+            className="h-12 w-full rounded-btn border border-transparent bg-transparent pl-11 pr-3.5 text-[15px] text-ink placeholder:text-ink-subtle hover:bg-field-hover focus:border-brand-600 focus:bg-card focus:outline-none focus:ring-2 focus:ring-brand-600/20"
           />
           {open && typedEnough && (
             <ul
               ref={listRef}
               id={`${id}-list`}
               role="listbox"
-              className="absolute inset-x-0 top-full z-30 mt-0.5 max-h-72 overflow-y-auto rounded-[3px] border border-ink-subtle bg-card py-1"
+              className="pop-in absolute inset-x-0 top-full z-30 mt-1 max-h-72 overflow-y-auto rounded-input border border-line bg-card py-1 shadow-lg"
             >
               {renderGroup(null, groups.typed)}
               {renderGroup("Puestos", groups.occupations)}
               {renderGroup("Categorías", groups.categories)}
               {loading && occupations.length === 0 && (
-                <li role="presentation" className="px-2.5 py-1.5 text-sm text-ink-muted">
+                <li role="presentation" className="px-3.5 py-2 text-sm text-ink-muted">
                   Buscando puestos…
                 </li>
               )}
               {source === "esco" && occupations.length > 0 && (
-                <li role="presentation" className="border-t border-line px-2.5 pt-1.5 text-[10px] text-ink-muted">
+                <li role="presentation" className="mt-1 border-t border-line px-3.5 pb-1 pt-2 text-[12px] text-ink-subtle">
                   Puestos: clasificación europea ESCO
                 </li>
               )}
             </ul>
           )}
         </div>
-        <div className="md:ml-14 md:w-[320px] md:shrink-0">
-          <span id={`${id}-place`} className="mb-1.5 block text-[17px] font-semibold text-ink-muted">
-            En...
+        <span aria-hidden className="hidden h-7 w-px shrink-0 bg-line md:block" />
+        {/* En el móvil, lugar y botón comparten fila */}
+        <div className="flex gap-1 md:contents">
+        <div className="min-w-0 flex-1 md:w-[230px] md:flex-none md:shrink-0">
+          <span id={`${id}-place`} className="sr-only">
+            Dónde
           </span>
-          <ProvinceSelect value={place} onChange={setPlace} labelledBy={`${id}-place`} flat />
+          <ProvinceSelect value={place} onChange={setPlace} labelledBy={`${id}-place`} inline />
         </div>
         <button
           type="submit"
-          className="h-[45px] rounded-[3px] bg-brand-600 px-9 text-[17px] font-bold uppercase text-on-brand transition-colors hover:bg-brand-hover md:mb-[3px] md:ml-10"
+          aria-busy={busy}
+          className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-btn bg-brand-600 px-5 sm:px-7 text-[15px] font-semibold text-on-brand transition-colors hover:bg-brand-hover"
         >
-          Buscar
+          {busy && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
+          <span className="sm:hidden">{busy ? "…" : "Buscar"}</span>
+          <span className="hidden sm:inline">{busy ? "Buscando…" : "Buscar ofertas"}</span>
         </button>
+        </div>
       </div>
     </form>
   );

@@ -19,7 +19,7 @@ TEXTS = {
     "reply": "ha respondido a tu comentario",
     "comment_like": "ha indicado que le gusta tu comentario",
     "tag": "te ha etiquetado en una publicación",
-    "welcome": "Te damos la bienvenida a StudyHub. Completa tu perfil y únete a comunidades de tus estudios.",
+    "welcome": "Te damos la bienvenida a Linkedu. Completa tu perfil y únete a comunidades de tus estudios.",
     "job": "ha publicado una oferta que encaja con tus estudios",
     "job_application": "se ha inscrito en tu oferta",
     "application_status": "ha actualizado tu candidatura",

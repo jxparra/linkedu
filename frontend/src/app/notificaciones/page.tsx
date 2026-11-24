@@ -7,6 +7,8 @@ import { AppShell } from "@/components/app/AppShell";
 import { Avatar } from "@/components/Avatar";
 import { api, refreshUnread, type NotificationItem } from "@/lib/api";
 import { timeAgo } from "@/lib/time";
+import { ChalkText } from "@/components/ChalkLine";
+import { BrandMark } from "@/components/app/Spine";
 
 const ICONS: Record<string, { icon: typeof Bell; cls: string }> = {
   like: { icon: Heart, cls: "bg-red-50 text-danger" },
@@ -35,11 +37,13 @@ function List() {
 
   return (
     <section className="rounded-card border border-line bg-card">
-      <h1 className="border-b border-line px-5 py-4 text-xl font-bold">Notificaciones</h1>
+      <h1 className="border-b border-line px-5 pb-5 pt-4 text-[28px] font-bold leading-tight">
+        <ChalkText>Notificaciones</ChalkText>
+      </h1>
       {items === null ? (
         <div className="space-y-2 p-4">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="h-16 animate-pulse rounded-xl bg-page" />
+            <div key={i} className="h-16 animate-pulse rounded-card bg-page" />
           ))}
         </div>
       ) : items.length === 0 ? (
@@ -49,8 +53,19 @@ function List() {
           <p className="text-ink-muted">Te avisaremos cuando alguien te siga o reaccione a lo que publicas.</p>
         </div>
       ) : (
+        [
+          { title: "Nuevas", list: items.filter((n) => !n.read) },
+          { title: "Anteriores", list: items.filter((n) => n.read) },
+        ]
+          .filter((g) => g.list.length > 0)
+          .map((g) => (
+        <div key={g.title}>
+          {/* Las nuevas van primero y aparte: así se ve qué ha pasado desde la última vez */}
+          <h2 className="border-b border-line px-5 pb-2 pt-4 text-[15px] font-semibold text-ink-muted">
+            {g.title} <span className="font-normal text-ink-subtle">· {g.list.length}</span>
+          </h2>
         <ul>
-          {items.map((n) => {
+          {g.list.map((n) => {
             const { icon: Icon, cls } = ICONS[n.type] ?? ICONS.welcome;
             const body = (
               <>
@@ -58,7 +73,9 @@ function List() {
                   {n.actor ? (
                     <Avatar name={n.actor.name} src={n.actor.avatar_url} size="md" square={n.actor.role === "company"} />
                   ) : (
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-600 text-lg font-extrabold text-on-brand">S</span>
+                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-spine text-spine-strong">
+                      <BrandMark className="scale-75" />
+                    </span>
                   )}
                   <span className={`absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-card ${cls}`}>
                     <Icon className="h-3.5 w-3.5" aria-hidden />
@@ -99,6 +116,8 @@ function List() {
             );
           })}
         </ul>
+        </div>
+          ))
       )}
     </section>
   );

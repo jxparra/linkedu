@@ -1,6 +1,6 @@
 # Pendientes
 
-> Actualizado: 2026-11-12. Marca lo que vayas haciendo. Último día → [[diario/2026-11-12]]
+> Actualizado: 2026-11-24. Marca lo que vayas haciendo. Último día → [[diario/2026-11-24]]
 
 ## 🔴 Primero (antes de seguir programando)
 - [ ] **Confirmar con el tutor qué se entrega en ~2 semanas** y en qué formato (¿demo, memoria, presentación?)
@@ -8,7 +8,12 @@
 - [ ] Decidir edad mínima y reseñas de docentes → [[decisiones/ADR-003-resenas-docentes]]
 - [x] **Guardar el trabajo en Git** → https://github.com/jxparra/StudyHub (2026-11-12)
 
-## 🎨 Estética (rama `estetica-carpeta`) → [[decisiones/ADR-010-estetica-carpeta-profesional]]
+## 🎨 Estética «Pizarra y fosforito» (rama `estetica-pizarra`) → [[decisiones/ADR-011-estetica-pizarra-fosforito]]
+- [x] Rediseño completo para no parecerse a LinkedIn, Facebook ni InfoJobs (2026-11-19)
+- [ ] **Decidir si se queda** «Pizarra y fosforito» y unir la rama a `main`
+- [x] Mirar en claro y oscuro las pantallas que no se han revisado a mano (revisión externa del 2026-11-24, todas las rutas en claro/oscuro y ordenador/móvil)
+
+### Anterior: «Carpeta profesional» (rama `estetica-carpeta`) → [[decisiones/ADR-010-estetica-carpeta-profesional]]
 - [x] Elegir estética entre 3 propuestas → «Carpeta», luego versión profesional
 - [x] Modo oscuro (Ajustes → Visualización)
 - [x] Color principal azul petróleo (antes coral), Empleo en verde
@@ -20,6 +25,32 @@
 - [ ] Panel «Publicaciones de interés»: ¿excluir publicaciones de grupos en los que ya estás? (ahora pueden repetirse con el feed)
 - [ ] Panel de interés en **móvil** (ahora solo sale en pantallas anchas)
 - [ ] Traducir al inglés los textos nuevos (panel de interés, diálogos de salir, Foros)
+
+## ▶️ Próximo día (por este orden)
+1. **Decidir si se queda «Pizarra y fosforito»** y unir la rama `estetica-pizarra` a `main`.
+2. **Editar perfil completo:** estudios, foto y descripción (ahora `/perfil/editar` solo cambia nombre, @usuario y ubicación, o los datos de la empresa).
+3. **Repasar los estudios recomendados de las ofertas de prueba** (`backend/app/seed.py`): la de auxiliar de enfermería estaba unida a Medicina; puede haber más así.
+4. **Registro:** valorar elegir estudiante o empresa antes del email (propuesta del revisor externo).
+5. **Estadísticas:** métricas propias de estudiante (ofertas vistas, candidaturas en proceso, respuestas en foros). Necesita backend.
+6. Siguiente bloque grande: **Reseñas** (tabla `reviews` ya creada).
+
+## 🔍 Revisión externa (2026-11-24) → [[decisiones/ADR-016-movimiento-y-reborde-encaja-contigo]]
+Aplicadas la prioridad alta, la media y la baja (ver diario del 2026-11-24). «(demo)» en las empresas se queda a propósito: deja claro que son inventadas.
+- [x] Estadísticas (fondo de pizarra), Ajustes → Idioma, editor de grupos y estado de candidatura siguen con `select` nativo
+- [ ] Editar perfil: cambiar estudios, foto y descripción (ahora solo nombre, @usuario y ubicación, o datos de la empresa)
+- [x] Botón «Editar perfil» en tu propio perfil; «2°» → «2º curso»
+- [x] «Buscar ofertas» sale dos veces en la cabecera de Empleo (pestaña y botón): la pestaña, «Ofertas»
+- [x] Mismo ancho de contenido en todas las páginas (Ajustes y Estadísticas usan 1280 px)
+- [x] Un solo estilo de «seleccionado» y un solo tratamiento de título por nivel
+- [x] Textos de unirse iguales en todas partes («Unirme» / «Unido»)
+- [x] Desplegables: el propio en vez del `select` nativo (Ordenar por, Categoría)
+- [x] Dentro de un grupo, no repetir el nombre del grupo y «Unido» en cada publicación
+- [x] 3D de fondo: menos presencia (sobre todo en oscuro y detrás de «Publicar oferta» en móvil); no montarlo con `prefers-reduced-motion`
+- [x] Mensajes: lista más ancha (360–380 px) y abrir la primera conversación
+- [x] Empleo en móvil: cabecera más compacta
+- [x] Notificaciones: distinguir leídas y no leídas; Estadísticas: «—» si los dos periodos son 0
+- [x] Enlace «Saltar al contenido»; quitar «(demo)» y «Equipo StudyHub» de los datos de prueba
+- [ ] Registro: elegir estudiante o empresa antes del email (propuesta del revisor)
 
 ## 🟡 Siguiente bloque de código (elige uno)
 - [x] **Empleo** (al estilo InfoJobs) → [[diseno/empleo]]
@@ -61,7 +92,7 @@
 ---
 
 ## Cómo retomarlo
-> ⚠️ Rama de trabajo actual: **`estetica-carpeta`** (`git switch estetica-carpeta`). En `main` está Foros sin la estética nueva.
+> ⚠️ Rama de trabajo actual: **`estetica-pizarra`** (`git switch estetica-pizarra`), que sale de `estetica-carpeta`. En `main` está Foros sin ninguna de las dos estéticas.
 
 **Terminal 1 (backend):**
 ```powershell

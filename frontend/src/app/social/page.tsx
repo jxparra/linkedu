@@ -5,9 +5,10 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { GroupCard, GroupCardSkeleton } from "@/components/social/GroupCard";
-import { GroupRow, SectionHeader } from "@/components/social/GroupRow";
+import { SectionHeader } from "@/components/social/GroupRow";
 import { SocialShell } from "@/components/social/SocialNav";
-import { api, type GroupSuggestions } from "@/lib/api";
+import { api, type GroupCard as Group, type GroupSuggestions } from "@/lib/api";
+import { SectionHero } from "@/components/SectionHero";
 
 type Section = "for_you" | "nearby" | "more";
 
@@ -17,7 +18,7 @@ function sectionText(section: Section, province: string | null) {
   if (section === "nearby")
     return province
       ? { title: "Populares cerca de ti", subtitle: `Los grupos con más gente de ${province}, para cualquiera.` }
-      : { title: "Populares en StudyHub", subtitle: "Los grupos con más gente, de temas que interesan a cualquiera." };
+      : { title: "Populares en Linkedu", subtitle: "Los grupos con más gente, de temas que interesan a cualquiera." };
   return { title: "Más sugerencias", subtitle: "Algunos relacionados contigo y otros para descubrir cosas nuevas." };
 }
 
@@ -59,7 +60,7 @@ function FullSection({ section }: { section: Section }) {
       {error && <Retry onRetry={load} />}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {groups === null && !error && [0, 1, 2, 3, 4, 5].map((i) => <GroupCardSkeleton key={i} />)}
-        {groups?.map((g) => <GroupCard key={g.id} group={g} dismissible />)}
+        {groups?.map((g) => <GroupCard key={g.id} group={g} dismissible match={section === "for_you"} />)}
       </div>
       {groups?.length === 0 && <p className="rounded-card border border-line bg-card p-8 text-center text-ink-muted">No hay más grupos en este apartado.</p>}
     </div>
@@ -89,35 +90,48 @@ function Suggestions() {
   const forYou = sectionText("for_you", province);
   const nearby = sectionText("nearby", province);
   const more = sectionText("more", province);
-  const divider = <hr className="my-8 border-line" />;
+
+  // Un solo protagonista (el primer grupo «Para ti», en grande) y apartados cortos de 3: menos ruido que tres carruseles seguidos
+  const [first, ...restForYou] = data?.for_you ?? [];
+  const shelf = (groups: Group[] | undefined, match = false) => (
+    <div className={`grid gap-4 sm:grid-cols-2 lg:grid-cols-3 ${data ? "stagger-in" : ""}`}>
+      {data === null
+        ? [0, 1, 2].map((i) => <GroupCardSkeleton key={i} />)
+        : (groups ?? []).slice(0, 3).map((g) => <GroupCard key={g.id} group={g} dismissible match={match} />)}
+    </div>
+  );
 
   return (
     <div>
-      <GroupRow
-        id="for-you"
-        title={forYou.title}
-        subtitle={forYou.subtitle}
-        href="/social?ver=para-ti"
-        groups={data?.for_you ?? null}
-        empty={
+      <SectionHero kind="social" title="Social" subtitle="Grupos de tu clase, de tu ciudad y de lo que te gusta. Cada punto de la red es alguien como tú." />
+
+      <section aria-labelledby="for-you" className="mt-10">
+        <SectionHeader id="for-you" title={forYou.title} subtitle={forYou.subtitle} href={data && data.for_you.length > 4 ? "/social?ver=para-ti" : undefined} />
+        {data === null ? (
+          <div className="h-64 animate-pulse rounded-card border border-line bg-card" />
+        ) : first ? (
+          <div className="space-y-4">
+            <GroupCard group={first} dismissible featured match />
+            {restForYou.length > 0 && shelf(restForYou, true)}
+          </div>
+        ) : (
           <div className="flex items-center gap-4 rounded-card border border-line bg-card p-5">
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
               <Compass className="h-6 w-6" aria-hidden />
             </span>
-            <p className="text-[15px] text-ink-muted">
-              Ya estás en todos los grupos que encajan contigo. Únete a alguno de abajo y te sugeriremos más de esos temas.
-            </p>
+            <p className="text-[15px] text-ink-muted">Ya estás en todos los grupos que encajan contigo. Únete a alguno de abajo y te sugeriremos más de esos temas.</p>
           </div>
-        }
-      />
-      {divider}
-      <GroupRow id="nearby" title={nearby.title} subtitle={nearby.subtitle} href="/social?ver=cerca" groups={data?.nearby ?? null} />
-      {divider}
-      <section aria-labelledby="more">
-        <SectionHeader id="more" title={more.title} subtitle={more.subtitle} href={data && data.more.length > 0 ? "/social?ver=mas" : undefined} />
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {data === null ? [0, 1, 2].map((i) => <GroupCardSkeleton key={i} />) : data.more.map((g) => <GroupCard key={g.id} group={g} dismissible />)}
-        </div>
+        )}
+      </section>
+
+      <section aria-labelledby="nearby" className="mt-12">
+        <SectionHeader id="nearby" title={nearby.title} subtitle={nearby.subtitle} href={data && data.nearby.length > 3 ? "/social?ver=cerca" : undefined} />
+        {shelf(data?.nearby)}
+      </section>
+
+      <section aria-labelledby="more" className="mt-12">
+        <SectionHeader id="more" title={more.title} subtitle={more.subtitle} href={data && data.more.length > 3 ? "/social?ver=mas" : undefined} />
+        {shelf(data?.more)}
         {data?.more.length === 0 && (
           <p className="rounded-card border border-line bg-card p-6 text-center text-ink-muted">Ya has visto todos los grupos. ¿Por qué no creas uno?</p>
         )}

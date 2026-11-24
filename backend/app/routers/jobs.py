@@ -67,6 +67,17 @@ def _student_degree(user: User) -> int | None:
     return user.student_profile.degree_id if user.student_profile else None
 
 
+def _summary(text: str | None, limit: int = 150) -> str | None:
+    """Resumen corto para la tarjeta: la descripción en una línea, cortada en una palabra completa."""
+    if not text:
+        return None
+    flat = " ".join(text.split())
+    if len(flat) <= limit:
+        return flat
+    cut = flat[:limit].rsplit(" ", 1)[0].rstrip(",.;:")
+    return cut + "…"
+
+
 def _cards(db: Session, user: User, jobs: list[Job]) -> list[JobCardOut]:
     if not jobs:
         return []
@@ -108,6 +119,7 @@ def _cards(db: Session, user: User, jobs: list[Job]) -> list[JobCardOut]:
                 applicants=counts.get(j.id, 0),
                 my_status=mine.get(j.id),
                 matches_studies=bool(degree and j.degree_id == degree),
+                summary=_summary(j.description),
             )
         )
     return out

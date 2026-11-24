@@ -248,7 +248,7 @@ def unfollow(user_id: int, user: VerifiedUser, db: DB):
 
 @router.get("/trends", response_model=list[TrendOut])
 def trends(db: DB, limit: int = Query(default=6, le=20)):
-    """Comunidades con más publicaciones: lo que se mueve ahora en StudyHub."""
+    """Comunidades con más publicaciones: lo que se mueve ahora en Linkedu."""
     posts = (
         select(Post.community_id, func.count().label("n"), func.max(Post.created_at).label("last"))
         .where(Post.community_id.is_not(None))

@@ -4,8 +4,15 @@ import { useEffect, useState } from "react";
 import { api } from "./api";
 
 /** Cuenta notificaciones y mensajes sin leer. Se actualiza cada 30 s, al volver a la pestaña y cuando se lee algo. */
+/** Últimos contadores: al cambiar de página se enseñan al momento en vez de desaparecer hasta la siguiente carga. */
+let lastCounts = { notifications: 0, messages: 0 };
+
 export function useUnread(enabled: boolean) {
-  const [counts, setCounts] = useState({ notifications: 0, messages: 0 });
+  const [counts, setCountsState] = useState(lastCounts);
+  const setCounts = (c: typeof lastCounts) => {
+    lastCounts = c;
+    setCountsState(c);
+  };
 
   useEffect(() => {
     if (!enabled) return;

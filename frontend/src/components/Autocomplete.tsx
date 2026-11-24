@@ -95,7 +95,7 @@ export function Autocomplete({ label, placeholder, endpoint, value, onChange, er
         <ul
           id={`${id}-list`}
           role="listbox"
-          className="absolute z-10 mt-1 max-h-64 w-full overflow-auto rounded-input border border-line bg-card py-1 shadow-lg"
+          className="pop-in absolute z-10 mt-1 max-h-64 w-full overflow-auto rounded-input border border-line bg-card py-1 shadow-lg"
         >
           {options.map((o, i) => (
             <li

@@ -6,18 +6,19 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { displayName } from "@/components/app/TopBar";
 import { Avatar } from "@/components/Avatar";
+import { ChalkText } from "@/components/ChalkLine";
 import { api, mediaUrl, type Profile, type User } from "@/lib/api";
 import { useT } from "@/lib/i18n";
 
 export const SETTINGS_SECTIONS = [
-  { href: "/ajustes", label: "Preferencias de la cuenta", icon: UserIcon },
-  { href: "/ajustes/seguridad", label: "Inicio de sesión y seguridad", icon: Lock },
-  { href: "/ajustes/visibilidad", label: "Visibilidad", icon: Eye },
-  { href: "/ajustes/privacidad", label: "Privacidad de datos", icon: Shield },
+  { href: "/ajustes", label: "Tu cuenta", icon: UserIcon },
+  { href: "/ajustes/seguridad", label: "Contraseña y sesiones", icon: Lock },
+  { href: "/ajustes/visibilidad", label: "Quién te ve", icon: Eye },
+  { href: "/ajustes/privacidad", label: "Tus datos", icon: Shield },
   { href: "/ajustes/notificaciones", label: "Notificaciones", icon: Bell },
 ];
 
-/** Columna izquierda de Ajustes: tu foto, el título y las secciones (como los ajustes de LinkedIn). */
+/** Columna izquierda de Ajustes: el título y las secciones; la activa, en fosforito. */
 export function SettingsNav({ user }: { user: User | null }) {
   const t = useT();
   const path = usePathname();
@@ -31,14 +32,16 @@ export function SettingsNav({ user }: { user: User | null }) {
         .catch(() => {});
   }, [user]);
 
-  // "Idioma" está dentro de Preferencias de la cuenta
+  // "Idioma" está dentro de Tu cuenta
   const current = path === "/ajustes/idioma" ? "/ajustes" : path;
 
   return (
-    <nav aria-label={t("Ajustes")} className="rounded-card border border-line bg-card py-4">
-      <div className="mb-3 flex items-center gap-3 px-4">
-        <Avatar name={name || "?"} src={avatar} size="md" square={user?.role === "company"} />
-        <h1 className="text-[28px] font-semibold">{t("Ajustes")}</h1>
+    <nav aria-label={t("Ajustes")} className="space-y-0.5 rounded-card border border-line bg-card p-2">
+      <div className="mb-2 flex items-center gap-3 px-2 pt-2">
+        <Avatar name={name || "?"} src={avatar} size="sm" square={user?.role === "company"} />
+        <h1 className="pb-1 text-[28px] font-bold">
+          <ChalkText>{t("Ajustes")}</ChalkText>
+        </h1>
       </div>
       {SETTINGS_SECTIONS.map(({ href, label, icon: Icon }) => {
         const active = current === href;
@@ -47,8 +50,8 @@ export function SettingsNav({ user }: { user: User | null }) {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`flex min-h-14 items-center gap-3 border-l-[3px] px-4 text-[15px] font-semibold transition-colors ${
-              active ? "border-brand-600 text-brand-700" : "border-transparent text-ink hover:bg-page"
+            className={`flex min-h-11 items-center gap-3 rounded-btn px-3 text-[15px] font-medium transition-colors ${
+              active ? "nav-mark font-semibold" : "text-ink hover:bg-field-hover"
             }`}
           >
             <Icon className="h-5 w-5 shrink-0" aria-hidden />
@@ -60,11 +63,44 @@ export function SettingsNav({ user }: { user: User | null }) {
   );
 }
 
+/**
+ * Ajustes en el móvil: la columna izquierda no se muestra, así que el título y las secciones
+ * van arriba del contenido, como en Social (fichas que se desplazan y la activa en fosforito).
+ */
+export function SettingsMobileNav() {
+  const t = useT();
+  const path = usePathname();
+  const chip = "flex min-h-11 shrink-0 items-center gap-1.5 rounded-btn px-4 text-sm font-semibold transition-colors";
+  return (
+    <div className="mb-4 space-y-4 md:hidden">
+      <h1 className="pb-1 text-[28px] font-bold leading-tight">
+        <ChalkText>{t("Ajustes")}</ChalkText>
+      </h1>
+      <nav aria-label={t("Ajustes")} className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4">
+        {SETTINGS_SECTIONS.map(({ href, label, icon: Icon }) => {
+          const active = path === href;
+          return (
+            <Link
+              key={href}
+              href={href}
+              aria-current={active ? "page" : undefined}
+              className={`${chip} ${active ? "nav-mark" : "bg-card text-ink ring-1 ring-line"}`}
+            >
+              <Icon className="h-4 w-4" aria-hidden />
+              {t(label)}
+            </Link>
+          );
+        })}
+      </nav>
+    </div>
+  );
+}
+
 /** Tarjeta con un título y filas. */
 export function SettingsCard({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="overflow-hidden rounded-card border border-line bg-card">
-      <h2 className="px-6 pb-2 pt-5 text-xl font-semibold">{title}</h2>
+      <h2 className="px-6 pb-2 pt-5 text-lg font-bold">{title}</h2>
       <ul>{children}</ul>
     </section>
   );

@@ -30,6 +30,8 @@ export type JobCard = {
   applicants: number;
   my_status: ApplicationStatus | null;
   matches_studies: boolean;
+  /** Resumen de la descripción para la tarjeta de la lista (unos 150 caracteres) */
+  summary?: string | null;
 };
 
 export type Job = JobCard & {

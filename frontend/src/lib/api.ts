@@ -16,7 +16,7 @@ export type User = {
     degree_id: number | null;
     course: number | null;
   } | null;
-  company: { name: string; sector: string | null; location: string | null } | null;
+  company: { name: string; sector: string | null; location: string | null; website?: string | null; contact_name?: string | null } | null;
 };
 
 export type Option = { id: number; name: string };

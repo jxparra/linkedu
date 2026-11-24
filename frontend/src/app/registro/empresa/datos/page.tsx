@@ -68,8 +68,8 @@ export default function EmpresaDatos() {
               type="button"
               aria-pressed={form.sector === s}
               onClick={() => setForm((f) => ({ ...f, sector: f.sector === s ? "" : s }))}
-              className={`min-h-11 rounded-full border px-4 text-sm font-medium transition-colors ${
-                form.sector === s ? "border-brand-600 bg-brand-600 text-on-brand" : "border-line hover:border-ink-subtle"
+              className={`min-h-11 rounded-btn border px-4 text-sm font-medium transition-colors ${
+                form.sector === s ? "nav-mark border-transparent" : "border-line hover:border-ink-subtle"
               }`}
             >
               {s}

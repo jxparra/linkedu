@@ -34,7 +34,7 @@ export function CommentThread({ comment, replies, ...shared }: Shared & { commen
             <button
               type="button"
               onClick={() => setShowReplies(true)}
-              className="flex min-h-9 items-center gap-1.5 rounded-lg px-1 text-sm font-semibold text-ink-muted hover:text-ink"
+              className="flex min-h-9 items-center gap-1.5 rounded-btn px-1 text-sm font-semibold text-ink-muted hover:text-ink"
             >
               <CornerDownRight className="h-4 w-4" aria-hidden />
               Ver {replies.length} {replies.length === 1 ? "respuesta" : "respuestas"}
@@ -149,7 +149,7 @@ function CommentItem({
 
   if (hidden) {
     return (
-      <div className="flex items-center gap-3 rounded-xl bg-page px-3 py-2 text-sm text-ink-muted">
+      <div className="flex items-center gap-3 rounded-card bg-page px-3 py-2 text-sm text-ink-muted">
         <EyeOff className="h-4 w-4" aria-hidden /> Comentario oculto
         <button type="button" onClick={() => setHidden(false)} className="ml-auto font-semibold text-brand-700 hover:underline">
           Deshacer
@@ -167,7 +167,7 @@ function CommentItem({
       </Link>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1">
-          <div className={`min-w-0 rounded-2xl bg-page px-3 py-2 ${small ? "text-sm" : "text-[15px]"}`}>
+          <div className={`min-w-0 rounded-card bg-page px-3 py-2 ${small ? "text-sm" : "text-[15px]"}`}>
             <p className="flex flex-wrap items-center gap-x-1.5 text-sm">
               <Link href={`/perfil/${author.id}`} className="font-semibold hover:underline">
                 {author.name}
@@ -191,7 +191,7 @@ function CommentItem({
               <MoreHorizontal className="h-[18px] w-[18px]" aria-hidden />
             </button>
             {menu && (
-              <div role="menu" className="absolute right-0 top-9 z-20 w-60 overflow-hidden rounded-xl border border-line bg-card py-1 shadow-xl sm:left-0 sm:right-auto">
+              <div role="menu" className="absolute right-0 top-9 z-20 w-60 overflow-hidden rounded-card border border-line bg-card py-1 shadow-xl sm:left-0 sm:right-auto">
                 <button role="menuitem" type="button" onClick={() => { setMenu(false); setHidden(true); }} className="flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-sm hover:bg-page">
                   <EyeOff className="h-4 w-4" aria-hidden /> Ocultar comentario
                 </button>
@@ -211,7 +211,7 @@ function CommentItem({
         </div>
         {comment.image_url && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={mediaUrl(comment.image_url)} alt="" loading="lazy" className="mt-1.5 max-h-52 rounded-xl border border-line" />
+          <img src={mediaUrl(comment.image_url)} alt="" loading="lazy" className="mt-1.5 max-h-52 rounded-card border border-line" />
         )}
         <div className="mt-1 flex max-w-[520px] flex-wrap items-center gap-x-3 px-2 text-[13px] text-ink-muted">
           <time dateTime={comment.created_at}>{timeAgo(comment.created_at)}</time>

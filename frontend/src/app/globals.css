@@ -1,111 +1,176 @@
 @import "tailwindcss";
 
-/* Tokens de diseño de StudyHub: estética «Carpeta profesional» → docs/diseno/sistema-diseno.md
+/* Tokens de diseño de Linkedu: estética «Pizarra y fosforito» → docs/diseno/sistema-diseno.md
+   Pizarra (verde oscuro de aula) como marca y amarillo fosforito para marcar lo activo, como se subrayan los apuntes.
    Cada color tiene versión clara (aquí) y oscura (más abajo, en :root[data-theme="dark"]).
    Las utilidades de Tailwind leen estas variables, así que cambiar el tema solo cambia los valores. */
-@theme {
-  /* Principal: azul petróleo con texto blanco (contraste AA 5,67:1) */
-  --color-brand-50: #e3f1f6;
-  --color-brand-100: #cbe5ee;
-  --color-brand-600: #1f6f8b;
-  --color-brand-hover: #195d75;
-  --color-brand-700: #175a72; /* textos y enlaces (7,66:1 sobre blanco) */
-  --color-on-brand: #ffffff;
-
-  --color-accent-50: #fff4d1;
-  --color-accent-400: #f5b70a;
-  --color-accent-800: #6e5200;
-
-  /* Un color por sección: fondo suave (-50) y tono fuerte para icono y texto (-ink) */
-  --color-social: #1f6f8b;
-  --color-social-50: #e3f1f6;
-  --color-social-ink: #175a72;
-  --color-empleo: #1f9d57;
-  --color-empleo-50: #e2f5ea;
-  --color-empleo-ink: #17703f;
-  --color-foros: #7c5ce6;
-  --color-foros-50: #eee8fe;
-  --color-foros-ink: #5b3cc4;
-  --color-on-section: #ffffff;
-
-  /* Cabeceras de perfil y de Estadísticas: degradado azul petróleo, apagado en oscuro */
-  --color-banner-from: #175a72;
-  --color-banner-to: #3a9bb5;
-
-  --color-ink: #16151a;
-  --color-ink-muted: #57545e;
-  --color-ink-subtle: #6b6773;
-  --color-inverse: #ffffff;
-  --color-edge: #c9ccd3;
-  --color-line: #e2e4e9;
-  --color-page: #eef0f3; /* gris claro: las tarjetas blancas destacan encima */
-  --color-card: #ffffff;
-  --color-topbar: #ffffff;
-  --color-field: rgba(22, 21, 26, 0.05);
-  --color-field-hover: rgba(22, 21, 26, 0.09);
-  --color-field-text: #5f5b65;
-
-  --color-success: #15803d;
-  --color-warning: #c2410c;
-  --color-danger: #dc2626;
-  --color-on-danger: #ffffff; /* texto sobre bg-danger */
-
-  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
-  --font-display: var(--font-jakarta), var(--font-dm-sans), system-ui, sans-serif;
-
-  --radius-input: 10px;
-  --radius-card: 14px;
-
-  --shadow-card: 0 1px 2px rgba(22, 24, 32, 0.05), 0 2px 8px -4px rgba(22, 24, 32, 0.06);
-  --shadow-pop: 0 1px 2px rgba(22, 21, 26, 0.12);
+/* Cada sección tiñe su fondo y su cabecera con su color (Social verde, Foros granate, Empleo ocre).
+   Más color, pero en superficies grandes y suaves, no en cada tarjeta. Contraste medido en los dos temas. */
+[data-section="social"] {
+  --color-page: #eef4f0;
+  --color-topbar: #eef4f0;
+}
+[data-section="foros"] {
+  --color-page: #f9f3f5;
+  --color-topbar: #f9f3f5;
+  --color-hero: #7a2442;
+  --color-hero-ink: #f2c9d6;
+}
+[data-section="empleo"] {
+  --color-page: #f7f2e6;
+  --color-topbar: #f7f2e6;
+  --color-hero: #6e4a08;
+  --color-hero-ink: #f1dcae;
+}
+:root[data-theme="dark"] [data-section="social"] {
+  --color-page: #131715;
+  --color-topbar: #131715;
+}
+:root[data-theme="dark"] [data-section="foros"] {
+  --color-page: #161214;
+  --color-topbar: #161214;
+  --color-hero: #3d1824;
+  --color-hero-ink: #f2c9d6;
+}
+:root[data-theme="dark"] [data-section="empleo"] {
+  --color-page: #161410;
+  --color-topbar: #161410;
+  --color-hero: #3a2a0e;
+  --color-hero-ink: #f1dcae;
 }
 
-/* Modo oscuro: por elección (Ajustes) o, si no se ha elegido, según el sistema */
+/* Fuentes: `inline` porque apuntan a variables de next/font (si no, quedan vacías en :root y se ve la letra del sistema) */
+@theme inline {
+  --font-sans: var(--font-instrument), system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-instrument), system-ui, sans-serif;
+}
+
+@theme {
+  /* Principal: verde pizarra, un punto más vivo (texto blanco 6,35:1) */
+  --color-brand-50: #e2f0e9;
+  --color-brand-100: #c9e3d7;
+  --color-brand-600: #236b55;
+  --color-brand-hover: #1d5a48;
+  --color-brand-700: #1f5a47; /* textos y enlaces (8,04:1 sobre blanco) */
+  --color-on-brand: #ffffff;
+
+  /* Fosforito: la opción activa y lo que hay que mirar. Siempre con texto ink encima (13:1) */
+  --color-mark: #ffe24a;
+  --color-on-mark: #1b1e1c;
+  --color-mark-soft: rgba(255, 226, 74, 0.55);
+
+  /* El lomo (navegación lateral): pizarra intensa con texto de tiza */
+  --color-spine: #1f4236;
+  --color-spine-ink: #a9c4b8;
+  --color-spine-strong: #f3f7f4;
+  /* Cabecera de cada sección: un color propio, profundo, con texto de tiza. Lo fija [data-section] más abajo */
+  --color-hero: #1f5a47;
+  --color-hero-ink: #c9e3d7;
+  --color-board: #1f4236; /* la pizarra de la portada */
+
+  --color-accent-50: #fff6c7;
+  --color-accent-400: #d9a900;
+  --color-accent-800: #6b5400;
+
+  /* Un color por sección: fondo suave (-50) y tono fuerte para icono y texto (-ink) */
+  --color-social: #236b55;
+  --color-social-50: #e2f0e9;
+  --color-social-ink: #1f5a47;
+  --color-empleo: #a66f00;
+  --color-empleo-50: #fbf0d2;
+  --color-empleo-ink: #7a5300;
+  --color-foros: #b83a63;
+  --color-foros-50: #fbe6ed;
+  --color-foros-ink: #9c2f52;
+  --color-on-section: #ffffff;
+
+  /* Cabeceras de perfil y de Estadísticas: pizarra */
+  --color-banner-from: #1f4236;
+  --color-banner-to: #3d7a64;
+
+  --color-ink: #1b1e1c;
+  --color-ink-muted: #5c625e;
+  --color-ink-subtle: #6a706b;
+  --color-inverse: #ffffff;
+  --color-edge: #c8ccc6;
+  --color-line: #e1e4de;
+  --color-page: #f1f2ee; /* papel gris verdoso: las tarjetas blancas destacan encima */
+  --color-card: #ffffff;
+  --color-topbar: #f1f2ee;
+  --color-field: rgba(27, 30, 28, 0.05);
+  --color-field-hover: rgba(27, 30, 28, 0.09);
+  --color-field-text: #5c625e;
+
+  --color-success: #2e7d32;
+  --color-warning: #b45309;
+  --color-danger: #c62828;
+  --color-on-danger: #ffffff; /* texto sobre bg-danger */
+
+
+  --radius-input: 8px;
+  --radius-card: 10px;
+  --radius-btn: 8px;
+
+  /* Sin sombras difusas: las tarjetas se separan por el borde, como fichas sobre la mesa */
+  --shadow-card: none;
+  --shadow-pop: 0 1px 0 rgba(27, 30, 28, 0.08);
+}
+
+/* Modo oscuro: por elección (Ajustes) o, si no se ha elegido, según el sistema. Pizarra de verdad: verde casi negro y tiza */
 @layer base {
   :root[data-theme="dark"] {
-    --color-brand-50: #16303a;
-    --color-brand-100: #1c3c48;
-    --color-brand-600: #5fb3d0;
-    --color-brand-hover: #7ec4dc;
-    --color-brand-700: #7ec4dc;
-    --color-on-brand: #15141a;
-    --color-accent-50: #3a3216;
-    --color-accent-400: #f5c542;
-    --color-accent-800: #f5c542;
-    --color-social: #5fb3d0;
-    --color-social-50: #16303a;
-    --color-social-ink: #7ec4dc;
-    --color-empleo: #4ade80;
-    --color-empleo-50: #14301f;
-    --color-empleo-ink: #6edc9a;
-    --color-foros: #a78bfa;
-    --color-foros-50: #2a2340;
-    --color-foros-ink: #c4b1ff;
-    --color-on-section: #15141a;
-    --color-banner-from: #16303a;
-    --color-banner-to: #1d2a3d;
-    --color-ink: #f2f0ec;
-    --color-ink-muted: #adaab6;
-    --color-ink-subtle: #8a8796;
-    --color-inverse: #15141a;
-    --color-edge: #3d3a46;
-    --color-line: #2e2c36;
-    --color-page: #131217;
-    --color-card: #1c1b22;
-    --color-topbar: #1c1b22;
+    --color-brand-50: #1c2e27;
+    --color-brand-100: #23392f;
+    --color-brand-600: #8fd1b5;
+    --color-brand-hover: #a8ddc6;
+    --color-brand-700: #a8ddc6;
+    --color-on-brand: #121513;
+    --color-mark: #e7c93a;
+    --color-on-mark: #121513;
+    --color-mark-soft: rgba(231, 201, 58, 0.32);
+    --color-spine: #1a1e1b;
+    --color-spine-ink: #a3aaa5;
+    --color-spine-strong: #eceeea;
+    --color-hero: #17342b;
+    --color-hero-ink: #a8ddc6;
+    --color-board: #22392f;
+    --color-accent-50: #332c12;
+    --color-accent-400: #e7c93a;
+    --color-accent-800: #e7c93a;
+    --color-social: #8fd1b5;
+    --color-social-50: #1c2e27;
+    --color-social-ink: #a8ddc6;
+    --color-empleo: #e7b85a;
+    --color-empleo-50: #33291a;
+    --color-empleo-ink: #ebc678;
+    --color-foros: #f08aa8;
+    --color-foros-50: #3a1f29;
+    --color-foros-ink: #f5a3bb;
+    --color-on-section: #121513;
+    --color-banner-from: #1c2e27;
+    --color-banner-to: #24392f;
+    --color-ink: #eceeea;
+    --color-ink-muted: #a3aaa5;
+    --color-ink-subtle: #868d88;
+    --color-inverse: #121513;
+    --color-edge: #3a413c;
+    --color-line: #2a302c;
+    --color-page: #121513;
+    --color-card: #1a1e1b;
+    --color-topbar: #121513;
     --color-field: rgba(255, 255, 255, 0.07);
     --color-field-hover: rgba(255, 255, 255, 0.12);
-    --color-field-text: #a9a5b4;
-    --color-success: #4ade80;
-    --color-warning: #fb923c;
-    --color-danger: #f87171;
-    --color-on-danger: #15141a;
+    --color-field-text: #a3aaa5;
+    --color-success: #81c784;
+    --color-warning: #f0a35a;
+    --color-danger: #ff8a80;
+    --color-on-danger: #121513;
     /* Colores de Tailwind que se usan sueltos (avisos de error, "seleccionado"…) */
-    --color-red-50: #3a1d20;
-    --color-green-50: #16301f;
-    --color-green-600: #4ade80;
-    --color-green-700: #4ade80;
-    --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03);
+    --color-red-50: #3a1d1c;
+    --color-green-50: #17301f;
+    --color-green-600: #81c784;
+    --color-green-700: #81c784;
+    --shadow-card: none;
     --shadow-pop: none;
     color-scheme: dark;
   }
@@ -117,11 +182,26 @@
     color: var(--color-ink);
   }
 
+  /* Títulos (h1, h2): Bricolage Grotesque, apretada y con peso. Subtítulos (h3, h4): Instrument Sans seminegrita.
+     Así se distinguen por la letra y no solo por el tamaño. */
   h1,
-  h2,
-  h3 {
+  h2 {
     font-family: var(--font-display);
-    letter-spacing: -0.015em;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+
+  h3,
+  h4 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+
+  ::selection {
+    background: var(--color-mark);
+    color: var(--color-on-mark);
   }
 
   /* Anillo de foco por defecto; los campos de texto usan el suyo propio (focus:ring) */
@@ -153,9 +233,21 @@
     cursor: pointer;
   }
 
-  /* La "x" para borrar el texto de los buscadores (input type="search") */
+  /* La "x" para borrar el texto de los buscadores (input type="search"): la del navegador sale azul,
+     así que se dibuja una propia con el color del texto secundario (cambia sola con el tema) */
   input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 18px;
+    width: 18px;
+    margin-left: 6px;
     cursor: pointer;
+    background-color: var(--color-ink-muted);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .section-hero input[type="search"]::-webkit-search-cancel-button {
+    background-color: var(--color-spine-strong);
   }
 
   button:disabled,
@@ -183,9 +275,30 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
   transform: translateY(1px);
 }
 
-/* Tarjetas: sombra suave (el color del borde lo pone la clase, así funciona hover:border-…) */
+/* Tarjetas: sin sombra en reposo (el color del borde lo pone la clase, así funciona hover:border-…) */
 .rounded-card.border {
   box-shadow: var(--shadow-card);
+}
+
+/* Subrayado de fosforito: una franja por debajo del texto, como al marcar apuntes.
+   Se usa en un solo sitio por pantalla (la portada y los títulos de página). */
+.marker {
+  background-image: linear-gradient(
+    transparent 58%,
+    var(--color-mark-soft) 58%,
+    var(--color-mark-soft) 92%,
+    transparent 92%
+  );
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding-inline: 0.08em;
+}
+
+/* Opción activa de la navegación: pastilla de fosforito con la esquina un poco torcida */
+.nav-mark {
+  background: var(--color-mark);
+  color: var(--color-on-mark);
+  border-radius: 6px 10px 7px 9px;
 }
 
 /* Confeti al dar "me gusta" */
@@ -278,12 +391,14 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
   animation: share-spin 550ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* Con «reducir movimiento» el icono se queda quieto (pero visible) y no salen confeti ni rayos */
 @media (prefers-reduced-motion: reduce) {
   .animate-share-spin,
-  .share-burst,
-  .animate-like-pop,
-  .like-burst {
+  .animate-like-pop {
     animation: none !important;
+  }
+  .share-burst,
+  .like-burst {
     display: none;
   }
 }
@@ -294,4 +409,420 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* ───────────── Movimiento ─────────────
+   Curvas con nombre (ui-animation): entrada, desplazamiento y pulsación. Todo usa transform y opacity. */
+:root {
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-move: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Al cambiar de página, el contenido sube 8 px y aparece. Una sola entrada por página (no se anima cada tarjeta). */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+/* `backwards` y no `both`: al terminar no queda ningún transform en <main>. Si quedara, los paneles y
+   ventanas `fixed` de dentro (filtros, invitar…) se posicionarían respecto a <main> y no a la pantalla. */
+.page-enter {
+  animation: page-in 320ms var(--ease-enter) backwards;
+}
+
+/* Escenas 3D: aparecen con un fundido cuando el primer fotograma está listo */
+.scene-3d {
+  opacity: 0;
+  transition: opacity 900ms var(--ease-enter);
+  pointer-events: none;
+}
+.scene-3d[data-ready] {
+  opacity: 1;
+}
+/* Fondo de Inicio: detrás de todo y muy suave, para no competir con las publicaciones (revisión externa: asomaba como manchas) */
+.ambient-scene[data-ready] {
+  opacity: 0.16;
+}
+:root[data-theme="dark"] .ambient-scene[data-ready] {
+  opacity: 0.1;
+}
+/* Cabecera con la escena de fondo completa (Empleo): más discreta en oscuro, y en el móvil fuera (tapaba el buscador y los botones) */
+:root[data-theme="dark"] .section-hero-scene-full[data-ready] {
+  opacity: 0.55;
+}
+@media (max-width: 639px) {
+  .section-hero-scene-full {
+    display: none;
+  }
+}
+/* En la cabecera de sección, la escena se desvanece hacia el texto */
+.section-hero-scene {
+  -webkit-mask-image: linear-gradient(90deg, transparent 15%, #000 55%);
+  mask-image: linear-gradient(90deg, transparent 15%, #000 55%);
+}
+/* Cabecera de lado a lado: sale del contenedor centrado hasta el lomo y el borde derecho.
+   El contenedor de la app recorta lo que sobra a la derecha (overflow-x: clip), así la barra de desplazamiento no mueve la página. */
+.hero-bleed {
+  margin-inline: calc(50% - 50vw);
+}
+@media (min-width: 640px) {
+  .hero-bleed {
+    margin-inline: calc(50% - 50vw + 42px); /* 42px = mitad del lomo */
+  }
+}
+/* La escena llega a todos los bordes; esta veladura (del color de la cabecera) la funde solo donde está el texto */
+.hero-text-veil {
+  background: linear-gradient(180deg, var(--color-hero) 0, var(--color-hero) 34%, transparent 62%);
+}
+@media (min-width: 640px) {
+  .hero-text-veil {
+    background: radial-gradient(70% 85% at 0% 0%, var(--color-hero) 45%, transparent 100%);
+  }
+}
+/* En la portada, la escena deja limpio el titular (en móvil, la parte de arriba) */
+@media (max-width: 767px) {
+  .hero-scene {
+    -webkit-mask-image: linear-gradient(180deg, transparent 45%, #000 70%) !important;
+    mask-image: linear-gradient(180deg, transparent 45%, #000 70%) !important;
+  }
+}
+.hero-scene {
+  -webkit-mask-image: linear-gradient(90deg, transparent 50%, #000 70%);
+  mask-image: linear-gradient(90deg, transparent 50%, #000 70%);
+}
+
+/* Subrayado de tiza que se dibuja una vez */
+.chalk-line path {
+  fill: none;
+  stroke: var(--color-mark);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: chalk-draw 700ms 180ms var(--ease-expo) forwards;
+}
+/* En las pantallas sin cabecera de sección: el mismo trazo, en tinta y más fino (el fosforito ya está en el lomo) */
+.chalk-line-ink path {
+  stroke: var(--color-ink);
+  stroke-width: 2.5;
+}
+@keyframes chalk-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* El fosforito del lomo: al cambiar de sección se «pinta» de izquierda a derecha, como un trazo de rotulador.
+   Antes se deslizaba de una sección a otra y, por el camino, tapaba las etiquetas de las secciones intermedias. */
+.spine-mark-swipe {
+  transform-origin: left center;
+  animation: mark-swipe 360ms var(--ease-expo) both;
+}
+@keyframes mark-swipe {
+  from {
+    transform: scaleX(0.08);
+    opacity: 0.4;
+  }
+}
+/* El icono activo toma su color oscuro cuando el trazo ya ha pasado por debajo */
+.spine-icon-in {
+  animation: spine-icon-in 360ms var(--ease-enter) both;
+}
+@keyframes spine-icon-in {
+  from {
+    transform: scale(0.86);
+  }
+}
+
+/* Reborde de «encaja contigo»: ofertas de tus estudios, tus foros con actividad y grupos para ti.
+   Un trazo de 2 px del color de la sección que aparece una vez (se «enciende») y queda fijo. */
+.match-ring {
+  position: relative;
+}
+.match-ring::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 2px solid var(--match-color, var(--color-social));
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 20;
+  animation: match-in 700ms 150ms var(--ease-expo) both;
+}
+.match-empleo {
+  --match-color: var(--color-empleo);
+}
+.match-foros {
+  --match-color: var(--color-foros);
+}
+.match-social {
+  --match-color: var(--color-social);
+}
+@keyframes match-in {
+  from {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+}
+
+/* Resultados de Empleo: mientras llega la búsqueda nueva, los anteriores se atenúan (no desaparecen de golpe)
+   y una barra fina recorre la cabecera. Al llegar, las primeras tarjetas suben escalonadas. */
+.results-pending {
+  opacity: 0.45;
+  transition: opacity 180ms ease;
+}
+.results-ready {
+  transition: opacity 240ms var(--ease-enter);
+}
+.search-progress {
+  position: relative;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.search-progress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  border-radius: inherit;
+  background: var(--color-empleo);
+  animation: search-progress 900ms var(--ease-move) infinite;
+}
+@keyframes search-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+.results-in > * {
+  animation: page-in 460ms var(--ease-expo) backwards;
+}
+.results-in > :nth-child(2) {
+  animation-delay: 45ms;
+}
+.results-in > :nth-child(3) {
+  animation-delay: 90ms;
+}
+.results-in > :nth-child(4) {
+  animation-delay: 135ms;
+}
+.results-in > :nth-child(5) {
+  animation-delay: 180ms;
+}
+.results-in > :nth-child(n + 6) {
+  animation-delay: 220ms;
+}
+/* El número de ofertas cambia con un pequeño salto */
+.count-in {
+  display: inline-block;
+  animation: page-in 380ms var(--ease-expo) backwards;
+}
+
+/* Tarjetas en rejilla (grupos y foros): suben escalonadas la primera vez que se pintan */
+.stagger-in > * {
+  animation: page-in 520ms var(--ease-expo) backwards;
+}
+.stagger-in > :nth-child(2) {
+  animation-delay: 60ms;
+}
+.stagger-in > :nth-child(3) {
+  animation-delay: 120ms;
+}
+.stagger-in > :nth-child(n + 4) {
+  animation-delay: 160ms;
+}
+
+/* Paneles y menús desplegables: aparecen desde su origen con una escala corta */
+.pop-in {
+  transform-origin: var(--pop-origin, top center);
+  animation: pop-in 180ms var(--ease-enter) both;
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+}
+
+/* Tarjetas que se inclinan hacia el puntero (grupos y ofertas). La inclinación la pone useTilt. */
+.tilt {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
+  transition:
+    transform 450ms var(--ease-enter),
+    border-color 200ms ease;
+}
+.tilt[data-tilting] {
+  transition:
+    transform 120ms linear,
+    border-color 200ms ease;
+}
+/* Brillo que sigue al puntero sobre la tarjeta */
+.tilt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(260px circle at var(--gx, 50%) var(--gy, 50%), var(--color-mark-soft), transparent 60%);
+  opacity: 0;
+  transition: opacity 250ms ease;
+  mix-blend-mode: multiply;
+}
+:root[data-theme="dark"] .tilt::after {
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+.tilt[data-tilting]::after {
+  opacity: 0.35;
+}
+
+/* Botones: se hunden al pulsar, sin esperar */
+.bg-brand-600.text-on-brand,
+.btn-pop,
+.rounded-btn {
+  touch-action: manipulation;
+}
+button.rounded-btn:active:not(:disabled),
+a.rounded-btn:active {
+  transform: scale(0.97);
+  transition: transform 100ms var(--ease-enter);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: page-in-fade 200ms ease backwards;
+  }
+  .chalk-line path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .tilt {
+    transition: none;
+  }
+  .spine-mark-swipe,
+  .spine-icon-in,
+  .match-ring::before,
+  .results-in > *,
+  .stagger-in > *,
+  .count-in,
+  .pop-in {
+    animation: page-in-fade 160ms ease backwards;
+  }
+  .search-progress::after {
+    animation: none;
+    width: 100%;
+    opacity: 0.5;
+  }
+  .tilt {
+    transform: none;
+  }
+}
+@keyframes page-in-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Portada: una sola secuencia de entrada (titular, texto, botones y pizarra, 70 ms entre cada uno) */
+.hero-in > div > *,
+.hero-in > .board-3d {
+  animation: page-in 700ms var(--ease-expo) both;
+}
+.hero-in > div > :nth-child(2) {
+  animation-delay: 70ms;
+}
+.hero-in > div > :nth-child(3) {
+  animation-delay: 140ms;
+}
+.hero-in > .board-3d {
+  animation-name: board-in;
+  animation-delay: 200ms;
+  animation-duration: 900ms;
+}
+/* La pizarra está girada hacia el centro, como colgada en la pared del aula */
+.board-3d {
+  transform: perspective(1400px) rotateY(-9deg) rotateX(3deg);
+}
+@keyframes board-in {
+  from {
+    opacity: 0;
+    transform: perspective(1400px) rotateY(-24deg) rotateX(6deg) translateX(40px);
+  }
+}
+/* Las fichas de la pizarra se mecen despacio, cada una a su ritmo */
+.board-card {
+  animation: board-bob 6s ease-in-out infinite;
+}
+.board-card:nth-child(2) {
+  animation-delay: -2s;
+}
+.board-card:nth-child(3) {
+  animation-delay: -4s;
+}
+@keyframes board-bob {
+  50% {
+    transform: translateY(-5px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-in > div > *,
+  .hero-in > .board-3d {
+    animation: page-in-fade 300ms ease both;
+  }
+  .board-card {
+    animation-play-state: paused;
+  }
+}
+
+/* Panel lateral (filtros de Empleo): entra desde la derecha con la curva de cajón de iOS y sale más rápido.
+   El fondo oscurecido aparece y se va al mismo ritmo que el panel (ui-animation: elementos que se mueven juntos comparten curva). */
+:root {
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+@keyframes drawer-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+@keyframes drawer-slide-out {
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes scrim-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes scrim-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+.drawer-in {
+  animation: drawer-slide-in 380ms var(--ease-drawer) both;
+}
+.drawer-out {
+  animation: drawer-slide-out 220ms var(--ease-exit) both;
+}
+.scrim-in {
+  animation: scrim-fade-in 380ms var(--ease-drawer) both;
+}
+.scrim-out {
+  animation: scrim-fade-out 220ms var(--ease-exit) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Sin desplazamiento: solo un fundido corto */
+  .drawer-in {
+    animation: scrim-fade-in 150ms ease both;
+  }
+  .drawer-out {
+    animation: scrim-fade-out 120ms ease both;
+  }
 }

@@ -39,7 +39,7 @@ function GroupItem({ group, onLeave }: { group: MyGroup; onLeave: (g: MyGroup) =
     <li className="rounded-card border border-line bg-card p-4">
       <div className="flex items-center gap-3">
         <Link href={href} tabIndex={-1} aria-hidden className="shrink-0">
-          <GroupCover src={group.cover_url} topic={group.topic} iconSize="sm" className="h-20 w-20 rounded-xl" />
+          <GroupCover src={group.cover_url} topic={group.topic} iconSize="sm" className="h-20 w-20 rounded-card" />
         </Link>
         <div className="min-w-0 flex-1">
           <h3 className="font-semibold leading-snug">
@@ -54,14 +54,14 @@ function GroupItem({ group, onLeave }: { group: MyGroup; onLeave: (g: MyGroup) =
             </p>
           )}
           {group.role === "admin" && (
-            <span className="mt-1 inline-block rounded-full bg-accent-50 px-2 py-0.5 text-[12px] font-semibold text-accent-800">Administrador</span>
+            <span className="mt-1 inline-block rounded-[6px] bg-brand-50 px-2 py-0.5 text-[12px] font-semibold text-brand-700">Administrador</span>
           )}
         </div>
       </div>
       <div className="mt-3 flex gap-2">
         <Link
           href={href}
-          className="flex min-h-11 flex-1 items-center justify-center rounded-lg bg-brand-50 text-[15px] font-semibold text-brand-700 transition-colors hover:bg-brand-50/60"
+          className="flex min-h-11 flex-1 items-center justify-center rounded-btn bg-brand-50 text-[15px] font-semibold text-brand-700 transition-colors hover:bg-brand-50/60"
         >
           Ver grupo
         </Link>
@@ -71,12 +71,12 @@ function GroupItem({ group, onLeave }: { group: MyGroup; onLeave: (g: MyGroup) =
             onClick={() => menu.setOpen((o) => !o)}
             aria-label={`Más opciones de ${group.name}`}
             aria-expanded={menu.open}
-            className="flex h-11 w-11 items-center justify-center rounded-lg bg-field hover:bg-field-hover"
+            className="flex h-11 w-11 items-center justify-center rounded-btn bg-field hover:bg-field-hover"
           >
             <MoreHorizontal className="h-5 w-5" aria-hidden />
           </button>
           {menu.open && (
-            <div role="menu" className="absolute right-0 z-10 mt-1 w-52 rounded-xl border border-line bg-card p-1 shadow-lg">
+            <div role="menu" className="absolute right-0 z-10 mt-1 w-52 rounded-card border border-line bg-card p-1 shadow-lg">
               <button
                 type="button"
                 role="menuitem"
@@ -84,7 +84,7 @@ function GroupItem({ group, onLeave }: { group: MyGroup; onLeave: (g: MyGroup) =
                   menu.setOpen(false);
                   onLeave(group);
                 }}
-                className="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-left text-[15px] font-semibold text-danger hover:bg-page"
+                className="flex min-h-11 w-full items-center gap-3 rounded-btn px-3 text-left text-[15px] font-semibold text-danger hover:bg-page"
               >
                 <LogOut className="h-5 w-5" aria-hidden /> Salir del grupo
               </button>
@@ -120,7 +120,7 @@ function YourGroups() {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between gap-4 border-b border-line pb-4">
-        <h2 className="text-lg font-semibold">
+        <h2 className="text-lg font-bold">
           Todos los grupos a los que te has unido{groups && groups.length > 0 ? ` (${groups.length})` : ""}
         </h2>
         <div ref={menu.ref} className="relative shrink-0">
@@ -128,12 +128,12 @@ function YourGroups() {
             type="button"
             onClick={() => menu.setOpen((o) => !o)}
             aria-expanded={menu.open}
-            className="flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-[15px] font-semibold text-brand-700 hover:bg-brand-50"
+            className="flex min-h-11 items-center gap-1.5 rounded-btn px-2 text-[15px] font-semibold text-brand-700 hover:bg-brand-50"
           >
             <ArrowUpDown className="h-4 w-4" aria-hidden /> Ordenar
           </button>
           {menu.open && (
-            <div role="menu" className="absolute right-0 z-10 mt-1 w-60 rounded-xl border border-line bg-card p-1 shadow-lg">
+            <div role="menu" className="absolute right-0 z-10 mt-1 w-60 rounded-card border border-line bg-card p-1 shadow-lg">
               {(Object.keys(SORTS) as Sort[]).map((key) => (
                 <button
                   key={key}
@@ -144,7 +144,7 @@ function YourGroups() {
                     setSort(key);
                     menu.setOpen(false);
                   }}
-                  className="flex min-h-11 w-full items-center justify-between rounded-lg px-3 text-left text-[15px] hover:bg-page"
+                  className="flex min-h-11 w-full items-center justify-between rounded-btn px-3 text-left text-[15px] hover:bg-page"
                 >
                   {SORTS[key]}
                   {sort === key && <Check className="h-4 w-4 text-brand-700" aria-hidden />}
@@ -159,7 +159,7 @@ function YourGroups() {
         <UnfollowDialog
           kind="group"
           name={leaving.name}
-          picture={<GroupCover src={leaving.cover_url} topic={leaving.topic} iconSize="sm" className="h-16 w-16 rounded-2xl" />}
+          picture={<GroupCover src={leaving.cover_url} topic={leaving.topic} iconSize="sm" className="h-16 w-16 rounded-card" />}
           note={leaving.role === "admin" ? "Eres administrador: lo será quien lleve más tiempo en el grupo." : undefined}
           onConfirm={() => leave(leaving)}
           onCancel={() => setLeaving(null)}
@@ -178,7 +178,7 @@ function YourGroups() {
           <Users className="mx-auto h-10 w-10 text-ink-subtle" aria-hidden />
           <h3 className="mt-3 text-lg font-semibold">Aún no te has unido a ningún grupo</h3>
           <p className="mx-auto mt-1 max-w-sm text-ink-muted">Busca grupos de tus estudios, de tu ciudad o de lo que te guste.</p>
-          <Link href="/social" className="mt-4 inline-flex min-h-11 items-center rounded-full border border-line px-5 font-semibold hover:border-ink-subtle">
+          <Link href="/social" className="mt-4 inline-flex min-h-11 items-center rounded-btn border border-line px-5 font-semibold hover:border-ink-subtle">
             Ver sugerencias
           </Link>
         </div>

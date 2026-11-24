@@ -1,11 +1,10 @@
 "use client";
 
-import { Bookmark, Check, EyeOff, Flag, MessageCircle, MoreHorizontal, Plus, Repeat2, Send, ThumbsUp, Trash2 } from "lucide-react";
+import { Bookmark, Check, EyeOff, Flag, Heart, MessageCircle, MoreHorizontal, Plus, Repeat2, Send, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { announceRelation, api, onRelation, refreshGroups, type Post } from "@/lib/api";
 import { coverTopic, groupNoun } from "@/lib/groups";
-import { feelingPhrase } from "@/lib/feelings";
 import { timeAgo } from "@/lib/time";
 import { Avatar } from "../Avatar";
 import { GroupCover } from "../social/GroupCover";
@@ -33,9 +32,11 @@ type Props = {
   onUpdate?: (post: Post) => void;
   /** Solo en el panel: qué hacer al pulsar "Comentar" */
   onCommentClick?: () => void;
+  /** Dentro de la página del grupo: no se repite el grupo ni «Unido»; encabeza quien publica */
+  inGroup?: boolean;
 };
 
-export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowChange, onUpdate, onCommentClick }: Props) {
+export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowChange, onUpdate, onCommentClick, inGroup = false }: Props) {
   const [liked, setLiked] = useState(post.liked_by_me);
   const [likes, setLikes] = useState(post.likes);
   const [shared, setShared] = useState(post.shared_by_me);
@@ -45,7 +46,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
   const [burst, setBurst] = useState(0);
   const [shareBurst, setShareBurst] = useState(0);
   const [following, setFollowing] = useState(post.following_author);
-  const community = post.community;
+  const community = inGroup ? null : post.community;
   const groupHref = community ? `/social/grupo/${community.id}` : "";
   const [joined, setJoined] = useState(community?.is_member ?? false);
   const [joining, setJoining] = useState(false);
@@ -71,7 +72,6 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
   const isCompany = author.role === "company";
   const inModal = variant === "modal";
   const extras = [
-    post.feeling && feelingPhrase(post.feeling),
     post.tagged.length > 0 && `con ${post.tagged.map((t) => t.name).join(", ")}`,
     post.location && `en ${post.location}`,
   ].filter(Boolean) as string[];
@@ -205,8 +205,21 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
     onHide?.(post.id);
   };
 
+  const [copied, setCopied] = useState(false);
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}/inicio?post=${post.id}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* sin permiso para el portapapeles: no cambia nada */
+    }
+  };
+
   const openPost = () => (inModal ? onCommentClick?.() : setOpen(true));
-  const action = "flex min-h-11 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-2 text-sm font-semibold transition-colors";
+  // Acciones compactas y alineadas a la izquierda; solo se colorean cuando están activas
+  const action = "inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-btn px-2.5 text-sm font-semibold transition-colors";
+  const idle = "text-ink-muted hover:bg-field-hover hover:text-ink";
   const menuItem = "flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-sm hover:bg-page";
 
   return (
@@ -218,7 +231,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
         {community ? (
           // Publicación de un grupo o foro: manda el grupo, y quien la publicó va debajo, más pequeño
           <Link href={groupHref} aria-hidden tabIndex={-1} className="relative shrink-0">
-            <GroupCover src={community.cover_url} topic={coverTopic(community)} iconSize="sm" className="h-12 w-12 rounded-xl" />
+            <GroupCover src={community.cover_url} topic={coverTopic(community)} iconSize="sm" className="h-12 w-12 rounded-card" />
             <span className="absolute -bottom-1.5 -right-1.5 rounded-full ring-2 ring-card">
               <Avatar name={author.name} src={author.avatar_url} size="xs" square={isCompany} />
             </span>
@@ -275,9 +288,9 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
               onClick={join}
               disabled={joining}
               aria-label={`Unirme a ${community.name}`}
-              className="inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-full text-sm font-semibold text-brand-700 hover:bg-brand-50 sm:mr-1 sm:px-3"
+              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-btn px-2.5 text-sm font-semibold text-brand-700 hover:bg-brand-50 sm:mr-1 sm:px-3"
             >
-              <Plus className="h-5 w-5 sm:h-4 sm:w-4" aria-hidden /> <span className="hidden sm:inline">Unirme</span>
+              <Plus className="h-4 w-4" aria-hidden /> Unirme
             </button>
           )}
           {community && !post.is_mine && joined && (
@@ -285,9 +298,9 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
               type="button"
               onClick={() => setConfirmLeave(true)}
               aria-label={`Estás en ${community.name}. Pulsa para salir`}
-              className="inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-full text-sm font-semibold text-ink-muted hover:bg-page hover:text-ink sm:mr-1 sm:px-3"
+              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-btn px-2.5 text-sm font-semibold text-ink-muted hover:bg-field-hover hover:text-ink sm:mr-1 sm:px-3"
             >
-              <Check className="h-5 w-5 sm:h-4 sm:w-4" aria-hidden /> <span className="hidden sm:inline">Unido</span>
+              <Check className="h-4 w-4" aria-hidden /> Unido
             </button>
           )}
           {!community && !post.is_mine && !following && (
@@ -295,7 +308,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
               type="button"
               onClick={() => setFollow(true)}
               aria-label={`Seguir a ${author.name}`}
-              className="inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-full text-sm font-semibold text-brand-700 hover:bg-brand-50 sm:mr-1 sm:px-3"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-btn text-sm font-semibold text-brand-700 hover:bg-brand-50 sm:mr-1 sm:px-3"
             >
               <Plus className="h-5 w-5 sm:h-4 sm:w-4" aria-hidden /> <span className="hidden sm:inline">Seguir</span>
             </button>
@@ -305,7 +318,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
               type="button"
               onClick={() => setConfirmUnfollow(true)}
               aria-label={`Siguiendo a ${author.name}. Pulsa para dejar de seguir`}
-              className="inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-full text-sm font-semibold text-ink-muted hover:bg-page hover:text-ink sm:mr-1 sm:px-3"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-btn text-sm font-semibold text-ink-muted hover:bg-field-hover hover:text-ink sm:mr-1 sm:px-3"
             >
               <Check className="h-5 w-5 sm:h-4 sm:w-4" aria-hidden /> <span className="hidden sm:inline">Siguiendo</span>
             </button>
@@ -316,12 +329,12 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
               aria-label="Más opciones"
               aria-expanded={menu}
               onClick={() => setMenu((m) => !m)}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-ink-muted hover:bg-page hover:text-ink"
+              className="flex h-11 w-11 items-center justify-center rounded-btn text-ink-muted hover:bg-field-hover hover:text-ink"
             >
               <MoreHorizontal className="h-5 w-5" aria-hidden />
             </button>
             {menu && (
-              <div role="menu" className="absolute right-0 z-10 mt-1 w-52 overflow-hidden rounded-xl border border-line bg-card py-1 shadow-lg">
+              <div role="menu" className="absolute right-0 z-10 mt-1 w-52 overflow-hidden rounded-card border border-line bg-card py-1 shadow-lg">
                 <button role="menuitemcheckbox" aria-checked={saved} type="button" className={`${menuItem} ${saved ? "font-semibold" : ""}`} onClick={toggleSave}>
                   <Bookmark className={`h-4 w-4 ${saved ? "fill-ink text-ink" : ""}`} aria-hidden /> {saved ? "Guardado" : "Guardar"}
                 </button>
@@ -370,18 +383,18 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
 
       <MediaGallery media={post.media} onOpen={openPost} full={inModal} />
 
-      <footer className={`flex gap-1 px-2 py-1.5 ${inModal ? "" : "mt-1 border-t border-line"}`}>
+      <footer className={`flex items-center gap-0.5 px-2 pb-2 ${inModal ? "pt-1.5" : "pt-0.5"}`}>
         <button
           type="button"
           aria-pressed={liked}
           aria-label={`Me gusta${likes ? `: ${likes}` : ""}`}
           onClick={toggleLike}
-          className={`${action} text-brand-700 hover:bg-brand-50 ${liked ? "bg-brand-50" : ""}`}
+          className={`${action} ${liked ? "bg-foros-50 text-foros-ink" : idle}`}
         >
           <span className="relative flex">
-            <ThumbsUp
+            <Heart
               key={`icon-${burst}`}
-              className={`h-5 w-5 text-brand-700 ${liked ? "fill-brand-600" : ""} ${burst && liked ? "animate-like-pop" : ""}`}
+              className={`h-5 w-5 ${liked ? "fill-current" : ""} ${burst && liked ? "animate-like-pop" : ""}`}
               aria-hidden
             />
             {burst > 0 && liked && <LikeBurst key={`burst-${burst}`} />}
@@ -393,9 +406,9 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
           type="button"
           onClick={openPost}
           aria-label={`Comentar${comments ? `: ${comments} comentarios` : ""}`}
-          className={`${action} text-green-700 hover:bg-green-50`}
+          className={`${action} ${idle}`}
         >
-          <MessageCircle className="h-5 w-5 text-green-600" aria-hidden />
+          <MessageCircle className="h-5 w-5" aria-hidden />
           <span className="hidden sm:inline">Comentar</span>
           {comments > 0 && <span className="tabular-nums">{comments}</span>}
         </button>
@@ -404,12 +417,12 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
           aria-pressed={shared}
           aria-label={`Compartir${shares ? `: ${shares} veces compartida` : ""}`}
           onClick={toggleShare}
-          className={`${action} text-accent-800 hover:bg-accent-50 ${shared ? "bg-accent-50" : ""}`}
+          className={`${action} ${shared ? "bg-brand-50 text-brand-700" : idle}`}
         >
           <span className="relative flex">
             <Repeat2
               key={`share-${shareBurst}`}
-              className={`h-5 w-5 text-accent-800 ${shareBurst && shared ? "animate-share-spin" : ""}`}
+              className={`h-5 w-5 ${shareBurst && shared ? "animate-share-spin" : ""}`}
               strokeWidth={shared ? 2.75 : 2}
               aria-hidden
             />
@@ -418,17 +431,34 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
           <span className="hidden sm:inline">{shared ? "Compartido" : "Compartir"}</span>
           {shares > 0 && <span className="tabular-nums">{shares}</span>}
         </button>
-        <button type="button" aria-label="Enviar" className={`${action} text-ink-muted hover:bg-page hover:text-ink`}>
-          <Send className="h-5 w-5" aria-hidden />
-          <span className="hidden sm:inline">Enviar</span>
-        </button>
+        <span className="ml-auto flex">
+          {/* Copia el enlace de la publicación y lo confirma en el propio botón */}
+          <button
+            type="button"
+            onClick={copyLink}
+            aria-label={copied ? "Enlace copiado" : "Copiar enlace para enviarlo"}
+            className={`${action} ${copied ? "text-success" : idle}`}
+          >
+            {copied ? <Check className="h-5 w-5" aria-hidden /> : <Send className="h-5 w-5" aria-hidden />}
+            {copied && <span className="text-[13px]">Copiado</span>}
+          </button>
+          <button
+            type="button"
+            aria-pressed={saved}
+            aria-label={saved ? "Quitar de guardados" : "Guardar"}
+            onClick={toggleSave}
+            className={`${action} ${saved ? "text-ink" : idle}`}
+          >
+            <Bookmark className={`h-5 w-5 ${saved ? "fill-mark" : ""}`} aria-hidden />
+          </button>
+        </span>
       </footer>
 
       {confirmLeave && community && (
         <UnfollowDialog
           kind={groupNoun(community.type) === "foro" ? "forum" : "group"}
           name={community.name}
-          picture={<GroupCover src={community.cover_url} topic={coverTopic(community)} iconSize="sm" className="h-16 w-16 rounded-2xl" />}
+          picture={<GroupCover src={community.cover_url} topic={coverTopic(community)} iconSize="sm" className="h-16 w-16 rounded-card" />}
           onConfirm={leave}
           onCancel={() => setConfirmLeave(false)}
         />
@@ -464,5 +494,29 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
         />
       )}
     </article>
+  );
+}
+
+/** Esqueleto con la forma de una publicación (autor, texto y acciones), en vez de una caja lisa. */
+export function PostCardSkeleton() {
+  return (
+    <div aria-hidden className="rounded-card border border-line bg-card p-4">
+      <div className="flex items-center gap-3">
+        <div className="h-12 w-12 shrink-0 animate-pulse rounded-full bg-page" />
+        <div className="flex-1 space-y-2">
+          <div className="h-3.5 w-40 animate-pulse rounded bg-page" />
+          <div className="h-3 w-24 animate-pulse rounded bg-page" />
+        </div>
+      </div>
+      <div className="mt-4 space-y-2">
+        <div className="h-3.5 w-full animate-pulse rounded bg-page" />
+        <div className="h-3.5 w-4/5 animate-pulse rounded bg-page" />
+      </div>
+      <div className="mt-5 flex gap-6">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="h-4 w-20 animate-pulse rounded bg-page" />
+        ))}
+      </div>
+    </div>
   );
 }

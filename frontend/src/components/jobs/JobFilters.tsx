@@ -45,7 +45,7 @@ function Option({
 }) {
   const empty = count === 0 && !checked;
   return (
-    <label className={`flex min-h-9 items-center gap-2.5 rounded-lg px-1 text-[15px] hover:bg-page ${empty ? "text-ink-subtle" : "text-ink"}`}>
+    <label className={`flex min-h-9 items-center gap-2.5 rounded-btn px-1 text-[15px] hover:bg-page ${empty ? "text-ink-subtle" : "text-ink"}`}>
       <input type={type} name={name} checked={checked} onChange={onChange} className="h-[18px] w-[18px] shrink-0 accent-brand-600" />
       <span className="min-w-0 flex-1">{label}</span>
       {count !== undefined && <span className="text-sm text-ink-muted">{count}</span>}
@@ -88,15 +88,15 @@ export function JobFilters({
   );
 
   return (
+    // Va dentro del panel lateral de Empleo, que ya pone el título «Filtros»: aquí solo el marco y «Limpiar»
     <div className="rounded-card border border-line bg-card px-4">
-      <div className="flex items-center justify-between border-b border-line py-3">
-        <h2 className="text-lg font-semibold">Filtros</h2>
-        {activeFilters(filters) > 0 && (
-          <button type="button" onClick={() => onChange(EMPTY_FILTERS)} className="min-h-9 px-1 text-sm font-semibold text-brand-700 hover:underline">
-            Limpiar
+      {activeFilters(filters) > 0 && (
+        <div className="flex justify-end border-b border-line py-2">
+          <button type="button" onClick={() => onChange(EMPTY_FILTERS)} className="min-h-11 px-2 text-sm font-semibold text-brand-700 hover:underline">
+            Limpiar filtros
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {isStudent && (
         <Group title="Recomendadas">

@@ -47,6 +47,7 @@ class JobCardOut(BaseModel):
     applicants: int
     my_status: str | None  # estado de mi candidatura, si me he inscrito
     matches_studies: bool  # recomendada para los estudios del estudiante
+    summary: str | None = None  # resumen de la descripción para la tarjeta de la lista (~150 caracteres)
 
 
 class JobOut(JobCardOut):

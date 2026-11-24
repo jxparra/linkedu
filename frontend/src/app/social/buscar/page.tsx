@@ -30,7 +30,7 @@ function Results() {
           <SearchX className="mx-auto h-10 w-10 text-ink-subtle" aria-hidden />
           <h3 className="mt-3 text-lg font-semibold">No hay grupos con ese nombre</h3>
           <p className="mx-auto mt-1 max-w-sm text-ink-muted">Prueba con otra palabra o con una temática, como «deportes» o «idiomas». O crea tú el grupo.</p>
-          <Link href="/social/crear" className="mt-4 inline-flex min-h-11 items-center rounded-full border border-line px-5 font-semibold hover:border-ink-subtle">
+          <Link href="/social/crear" className="mt-4 inline-flex min-h-11 items-center rounded-btn border border-line px-5 font-semibold hover:border-ink-subtle">
             Crear grupo
           </Link>
         </div>

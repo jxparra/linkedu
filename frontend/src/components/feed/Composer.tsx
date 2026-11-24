@@ -1,6 +1,6 @@
 "use client";
 
-import { ImagePlus, Smile, Video } from "lucide-react";
+import { ImagePlus, Video } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import type { Post, User } from "@/lib/api";
@@ -31,19 +31,16 @@ export function Composer({
         <button
           type="button"
           onClick={() => setPanel("main")}
-          className="min-h-12 min-w-0 flex-1 truncate rounded-full bg-field px-4 text-left text-[15px] text-field-text transition-colors hover:bg-field-hover"
+          className="min-h-12 min-w-0 flex-1 truncate rounded-btn bg-field px-4 text-left text-[15px] text-field-text transition-colors hover:bg-field-hover"
         >
           {community ? `Escribe algo en el grupo, ${firstName}…` : `¿Qué quieres compartir, ${firstName}?`}
         </button>
         <div className="hidden items-center sm:flex">
-          <button type="button" onClick={() => setPanel("camera")} aria-label="Grabar vídeo" title="Grabar vídeo" className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-page">
-            <Video className="h-6 w-6 text-[#E4405F]" aria-hidden />
+          <button type="button" onClick={() => setPanel("camera")} aria-label="Grabar vídeo" title="Grabar vídeo" className="flex h-11 w-11 items-center justify-center rounded-btn hover:bg-field-hover">
+            <Video className="h-6 w-6 text-ink-muted" aria-hidden />
           </button>
-          <button type="button" onClick={() => setPanel("photo")} aria-label="Foto o vídeo" title="Foto/vídeo" className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-page">
-            <ImagePlus className="h-6 w-6 text-success" aria-hidden />
-          </button>
-          <button type="button" onClick={() => setPanel("feeling")} aria-label="Sentimiento o actividad" title="Sentimiento/actividad" className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-page">
-            <Smile className="h-6 w-6 text-accent-400" aria-hidden />
+          <button type="button" onClick={() => setPanel("photo")} aria-label="Foto o vídeo" title="Foto/vídeo" className="flex h-11 w-11 items-center justify-center rounded-btn hover:bg-field-hover">
+            <ImagePlus className="h-6 w-6 text-ink-muted" aria-hidden />
           </button>
         </div>
       </div>

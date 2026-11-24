@@ -19,7 +19,7 @@ export default function Seccion() {
     <AppShell>
       {() => (
         <div className="rounded-card border border-line bg-card p-8 text-center sm:p-12">
-          <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-accent-50 text-accent-800">
+          <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-card bg-accent-50 text-accent-800">
             <Hammer className="h-6 w-6" aria-hidden />
           </span>
           <h1 className="mt-4 text-[28px] font-semibold">{section.title}</h1>

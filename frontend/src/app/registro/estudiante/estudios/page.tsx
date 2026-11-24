@@ -26,7 +26,7 @@ export default function EstudianteEstudios() {
     const e: typeof errors = {};
     if (!school) e.school = "Elige tu centro de la lista.";
     if (!degree) e.degree = "Elige tus estudios de la lista.";
-    if (!over16) e.age = "Debes tener 16 años o más para usar StudyHub.";
+    if (!over16) e.age = "Debes tener 16 años o más para usar Linkedu.";
     setErrors(e);
     if (Object.keys(e).length) return;
     setLoading(true);
@@ -80,8 +80,8 @@ export default function EstudianteEstudios() {
               type="button"
               aria-pressed={course === c}
               onClick={() => setCourse(course === c ? null : c)}
-              className={`h-11 min-w-11 rounded-full border px-4 text-[15px] font-medium transition-colors ${
-                course === c ? "border-brand-600 bg-brand-600 text-on-brand" : "border-line hover:border-ink-subtle"
+              className={`h-11 min-w-11 rounded-btn border px-4 text-[15px] font-medium transition-colors ${
+                course === c ? "nav-mark border-transparent" : "border-line hover:border-ink-subtle"
               }`}
             >
               {c}º

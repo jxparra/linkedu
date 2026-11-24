@@ -46,7 +46,7 @@ function GroupsFeed() {
           <Newspaper className="mx-auto h-10 w-10 text-ink-subtle" aria-hidden />
           <h3 className="mt-3 text-lg font-semibold">Aún no hay nada por aquí</h3>
           <p className="mx-auto mt-1 max-w-sm text-ink-muted">Cuando te unas a grupos, lo que publiquen sus miembros aparecerá aquí.</p>
-          <Link href="/social" className="mt-4 inline-flex min-h-11 items-center rounded-full border border-line px-5 font-semibold hover:border-ink-subtle">
+          <Link href="/social" className="mt-4 inline-flex min-h-11 items-center rounded-btn border border-line px-5 font-semibold hover:border-ink-subtle">
             Ver sugerencias
           </Link>
         </div>

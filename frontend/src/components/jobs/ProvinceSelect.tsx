@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, MapPin } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { ABROAD, ALL_SPAIN, COMMON_PROVINCES, PROVINCES } from "@/lib/jobs";
 
@@ -16,8 +16,11 @@ export function ProvinceSelect({
   labelledBy,
   withAll = true,
   flat = false,
+  inline = false,
   className = "",
 }: {
+  /** Dentro de la barra de búsqueda de Empleo: sin borde propio, con el icono de lugar delante */
+  inline?: boolean;
   value: string;
   onChange: (v: string) => void;
   labelledBy?: string;
@@ -106,11 +109,16 @@ export function ProvinceSelect({
         aria-labelledby={labelledBy ? `${labelledBy} ${id}-value` : undefined}
         onClick={() => setOpen((o) => !o)}
         onKeyDown={onKey}
-        className={`flex w-full items-center justify-between gap-2 border bg-card text-left transition-colors ${
-          flat ? "h-[45px] rounded-[3px] px-2.5 text-[17px] font-semibold" : "h-12 rounded-input px-3.5 text-[15px]"
-        } ${open ? "border-brand-600 ring-2 ring-brand-600/20" : flat ? "border-ink-subtle" : "border-line hover:border-ink-subtle"}`}
+        className={
+          inline
+            ? `flex h-12 w-full items-center gap-2 rounded-btn px-3 text-left text-[15px] transition-colors ${open ? "bg-field-hover" : "hover:bg-field-hover"}`
+            : `flex w-full items-center justify-between gap-2 border bg-card text-left transition-colors ${
+                flat ? "h-[45px] rounded-[3px] px-2.5 text-[17px] font-semibold" : "h-12 rounded-input px-3.5 text-[15px]"
+              } ${open ? "border-brand-600 ring-2 ring-brand-600/20" : flat ? "border-ink-subtle" : "border-edge hover:border-ink-subtle"}`
+        }
       >
-        <span id={`${id}-value`} className={`truncate ${flat ? "text-ink-muted" : value ? "text-ink" : "text-ink-subtle"}`}>
+        {inline && <MapPin className="h-5 w-5 shrink-0 text-ink-subtle" aria-hidden />}
+        <span id={`${id}-value`} className={`${inline ? "flex-1 " : ""}truncate ${flat ? "text-ink-muted" : value ? "text-ink" : "text-ink-subtle"}`}>
           {label}
         </span>
         {flat ? (
@@ -128,7 +136,7 @@ export function ProvinceSelect({
           id={`${id}-list`}
           role="listbox"
           aria-activedescendant={`${id}-opt-${active}`}
-          className={`absolute inset-x-0 top-full z-30 mt-0.5 max-h-60 overflow-y-auto border bg-card py-1 ${
+          className={`pop-in absolute inset-x-0 top-full z-30 mt-0.5 max-h-60 overflow-y-auto border bg-card py-1 ${
             flat ? "rounded-[3px] border-ink-subtle" : "rounded-input border-line shadow-lg"
           }`}
         >
@@ -138,7 +146,7 @@ export function ProvinceSelect({
                 <li
                   key={item.heading}
                   role="presentation"
-                  className={flat ? "px-2.5 pt-1.5 text-[10px] text-ink-muted" : "px-3.5 pb-1 pt-2.5 text-[11px] font-semibold uppercase tracking-wide text-ink-subtle"}
+                  className={flat ? "px-2.5 pt-1.5 text-[10px] text-ink-muted" : "px-3.5 pb-1 pt-2.5 text-[12px] font-semibold text-ink-subtle"}
                 >
                   {item.heading}
                 </li>

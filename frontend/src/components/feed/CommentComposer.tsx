@@ -122,7 +122,7 @@ export const CommentComposer = forwardRef<HTMLTextAreaElement | null, Props>(fun
         <span className="h-9 w-9 shrink-0 rounded-full bg-page" />
       )}
       <div className="min-w-0 flex-1">
-        <div className="rounded-2xl bg-page px-3 py-2 focus-within:ring-2 focus-within:ring-brand-600/30">
+        <div className="rounded-card bg-page px-3 py-2 focus-within:ring-2 focus-within:ring-brand-600/30">
           <label className="block">
             <span className="sr-only">{parentId ? "Escribe una respuesta" : "Escribe un comentario"}</span>
             <textarea
@@ -147,9 +147,9 @@ export const CommentComposer = forwardRef<HTMLTextAreaElement | null, Props>(fun
           {image && (
             <div className="relative mt-2 inline-block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={image.url ? mediaUrl(image.url) : image.preview} alt="Imagen adjunta" className="max-h-32 rounded-xl" />
+              <img src={image.url ? mediaUrl(image.url) : image.preview} alt="Imagen adjunta" className="max-h-32 rounded-card" />
               {uploading && (
-                <span className="absolute inset-0 flex items-center justify-center rounded-xl bg-card/60">
+                <span className="absolute inset-0 flex items-center justify-center rounded-card bg-card/60">
                   <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
                 </span>
               )}
@@ -170,7 +170,7 @@ export const CommentComposer = forwardRef<HTMLTextAreaElement | null, Props>(fun
                   <Smile className="h-[18px] w-[18px]" aria-hidden />
                 </button>
                 {emojiOpen && (
-                  <div className="absolute bottom-10 left-0 z-30 grid w-64 grid-cols-8 gap-0.5 rounded-xl border border-line bg-card p-2 shadow-xl">
+                  <div className="absolute bottom-10 left-0 z-30 grid w-64 grid-cols-8 gap-0.5 rounded-card border border-line bg-card p-2 shadow-xl">
                     {EMOJIS.map((e) => (
                       <button key={e} type="button" onClick={() => insert(e)} className="flex h-7 w-7 items-center justify-center rounded-md text-lg hover:bg-page" aria-label={`Emoji ${e}`}>
                         {e}

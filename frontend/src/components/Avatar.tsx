@@ -26,7 +26,8 @@ export function Avatar({
     <span
       aria-hidden
       className={`${sizes[size]} ${shape} flex shrink-0 items-center justify-center font-semibold ${
-        square ? "bg-ink text-inverse" : "bg-brand-50 text-brand-700"
+        // Empresas: cuadradas y en el ocre de Empleo (antes un bloque negro, que en modo oscuro salía blanco y deslumbraba)
+        square ? "bg-empleo-50 text-empleo-ink" : "bg-brand-50 text-brand-700"
       }`}
     >
       {initials || "?"}

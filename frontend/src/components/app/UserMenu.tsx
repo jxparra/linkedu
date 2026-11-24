@@ -8,7 +8,7 @@ import { api, logout, mediaUrl, type Profile, type User } from "@/lib/api";
 import { useT } from "@/lib/i18n";
 import { Avatar } from "../Avatar";
 
-/** Menú que se abre al pulsar tu foto (arriba a la derecha), como el menú "Yo" de LinkedIn. */
+/** Menú que se abre al pulsar tu foto (arriba a la derecha): tu perfil, estadísticas, guardados y ajustes. */
 export function UserMenu({ user, name }: { user: User | null; name: string }) {
   const t = useT();
   const path = usePathname();
@@ -36,8 +36,8 @@ export function UserMenu({ user, name }: { user: User | null; name: string }) {
   }, [open, user, profile]);
 
   const avatar = profile?.user.avatar_url ? mediaUrl(profile.user.avatar_url) : null;
-  const card = "flex min-h-14 items-center justify-between gap-3 rounded-xl border border-line px-4 py-3 transition-colors hover:bg-page";
-  const row = "flex min-h-11 items-center gap-3 rounded-lg px-1 text-[15px] text-ink transition-colors hover:bg-page";
+  const card = "flex min-h-14 items-center justify-between gap-3 rounded-btn border border-line px-4 py-3 transition-colors hover:bg-page";
+  const row = "flex min-h-11 items-center gap-3 rounded-btn px-1 text-[15px] text-ink transition-colors hover:bg-page";
 
   return (
     <div ref={boxRef} className="relative ml-1 hidden sm:block">
@@ -47,16 +47,15 @@ export function UserMenu({ user, name }: { user: User | null; name: string }) {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`${t("Yo")}: ${name}`}
-        className="flex flex-col items-center gap-0.5 rounded-xl px-1 py-0.5 hover:bg-page"
+        className="flex min-h-11 items-center gap-2 rounded-btn py-1 pl-1 pr-2 hover:bg-field-hover"
       >
         <Avatar name={name || "?"} src={avatar} size="sm" square={company} />
-        <span className="flex items-center text-[12px] font-semibold text-ink-muted">
-          {t("Yo")} <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} aria-hidden />
-        </span>
+        <span className="hidden max-w-[9rem] truncate text-[14px] font-semibold lg:block">{name.split(" ")[0]}</span>
+        <ChevronDown className={`h-4 w-4 text-ink-muted transition-transform ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>
 
       {open && (
-        <div role="menu" className="absolute right-0 top-full z-40 mt-2 w-[340px] rounded-card border border-line bg-card p-4 shadow-xl">
+        <div role="menu" className="pop-in [--pop-origin:top_right] absolute right-0 top-full z-40 mt-2 w-[340px] rounded-card border border-line bg-card p-4 shadow-xl">
           <Link role="menuitem" href="/perfil" className={`${card} items-start`}>
             <span className="flex min-w-0 gap-3">
               <Avatar name={name || "?"} src={avatar} size="md" square={company} />

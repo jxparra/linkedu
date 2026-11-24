@@ -1,4 +1,6 @@
-# StudyHub
+# Linkedu
+
+> Antes se llamaba **StudyHub** (el repositorio y los nombres internos lo conservan). Ver `docs/decisiones/ADR-013-nombre-linkedu.md`.
 
 Red social para estudiantes y empresas: trabajos puntuales, comunidades y foros por estudios, y reseñas de carreras, universidades y docencia.
 
@@ -45,15 +47,9 @@ Trabajo de Fin de Ciclo (TFC) de Joaquín Parra.
 
 ## Cómo arrancarlo
 
-Necesitas **Docker**, **Python 3.11+** y **Node.js 20+**.
+Necesitas **Python 3.11+** y **Node.js 20+**. En local la base de datos es **SQLite** (`backend/studyhub.db`), así que no hace falta Docker. El `docker-compose.yml` (PostgreSQL) es solo para la entrega: en ese caso, `docker compose up -d` y cambia `DATABASE_URL` en `backend/.env` (ver `backend/.env.example`).
 
-### 1. Base de datos
-
-```bash
-docker compose up -d
-```
-
-### 2. Backend (terminal 1)
+### 1. Backend (terminal 1)
 
 ```bash
 cd backend
@@ -68,7 +64,7 @@ fastapi dev app/main.py
 - API: http://localhost:8000
 - Documentación interactiva (Swagger): http://localhost:8000/docs
 
-### 3. Frontend (terminal 2)
+### 2. Frontend (terminal 2)
 
 ```bash
 cd frontend
@@ -78,6 +74,27 @@ npm run dev
 ```
 
 Abre http://localhost:3000
+
+### Arrancarlo en el día a día (ya instalado)
+
+Una vez hecha la instalación, para volver a arrancarlo basta con dos terminales:
+
+```bash
+cd backend && .venv\Scripts\activate && fastapi dev app/main.py   # terminal 1 → http://localhost:8000
+cd frontend && npm run dev                                        # terminal 2 → http://localhost:3000
+```
+
+- Entra con `irene@demo.studyhub` (estudiante) o `technova@demo.studyhub` (empresa), contraseña `Demo1234`.
+- Para pararlo: `Ctrl+C` en cada terminal.
+
+### Si sale «No hay conexión con el servidor. Comprueba que el backend está arrancado»
+
+El frontend no llega a http://localhost:8000. Por orden:
+
+1. **¿Está la terminal 1 con el backend en marcha?** Abre http://localhost:8000/docs; si no carga, arráncalo (comando de arriba) y mira el error que sale en esa terminal.
+2. **¿`backend/.env` apunta a PostgreSQL?** Si `DATABASE_URL` empieza por `postgresql+psycopg://…` y no tienes Docker con la base de datos en marcha, el backend falla al arrancar. Déjalo en `DATABASE_URL=sqlite:///./studyhub.db` (así viene en `.env.example`).
+3. **¿`frontend/.env.local` tiene `NEXT_PUBLIC_API_URL=http://localhost:8000`?** Si lo cambias, reinicia `npm run dev`.
+- **No ejecutes `npm run build` con `npm run dev` en marcha**: sobrescribe `.next` y la web se queda sin estilos. Si pasa, para el servidor, borra `frontend/.next` y vuelve a lanzar `npm run dev`.
 
 ## Cuentas de prueba
 

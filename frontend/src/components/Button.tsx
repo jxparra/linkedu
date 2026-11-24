@@ -5,7 +5,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 type Variant = "primary" | "secondary" | "ghost";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors min-h-11 px-6 text-[15px] disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex items-center justify-center gap-2 rounded-btn font-semibold transition-colors min-h-11 px-6 text-[15px] disabled:cursor-not-allowed disabled:opacity-60";
 const variants: Record<Variant, string> = {
   primary: "bg-brand-600 text-on-brand hover:bg-brand-hover",
   secondary: "btn-pop bg-card text-ink hover:bg-page",

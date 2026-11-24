@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { api, refreshGroups, type GroupCard as Group } from "@/lib/api";
 import { coverTopic, groupNoun, groupStats } from "@/lib/groups";
+import { useTilt } from "@/lib/useTilt";
 import { GroupCover } from "./GroupCover";
 
 /** Icono según el motivo de la sugerencia */
@@ -22,13 +23,29 @@ function ReasonIcon({ reason }: { reason: string }) {
  * Tarjeta de un grupo: portada, nombre, miembros, por qué se sugiere y "Unirte al grupo".
  * Con `dismissible`, la "X" lo quita de tus sugerencias (con "Deshacer").
  */
-export function GroupCard({ group, dismissible = false }: { group: Group; dismissible?: boolean }) {
+/**
+ * Con `featured`, la tarjeta es horizontal y más grande (portada a la izquierda y la descripción visible):
+ * se usa para el primer grupo de «Para ti», el único protagonista de la pantalla.
+ */
+export function GroupCard({
+  group,
+  dismissible = false,
+  featured = false,
+  match = false,
+}: {
+  group: Group;
+  dismissible?: boolean;
+  featured?: boolean;
+  /** Encaja contigo (apartado «Para ti»): lleva el reborde de la sección */
+  match?: boolean;
+}) {
   const [joined, setJoined] = useState(group.is_member);
   const [members, setMembers] = useState(group.members);
   const [busy, setBusy] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const href = `/social/grupo/${group.id}`;
   const noun = groupNoun(group.type);
+  const tilt = useTilt<HTMLElement>(4);
 
   const join = async () => {
     setBusy(true);
@@ -62,9 +79,12 @@ export function GroupCard({ group, dismissible = false }: { group: Group; dismis
   }
 
   return (
-    <article className="relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-card shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-      <Link href={href} tabIndex={-1} aria-hidden className="block">
-        <GroupCover src={group.cover_url} topic={coverTopic(group)} className="aspect-[16/9] w-full" />
+    <article
+      {...tilt}
+      className={`tilt relative flex h-full overflow-hidden rounded-card border border-line bg-card hover:border-edge ${match ? "match-ring match-social" : ""} ${featured ? "flex-col sm:h-[260px] sm:flex-row" : "flex-col"}`}
+    >
+      <Link href={href} tabIndex={-1} aria-hidden className={featured ? "block sm:w-[38%] sm:shrink-0" : "block"}>
+        <GroupCover src={group.cover_url} topic={coverTopic(group)} className={featured ? "aspect-[2/1] w-full sm:aspect-auto sm:h-full" : "aspect-[2/1] w-full"} />
       </Link>
       {dismissible && !joined && (
         <button
@@ -77,8 +97,8 @@ export function GroupCard({ group, dismissible = false }: { group: Group; dismis
           <X className="h-5 w-5" aria-hidden />
         </button>
       )}
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="text-[17px] font-semibold leading-snug">
+      <div className={`flex flex-1 flex-col ${featured ? "p-5 sm:p-6" : "p-4"}`}>
+        <h3 className={featured ? "font-display text-[26px] font-bold leading-tight tracking-tight" : "text-[17px] font-semibold leading-snug"}>
           <Link href={href} className="line-clamp-2 hover:underline">
             {group.name}
           </Link>
@@ -87,29 +107,30 @@ export function GroupCard({ group, dismissible = false }: { group: Group; dismis
           {group.privacy === "private" && <Lock className="h-3.5 w-3.5 shrink-0" aria-label="Grupo privado" />}
           {groupStats(members, group.posts_week)}
         </p>
+        {featured && group.description && <p className="mt-3 line-clamp-3 max-w-[52ch] text-[15px] leading-relaxed text-ink-muted">{group.description}</p>}
         {group.reason && (
-          <p className="mt-2 inline-flex max-w-full items-center gap-1.5 self-start rounded-full bg-brand-50 px-2.5 py-1 text-[12px] font-semibold text-brand-700">
+          <p className="mt-2 inline-flex max-w-full items-center gap-1.5 self-start rounded-[6px] bg-brand-50 px-2 py-1 text-[12px] font-semibold text-brand-700">
             <ReasonIcon reason={group.reason} />
             <span className="truncate">{group.reason}</span>
           </p>
         )}
-        <div className="mt-auto pt-4">
+        <div className={`mt-auto pt-4 ${featured ? "sm:max-w-[240px]" : ""}`}>
           {joined ? (
             <Link
               href={href}
-              className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-brand-50 text-[15px] font-semibold text-brand-700 transition-colors hover:bg-brand-50/70"
+              className="flex min-h-11 w-full items-center justify-center gap-2 rounded-btn bg-brand-50 text-[15px] font-semibold text-brand-700 transition-colors hover:bg-brand-50/70"
             >
-              <Check className="h-4 w-4" aria-hidden /> Ver {noun}
+              <Check className="h-4 w-4" aria-hidden /> Unido · ver {noun}
             </Link>
           ) : (
             <button
               type="button"
               onClick={join}
               disabled={busy}
-              className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-field text-[15px] font-semibold text-ink transition-colors hover:bg-field-hover"
+              className="flex min-h-11 w-full items-center justify-center gap-2 rounded-btn bg-field text-[15px] font-semibold text-ink transition-colors hover:bg-field-hover"
             >
               {busy && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
-              Unirte al {noun}
+              Unirme
             </button>
           )}
         </div>
@@ -121,11 +142,11 @@ export function GroupCard({ group, dismissible = false }: { group: Group; dismis
 export function GroupCardSkeleton() {
   return (
     <div className="overflow-hidden rounded-card border border-line bg-card">
-      <div className="aspect-[16/9] w-full animate-pulse bg-page" />
+      <div className="aspect-[2/1] w-full animate-pulse bg-page" />
       <div className="space-y-2 p-4">
         <div className="h-4 w-2/3 animate-pulse rounded bg-page" />
         <div className="h-3 w-1/3 animate-pulse rounded bg-page" />
-        <div className="mt-4 h-11 animate-pulse rounded-lg bg-page" />
+        <div className="mt-4 h-11 animate-pulse rounded-btn bg-page" />
       </div>
     </div>
   );

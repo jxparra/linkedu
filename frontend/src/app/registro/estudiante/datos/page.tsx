@@ -49,7 +49,7 @@ export default function EstudianteDatos() {
   };
 
   return (
-    <OnboardingShell progress={50} title="¿Cómo te llamas?" subtitle="Así te verán los demás en StudyHub." onSubmit={submit} loading={loading}>
+    <OnboardingShell progress={50} title="¿Cómo te llamas?" subtitle="Así te verán los demás en Linkedu." onSubmit={submit} loading={loading}>
       <ErrorBanner message={error} />
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Nombre" autoComplete="given-name" placeholder="Lucía" value={form.name} onChange={set("name")} error={errors.name} />
@@ -62,7 +62,7 @@ export default function EstudianteDatos() {
         value={form.username}
         onChange={set("username")}
         error={errors.username}
-        hint="Tu @ en StudyHub. Podrás cambiarlo más adelante."
+        hint="Tu @ en Linkedu. Podrás cambiarlo más adelante."
       />
       <Field
         label="Ubicación (opcional)"

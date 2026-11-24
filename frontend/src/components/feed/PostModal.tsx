@@ -149,13 +149,13 @@ export function PostModal({ post: initial, onClose, onUpdate, onDelete }: Props)
                 onClick={() => setSortOpen((o) => !o)}
                 aria-expanded={sortOpen}
                 aria-haspopup="listbox"
-                className="inline-flex min-h-10 items-center gap-1 rounded-lg px-2 text-[15px] font-semibold text-ink-muted hover:bg-page hover:text-ink"
+                className="inline-flex min-h-10 items-center gap-1 rounded-btn px-2 text-[15px] font-semibold text-ink-muted hover:bg-page hover:text-ink"
               >
                 {current.label}
                 <ChevronDown className={`h-4 w-4 transition-transform ${sortOpen ? "rotate-180" : ""}`} aria-hidden />
               </button>
               {sortOpen && (
-                <ul role="listbox" aria-label="Ordenar comentarios" className="absolute left-0 z-20 mt-1 w-[min(360px,90vw)] rounded-xl border border-line bg-card p-2 shadow-xl">
+                <ul role="listbox" aria-label="Ordenar comentarios" className="absolute left-0 z-20 mt-1 w-[min(360px,90vw)] rounded-card border border-line bg-card p-2 shadow-xl">
                   {SORTS.map((s) => (
                     <li key={s.value} role="option" aria-selected={s.value === sort}>
                       <button
@@ -164,7 +164,7 @@ export function PostModal({ post: initial, onClose, onUpdate, onDelete }: Props)
                           setSort(s.value);
                           setSortOpen(false);
                         }}
-                        className={`w-full rounded-lg px-3 py-2.5 text-left hover:bg-page ${s.value === sort ? "bg-brand-50" : ""}`}
+                        className={`w-full rounded-btn px-3 py-2.5 text-left hover:bg-page ${s.value === sort ? "bg-brand-50" : ""}`}
                       >
                         <span className={`block font-semibold ${s.value === sort ? "text-brand-700" : ""}`}>{s.label}</span>
                         <span className="mt-0.5 block text-[13px] leading-snug text-ink-muted">{s.text}</span>
@@ -180,7 +180,7 @@ export function PostModal({ post: initial, onClose, onUpdate, onDelete }: Props)
                 {[0, 1, 2].map((i) => (
                   <div key={i} className="flex gap-2">
                     <div className="h-9 w-9 shrink-0 animate-pulse rounded-full bg-page" />
-                    <div className="h-16 flex-1 animate-pulse rounded-2xl bg-page" />
+                    <div className="h-16 flex-1 animate-pulse rounded-card bg-page" />
                   </div>
                 ))}
               </div>

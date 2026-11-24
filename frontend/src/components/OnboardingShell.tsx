@@ -46,7 +46,7 @@ export function OnboardingShell({
           aria-valuemax={100}
           aria-label="Progreso del registro"
         >
-          <div className="h-full rounded-full bg-brand-600 transition-all duration-500" style={{ width: `${progress}%` }} />
+          <div className="h-full rounded-full bg-brand-600 transition-[width] duration-500" style={{ width: `${progress}%` }} />
         </div>
         <div className="mt-4 flex items-center justify-between">
           <Logo className="text-base" />

@@ -8,6 +8,7 @@ import { AppShell } from "@/components/app/AppShell";
 import { Avatar } from "@/components/Avatar";
 import { api, refreshUnread, type Author, type ChatMessage, type Conversation } from "@/lib/api";
 import { timeAgo } from "@/lib/time";
+import { ChalkText } from "@/components/ChalkLine";
 
 function Thread({ other, onBack, onSent }: { other: Author; onBack: () => void; onSent: () => void }) {
   const [msgs, setMsgs] = useState<ChatMessage[] | null>(null);
@@ -83,7 +84,7 @@ function Thread({ other, onBack, onSent }: { other: Author; onBack: () => void; 
             onChange={(e) => setText(e.target.value)}
             placeholder="Escribe un mensaje…"
             maxLength={2000}
-            className="h-11 w-full rounded-full bg-page px-4 text-[15px] placeholder:text-ink-subtle focus:bg-card focus:outline-none focus:ring-2 focus:ring-brand-600/30"
+            className="h-11 w-full rounded-btn bg-page px-4 text-[15px] placeholder:text-ink-subtle focus:bg-card focus:outline-none focus:ring-2 focus:ring-brand-600/30"
           />
         </label>
         <button type="submit" disabled={sending || !text.trim()} aria-label="Enviar" className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-600 text-on-brand disabled:bg-page disabled:text-ink-subtle">
@@ -117,10 +118,20 @@ function Inbox() {
     else if (convs) api<{ user: Author }>(`/users/${id}`).then((p) => setActive(p.user)).catch(() => {});
   }, [params, convs, active?.id]);
 
+  // En pantallas anchas se abre la primera conversación: el panel derecho no se queda vacío
+  const autoOpened = useRef(false);
+  useEffect(() => {
+    if (autoOpened.current || !convs?.length || params.get("con") || active) return;
+    autoOpened.current = true;
+    if (window.matchMedia("(min-width: 768px)").matches) setActive(convs[0].user);
+  }, [convs, params, active]);
+
   return (
-    <section className="grid h-[calc(100vh-150px)] min-h-[480px] overflow-hidden rounded-card border border-line bg-card md:grid-cols-[300px_minmax(0,1fr)]">
+    <section className="grid h-[calc(100vh-150px)] min-h-[480px] grid-cols-[minmax(0,1fr)] overflow-hidden rounded-card border border-line bg-card md:grid-cols-[360px_minmax(0,1fr)] lg:grid-cols-[380px_minmax(0,1fr)]">
       <div className={`min-h-0 flex-col border-r border-line ${active ? "hidden md:flex" : "flex"}`}>
-        <h1 className="border-b border-line px-5 py-4 text-xl font-bold">Mensajes</h1>
+        <h1 className="border-b border-line px-5 pb-5 pt-4 text-[28px] font-bold leading-tight">
+          <ChalkText>Mensajes</ChalkText>
+        </h1>
         <ul className="min-h-0 flex-1 overflow-y-auto">
           {convs === null && <li className="p-5 text-sm text-ink-muted">Cargando…</li>}
           {convs?.length === 0 && (
@@ -162,7 +173,7 @@ function Inbox() {
         {active ? (
           <Thread other={active} onBack={() => setActive(null)} onSent={load} />
         ) : (
-          <p className="text-ink-muted">Elige una conversación.</p>
+          <p className="max-w-xs text-center text-ink-muted">Elige una conversación o escribe a alguien desde su perfil con el botón «Mensaje».</p>
         )}
       </div>
     </section>
@@ -171,7 +182,7 @@ function Inbox() {
 
 export default function Mensajes() {
   return (
-    <AppShell>
+    <AppShell wide>
       {() => (
         <Suspense>
           <Inbox />

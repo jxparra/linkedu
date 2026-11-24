@@ -53,7 +53,7 @@ export function UnfollowDialog({
         className="w-full max-w-sm rounded-card bg-card p-6 text-center shadow-xl"
       >
         <span className="mx-auto block w-fit">{picture ?? <Avatar name={name} src={avatarUrl} size="lg" square={square} />}</span>
-        <h2 id="unfollow-title" className="mt-4 text-xl font-semibold">
+        <h2 id="unfollow-title" className="mt-4 text-xl font-bold">
           {person ? `¿Dejar de seguir a ${name}?` : `¿Salir de «${name}»?`}
         </h2>
         <p id="unfollow-text" className="mt-1.5 text-[15px] text-ink-muted">
@@ -66,7 +66,7 @@ export function UnfollowDialog({
           <button
             type="button"
             onClick={onConfirm}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-danger px-6 font-semibold text-on-danger transition-opacity hover:opacity-90"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-btn bg-danger px-6 font-semibold text-on-danger transition-opacity hover:opacity-90"
           >
             {person ? <UserMinus className="h-4 w-4" aria-hidden /> : <LogOut className="h-4 w-4" aria-hidden />}
             {person ? "Dejar de seguir" : `Salir del ${noun}`}
@@ -75,7 +75,7 @@ export function UnfollowDialog({
             ref={cancelRef}
             type="button"
             onClick={onCancel}
-            className="min-h-11 rounded-full border border-line px-6 font-semibold text-ink transition-colors hover:border-ink-subtle"
+            className="min-h-11 rounded-btn border border-line px-6 font-semibold text-ink transition-colors hover:border-ink-subtle"
           >
             Cancelar
           </button>

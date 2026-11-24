@@ -4,10 +4,12 @@ import { RotateCcw } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { AppShell } from "@/components/app/AppShell";
+import { TodayBand } from "@/components/app/TodayBand";
 import { Composer } from "@/components/feed/Composer";
-import { PostCard } from "@/components/feed/PostCard";
+import { PostCard, PostCardSkeleton } from "@/components/feed/PostCard";
 import { PostModal } from "@/components/feed/PostModal";
 import { api, type Post, type User } from "@/lib/api";
+import { setFeedIds } from "@/lib/feedIds";
 
 function Feed({ user }: { user: User }) {
   const [posts, setPosts] = useState<Post[] | null>(null);
@@ -37,12 +39,18 @@ function Feed({ user }: { user: User }) {
     load();
   }, [load]);
 
+  // El panel de la derecha no repite lo que ya está en el feed
+  useEffect(() => {
+    setFeedIds(posts?.map((p) => p.id) ?? []);
+    return () => setFeedIds([]);
+  }, [posts]);
+
   const setFollowing = (authorId: number, following: boolean) =>
     setPosts((ps) => ps?.map((p) => (p.author.id === authorId ? { ...p, following_author: following } : p)) ?? ps);
 
   return (
     <div className="space-y-4">
-      <h1 className="sr-only">Inicio</h1>
+      <TodayBand user={user} />
       <Composer user={user} onPublished={(p) => setPosts((ps) => [p, ...(ps ?? [])])} />
 
       {error && (
@@ -55,11 +63,11 @@ function Feed({ user }: { user: User }) {
       )}
 
       {posts === null && !error &&
-        [0, 1].map((i) => <div key={i} className="h-56 animate-pulse rounded-card border border-line bg-card" />)}
+        [0, 1].map((i) => <PostCardSkeleton key={i} />)}
 
       {posts?.length === 0 && (
         <div className="rounded-card border border-line bg-card p-8 text-center">
-          <h2 className="text-lg font-semibold">Tu inicio está vacío</h2>
+          <h2 className="text-lg font-bold">Tu inicio está vacío</h2>
           <p className="mt-1 text-ink-muted">Únete a comunidades o publica algo para empezar.</p>
         </div>
       )}
@@ -104,7 +112,7 @@ function Feed({ user }: { user: User }) {
 
 export default function Inicio() {
   return (
-    <AppShell>
+    <AppShell ambient>
       {(user) => (
         <Suspense>
           <Feed user={user} />

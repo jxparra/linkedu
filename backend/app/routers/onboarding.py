@@ -51,7 +51,7 @@ def student_studies(data: StudentStudiesIn, user: VerifiedUser, db: DB):
     if not user.student_profile:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Completa primero tu nombre y usuario.")
     if not data.is_over_16:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Debes tener 16 años o más para usar StudyHub.")
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Debes tener 16 años o más para usar Linkedu.")
     if not db.get(School, data.school_id) or not db.get(Degree, data.degree_id):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "No encontramos ese centro o esos estudios.")
     p = user.student_profile
@@ -100,7 +100,7 @@ def finish(user: VerifiedUser, db: DB):
             db.add(Message(
                 sender_id=team.id,
                 recipient_id=user.id,
-                content="¡Hola! Bienvenido a StudyHub 👋 Si tienes cualquier duda o sugerencia, escríbenos por aquí.",
+                content="¡Hola! Bienvenido a Linkedu 👋 Si tienes cualquier duda o sugerencia, escríbenos por aquí.",
             ))
     user.onboarding_done = True
     db.commit()

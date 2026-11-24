@@ -54,7 +54,7 @@ export default function Registro() {
 
   return (
     <AuthCard
-      title="Únete a StudyHub. Es gratis."
+      title="Crea tu cuenta de Linkedu"
       footer={
         <>
           ¿Ya tienes cuenta?{" "}

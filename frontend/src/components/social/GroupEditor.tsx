@@ -1,13 +1,14 @@
 "use client";
 
-import { ChevronDown, ChevronRight, ImagePlus, Loader2, Monitor, Smartphone, Trash2 } from "lucide-react";
+import { ChevronRight, ImagePlus, Loader2, Monitor, Smartphone, Smile, Trash2, Video } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { Avatar } from "@/components/Avatar";
 import { Button } from "@/components/Button";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import { Field } from "@/components/Field";
+import { Select, type SelectItem } from "@/components/Select";
 import { displayName } from "@/components/app/TopBar";
 import { api, ApiError, refreshGroups, uploadFile, type Author, type Group, type GroupPrivacy, type Topic, type User } from "@/lib/api";
 import { ONLINE, PRIVACY } from "@/lib/groups";
@@ -16,27 +17,23 @@ import { GroupCover } from "./GroupCover";
 import { GroupHeader } from "./GroupHeader";
 import { PeoplePicker } from "./PeoplePicker";
 
-const selectCls =
-  "h-12 w-full appearance-none rounded-input border border-line bg-card pl-3.5 pr-10 text-[15px] hover:border-ink-subtle focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20";
 
-function SelectField({ label, hint, value, onChange, children }: { label: string; hint?: string; value: string; onChange: (v: string) => void; children: ReactNode }) {
+function SelectField({ label, hint, value, onChange, options, placeholder }: {
+  label: string;
+  hint?: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: SelectItem[];
+  placeholder?: string;
+}) {
   const id = useId();
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-medium">
+      <label id={`${id}-label`} className="mb-1.5 block text-sm font-medium">
         {label}
       </label>
-      <div className="relative">
-        <select id={id} value={value} onChange={(e) => onChange(e.target.value)} aria-describedby={hint ? `${id}-hint` : undefined} className={`${selectCls} ${value ? "text-ink" : "text-ink-subtle"}`}>
-          {children}
-        </select>
-        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-ink" aria-hidden />
-      </div>
-      {hint && (
-        <p id={`${id}-hint`} className="mt-1.5 text-[13px] text-ink-muted">
-          {hint}
-        </p>
-      )}
+      <Select labelledBy={`${id}-label`} value={value} onChange={onChange} options={options} placeholder={placeholder} />
+      {hint && <p className="mt-1.5 text-[13px] text-ink-muted">{hint}</p>}
     </div>
   );
 }
@@ -147,51 +144,45 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
 
           <Field label="Nombre del grupo" value={name} onChange={(e) => setName(e.target.value)} maxLength={80} placeholder="Ej.: Quedadas de DAW en Granada" required />
 
-          <SelectField label="Privacidad" value={privacy} onChange={(v) => setPrivacy(v as GroupPrivacy)} hint={privacy ? PRIVACY[privacy].text : undefined}>
-            <option value="" disabled>
-              Elige la privacidad
-            </option>
-            <option value="public">Público</option>
-            <option value="private">Privado</option>
-          </SelectField>
+          <SelectField
+            label="Privacidad"
+            value={privacy}
+            onChange={(v) => setPrivacy(v as GroupPrivacy)}
+            hint={privacy ? PRIVACY[privacy].text : undefined}
+            placeholder="Elige la privacidad"
+            options={[
+              { value: "public", label: "Público" },
+              { value: "private", label: "Privado" },
+            ]}
+          />
 
-          <SelectField label="Temática" value={topic} onChange={setTopic} hint="Sirve para recomendar el grupo a quien le pueda interesar.">
-            <option value="" disabled>
-              Elige una temática
-            </option>
-            <optgroup label="De estudios y trabajo">
-              {topics.filter((t) => !t.universal).map((t) => (
-                <option key={t.key} value={t.key}>
-                  {t.label}
-                </option>
-              ))}
-            </optgroup>
-            <optgroup label="Para todo el mundo">
-              {topics.filter((t) => t.universal).map((t) => (
-                <option key={t.key} value={t.key}>
-                  {t.label}
-                </option>
-              ))}
-            </optgroup>
-          </SelectField>
+          <SelectField
+            label="Temática"
+            value={topic}
+            onChange={setTopic}
+            hint="Sirve para recomendar el grupo a quien le pueda interesar."
+            placeholder="Elige una temática"
+            options={[
+              { heading: "De estudios y trabajo" },
+              ...topics.filter((t) => !t.universal).map((t) => ({ value: t.key, label: t.label })),
+              { heading: "Para todo el mundo" },
+              ...topics.filter((t) => t.universal).map((t) => ({ value: t.key, label: t.label })),
+            ]}
+          />
 
-          <SelectField label="Ubicación" value={province} onChange={setProvince} hint="Si es de una ciudad, se recomendará sobre todo a la gente de esa provincia.">
-            <option value="">{ONLINE}</option>
-            <optgroup label="Más comunes">
-              {COMMON_PROVINCES.map((p) => (
-                <option key={`c-${p}`} value={p}>
-                  {p}
-                </option>
-              ))}
-            </optgroup>
-            <optgroup label="Todas las provincias">
-              {PROVINCES.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </optgroup>
-          </SelectField>
+          <SelectField
+            label="Ubicación"
+            value={province}
+            onChange={setProvince}
+            hint="Si es de una ciudad, se recomendará sobre todo a la gente de esa provincia."
+            options={[
+              { value: "", label: ONLINE },
+              { heading: "Más comunes" },
+              ...COMMON_PROVINCES.map((p) => ({ value: p, label: p })),
+              { heading: "Todas las provincias" },
+              ...PROVINCES.map((p) => ({ value: p, label: p })),
+            ]}
+          />
 
           <div>
             <label htmlFor={descId} className="mb-1.5 block text-sm font-medium">
@@ -213,7 +204,7 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
             <input ref={fileInput} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(e) => pickCover(e.target.files?.[0])} />
             {cover ? (
               <div className="flex items-center gap-3">
-                <GroupCover src={cover} topic={topic} iconSize="sm" className="h-14 w-24 rounded-lg" />
+                <GroupCover src={cover} topic={topic} iconSize="sm" className="h-14 w-24 rounded-btn" />
                 <button type="button" onClick={() => fileInput.current?.click()} className="min-h-11 px-2 text-sm font-semibold text-brand-700">
                   Cambiar
                 </button>
@@ -226,9 +217,9 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
                 type="button"
                 onClick={() => fileInput.current?.click()}
                 disabled={uploading}
-                className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-dashed border-line text-[15px] font-semibold text-ink hover:border-ink-subtle"
+                className="flex min-h-11 w-full items-center justify-center gap-2 rounded-btn border border-dashed border-line text-[15px] font-semibold text-ink hover:border-ink-subtle"
               >
-                {uploading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <ImagePlus className="h-5 w-5 text-success" aria-hidden />}
+                {uploading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <ImagePlus className="h-5 w-5 text-ink-muted" aria-hidden />}
                 {uploading ? "Subiendo…" : "Añadir foto"}
               </button>
             )}
@@ -247,7 +238,7 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
 
       <section aria-label="Vista previa" className="rounded-card border border-line bg-card p-4 sm:p-5">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-semibold">Vista previa para {mobile ? "móvil" : "ordenador"}</h2>
+          <h2 className="font-bold">Vista previa para {mobile ? "móvil" : "ordenador"}</h2>
           <div className="flex gap-1" role="group" aria-label="Tamaño de la vista previa">
             {(
               [
@@ -262,7 +253,7 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
                 aria-pressed={device === key}
                 aria-label={label}
                 title={label}
-                className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${device === key ? "bg-brand-50 text-brand-700" : "text-ink-muted hover:bg-page"}`}
+                className={`flex h-11 w-11 items-center justify-center rounded-btn transition-colors ${device === key ? "nav-mark" : "text-ink-muted hover:bg-field-hover"}`}
               >
                 <Icon className="h-5 w-5" aria-hidden />
               </button>
@@ -270,7 +261,7 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
           </div>
         </div>
 
-        <div aria-hidden className={`pointer-events-none mx-auto select-none rounded-2xl bg-page p-3 transition-all ${mobile ? "max-w-[380px]" : ""}`}>
+        <div aria-hidden className={`pointer-events-none mx-auto select-none rounded-card bg-page p-3 ${mobile ? "max-w-[380px]" : ""}`}>
           <GroupHeader
             placeholder
             compact={mobile}
@@ -285,14 +276,13 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
           />
           <div className={`mt-3 grid gap-3 ${mobile ? "" : "md:grid-cols-[minmax(0,1fr)_240px]"}`}>
             <div className={`rounded-card border border-line bg-card p-4 ${mobile ? "order-2" : ""}`}>
+              {/* Igual que la caja de publicar de verdad: iconos en un solo color a la derecha, sin barra de acciones */}
               <div className="flex items-center gap-3">
                 <Avatar name={me || "?"} size="sm" square={user.role === "company"} />
-                <span className="flex-1 truncate rounded-full bg-field px-4 py-2.5 text-[15px] text-field-text">¿Qué quieres compartir?</span>
-              </div>
-              <div className="mt-3 flex justify-around border-t border-line pt-3 text-sm font-semibold text-ink-muted">
-                <span>Foto/vídeo</span>
-                <span>Etiquetar personas</span>
-                {!mobile && <span>Sentimiento</span>}
+                <span className="flex-1 truncate rounded-btn bg-field px-4 py-2.5 text-[15px] text-field-text">Escribe algo en el grupo…</span>
+                <Video className="h-5 w-5 shrink-0 text-ink-muted" aria-hidden />
+                <ImagePlus className="h-5 w-5 shrink-0 text-ink-muted" aria-hidden />
+                {!mobile && <Smile className="h-5 w-5 shrink-0 text-ink-muted" aria-hidden />}
               </div>
             </div>
             <div className="rounded-card border border-line bg-card p-4">

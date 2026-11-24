@@ -1,4 +1,5 @@
 "use client";
+import { ChalkText } from "@/components/ChalkLine";
 
 import { Briefcase, Users } from "lucide-react";
 import Link from "next/link";
@@ -14,9 +15,9 @@ function Empty({ title, text, href, cta }: { title: string; text: string; href: 
   return (
     <div className="rounded-card border border-line bg-card p-10 text-center">
       <Briefcase className="mx-auto h-8 w-8 text-ink-subtle" aria-hidden />
-      <h2 className="mt-3 text-lg font-semibold">{title}</h2>
+      <h2 className="mt-3 text-lg font-bold">{title}</h2>
       <p className="mt-1 text-ink-muted">{text}</p>
-      <Link href={href} className="mt-4 inline-flex min-h-11 items-center rounded-full bg-brand-600 px-6 font-semibold text-on-brand hover:bg-brand-hover">
+      <Link href={href} className="mt-4 inline-flex min-h-11 items-center rounded-btn bg-brand-600 px-6 font-semibold text-on-brand hover:bg-brand-hover">
         {cta}
       </Link>
     </div>
@@ -50,8 +51,8 @@ function MyApplications() {
               type="button"
               aria-pressed={filter === s}
               onClick={() => setFilter(s)}
-              className={`min-h-10 rounded-full border px-4 text-sm font-semibold ${
-                filter === s ? "border-brand-600 bg-brand-50 text-brand-700" : "border-line bg-card hover:border-ink-subtle"
+              className={`min-h-10 rounded-btn border px-4 text-sm font-semibold ${
+                filter === s ? "nav-mark border-transparent" : "border-line bg-card hover:border-ink-subtle"
               }`}
             >
               {s === "todas" ? `Todas (${items.length})` : `${APPLICATION_STATUS[s].label} (${counts[s]})`}
@@ -94,7 +95,7 @@ function MyJobs() {
           <JobCard job={j} showStatus={false} />
           <Link
             href={`/empleo/${j.id}#candidatos`}
-            className="relative z-10 -mt-2 ml-auto mr-4 flex w-fit items-center gap-1.5 rounded-b-xl border border-t-0 border-line bg-card px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-page"
+            className="relative z-10 -mt-2 ml-auto mr-4 flex w-fit items-center gap-1.5 rounded-b-card border border-t-0 border-line bg-card px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-page"
           >
             <Users className="h-4 w-4" aria-hidden />
             {j.applicants === 0 ? "Sin candidatos" : `Ver ${j.applicants} ${j.applicants === 1 ? "candidato" : "candidatos"}`}
@@ -110,12 +111,14 @@ function Mias({ user }: { user: User }) {
   return (
     <div className="space-y-4">
       <EmpleoTabs user={user} />
-      <h1 className="text-xl font-semibold">{company ? "Mis ofertas" : "Mis candidaturas"}</h1>
+      <h1 className="text-[28px] font-bold leading-tight">
+        <ChalkText>{company ? "Mis ofertas" : "Mis candidaturas"}</ChalkText>
+      </h1>
       <div className="space-y-3">{company ? <MyJobs /> : <MyApplications />}</div>
     </div>
   );
 }
 
 export default function MiasPage() {
-  return <AppShell wide>{(user) => <Mias user={user} />}</AppShell>;
+  return <AppShell wide section="empleo">{(user) => <Mias user={user} />}</AppShell>;
 }

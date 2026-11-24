@@ -15,6 +15,9 @@ export function SearchBox({ open, onOpenChange }: { open: boolean; onOpenChange:
   const [results, setResults] = useState<SearchResult | null>(null);
   const [loading, setLoading] = useState(false);
   const input = useRef<HTMLInputElement>(null);
+  const box = useRef<HTMLDivElement>(null);
+  // Un clic dentro del panel (en un texto, en el hueco) también quita el foco del campo: eso no debe cerrarlo
+  const pressingInside = useRef(false);
 
   useEffect(() => {
     if (open) input.current?.focus();
@@ -47,6 +50,12 @@ export function SearchBox({ open, onOpenChange }: { open: boolean; onOpenChange:
     onOpenChange(false);
     setQ("");
   };
+  // Si el foco sale del buscador (Tab, clic en otro sitio), se cierra: el oscurecido no puede quedarse tapando lo enfocado (WCAG 2.4.11)
+  const onBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    if (!open || box.current?.contains(e.relatedTarget as Node | null)) return;
+    if (pressingInside.current) return;
+    close();
+  };
   const empty = results && results.users.length === 0 && results.communities.length === 0;
 
   return (
@@ -60,10 +69,16 @@ export function SearchBox({ open, onOpenChange }: { open: boolean; onOpenChange:
         />
       )}
       <div
+        ref={box}
+        onBlur={onBlur}
+        onPointerDown={() => {
+          pressingInside.current = true;
+          setTimeout(() => (pressingInside.current = false), 0);
+        }}
         className={`${
           open
-            ? "fixed inset-x-0 top-0 z-40 bg-card p-3 md:absolute md:inset-x-auto md:left-[68px] md:top-3 md:w-[420px] md:rounded-card md:p-2 md:shadow-xl"
-            : "relative hidden w-72 md:block"
+            ? "fixed inset-x-0 top-0 z-40 bg-card p-3 md:absolute md:inset-x-auto md:-left-2 md:-top-[30px] md:w-[460px] md:rounded-card md:border md:border-line md:p-2 md:shadow-xl"
+            : "relative hidden w-[min(420px,36vw)] md:block"
         }`}
       >
         <div className="flex items-center gap-2">
@@ -73,7 +88,7 @@ export function SearchBox({ open, onOpenChange }: { open: boolean; onOpenChange:
             </button>
           )}
           <label className="relative block flex-1">
-            <span className="sr-only">Buscar en StudyHub</span>
+            <span className="sr-only">Buscar en Linkedu</span>
             <Search className={`pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 ${open ? "text-ink-muted" : "text-field-text"}`} aria-hidden />
             <input
               ref={input}
@@ -84,8 +99,8 @@ export function SearchBox({ open, onOpenChange }: { open: boolean; onOpenChange:
               value={q}
               onChange={(e) => setQ(e.target.value)}
               onFocus={() => onOpenChange(true)}
-              placeholder="Buscar personas, foros, empleo…"
-              className={`h-10 w-full rounded-full border pl-10 pr-10 text-[15px] placeholder:text-ink-subtle focus:outline-none ${
+              placeholder="Buscar personas, empresas y comunidades…"
+              className={`h-10 w-full rounded-btn border pl-10 pr-10 text-[15px] placeholder:text-ink-subtle focus:outline-none ${
                 open ? "border-brand-600 bg-card ring-2 ring-brand-600/20" : "border-transparent bg-field text-field-text placeholder:!text-field-text hover:bg-field-hover"
               }`}
             />
@@ -104,11 +119,11 @@ export function SearchBox({ open, onOpenChange }: { open: boolean; onOpenChange:
             {empty && <p className="px-3 py-4 text-sm text-ink-muted">No hay resultados para «{q.trim()}».</p>}
             {results && results.users.length > 0 && (
               <>
-                <p className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-wide text-ink-muted">Personas y empresas</p>
+                <p className="px-3 pb-1 pt-2 text-[13px] font-semibold text-ink-subtle">Personas y empresas</p>
                 <ul>
                   {results.users.map((u) => (
                     <li key={u.id}>
-                      <Link href={`/perfil/${u.id}`} onClick={close} className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-page">
+                      <Link href={`/perfil/${u.id}`} onClick={close} className="flex items-center gap-3 rounded-card px-3 py-2 hover:bg-page">
                         <Avatar name={u.name} src={u.avatar_url} size="sm" square={u.role === "company"} />
                         <span className="min-w-0">
                           <span className="block truncate font-semibold">{u.name}</span>
@@ -122,12 +137,12 @@ export function SearchBox({ open, onOpenChange }: { open: boolean; onOpenChange:
             )}
             {results && results.communities.length > 0 && (
               <>
-                <p className="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-ink-muted">Comunidades</p>
+                <p className="px-3 pb-1 pt-3 text-[13px] font-semibold text-ink-subtle">Comunidades</p>
                 <ul>
                   {results.communities.map((c) => (
                     <li key={c.id}>
-                      <Link href={`/social/grupo/${c.id}`} onClick={close} className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-page">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+                      <Link href={`/social/grupo/${c.id}`} onClick={close} className="flex items-center gap-3 rounded-card px-3 py-2 hover:bg-page">
+                        <span className="flex h-9 w-9 items-center justify-center rounded-card bg-brand-50 text-brand-700">
                           <MessagesSquare className="h-4 w-4" aria-hidden />
                         </span>
                         <span className="min-w-0">

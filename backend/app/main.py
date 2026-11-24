@@ -49,7 +49,7 @@ def _seed_jobs_if_empty():
         db.close()
 
 
-app = FastAPI(title="StudyHub API", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="Linkedu API", version="0.1.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

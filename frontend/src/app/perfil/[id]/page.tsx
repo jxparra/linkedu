@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, MessageCircle, Plus, Users } from "lucide-react";
+import { Check, MessageCircle, Plus, Users, Pencil } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -93,50 +93,65 @@ function ProfileView({ id, me }: { id: number; me: User }) {
           onCancel={() => setConfirmUnfollow(false)}
         />
       )}
+      {/* Cabecera tipo carné: franja de pizarra, foto a la izquierda y los datos al lado (sin foto de portada) */}
       <section className="overflow-hidden rounded-card border border-line bg-card">
-        <div className="h-28 bg-gradient-to-br from-banner-from to-banner-to sm:h-36" />
-        <div className="px-5 pb-5">
-          <div className="-mt-12 flex items-end justify-between gap-3">
-            <span className={`border-4 border-card bg-card ${isCompany ? "rounded-[14px]" : "rounded-full"}`}>
-              <Avatar name={user.name} src={user.avatar_url} size="xl" square={isCompany} />
-            </span>
-            {!profile.is_me && (
-              <div className="flex gap-2">
-                <Link href={`/mensajes?con=${user.id}`} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 font-semibold hover:border-ink-subtle">
-                  <MessageCircle className="h-4 w-4" aria-hidden /> Mensaje
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => (profile.followed_by_me ? setConfirmUnfollow(true) : toggleFollow())}
-                  className={`inline-flex min-h-11 items-center gap-1.5 rounded-full px-5 font-semibold ${
-                    profile.followed_by_me ? "border border-line hover:border-ink-subtle" : "bg-brand-600 text-on-brand hover:bg-brand-hover"
-                  }`}
-                >
-                  {profile.followed_by_me ? <Check className="h-4 w-4" aria-hidden /> : <Plus className="h-4 w-4" aria-hidden />}
-                  {profile.followed_by_me ? "Siguiendo" : "Seguir"}
-                </button>
+        <div className="h-2 bg-brand-600" aria-hidden />
+        <div className="p-5 sm:p-6">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+            <Avatar name={user.name} src={user.avatar_url} size="xl" square={isCompany} />
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h1 className="text-[28px] font-bold leading-tight">
+                    {user.name}
+                    {user.badge && (
+                      <span
+                        className={`ml-2 inline-block rounded-[6px] px-2 py-0.5 align-middle font-sans text-xs font-semibold tracking-normal ${
+                          isCompany ? "bg-page text-ink-muted" : "bg-brand-50 text-brand-700"
+                        }`}
+                      >
+                        {user.badge}
+                      </span>
+                    )}
+                  </h1>
+                  {user.headline && <p className="mt-1 text-base text-ink-muted">{user.headline}</p>}
+                </div>
+                {profile.is_me && (
+                  <Link
+                    href="/perfil/editar"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-btn border border-edge px-4 font-semibold hover:border-ink-subtle"
+                  >
+                    <Pencil className="h-4 w-4" aria-hidden /> Editar perfil
+                  </Link>
+                )}
+                {!profile.is_me && (
+                  <div className="flex gap-2">
+                    <Link href={`/mensajes?con=${user.id}`} className="inline-flex min-h-11 items-center gap-2 rounded-btn border border-edge px-4 font-semibold hover:border-ink-subtle">
+                      <MessageCircle className="h-4 w-4" aria-hidden /> Mensaje
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => (profile.followed_by_me ? setConfirmUnfollow(true) : toggleFollow())}
+                      className={`inline-flex min-h-11 items-center gap-1.5 rounded-btn px-5 font-semibold ${
+                        profile.followed_by_me ? "border border-edge hover:border-ink-subtle" : "bg-brand-600 text-on-brand hover:bg-brand-hover"
+                      }`}
+                    >
+                      {profile.followed_by_me ? <Check className="h-4 w-4" aria-hidden /> : <Plus className="h-4 w-4" aria-hidden />}
+                      {profile.followed_by_me ? "Siguiendo" : "Seguir"}
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
+              <dl className="mt-5 flex divide-x divide-line">
+                {stats.map((s) => (
+                  <div key={s.label} className="flex flex-col-reverse px-5 first:pl-0">
+                    <dt className="text-sm text-ink-muted">{s.label}</dt>
+                    <dd className="font-display text-[26px] font-bold leading-none tracking-tight">{s.n}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </div>
-          <h1 className="mt-3 text-2xl font-bold">
-            {user.name}
-            {user.badge && (
-              <span className={`ml-2 inline-block rounded-full px-2.5 py-0.5 align-middle text-xs font-semibold ${isCompany ? "bg-page text-ink-muted" : "bg-brand-50 text-brand-700"}`}>
-                {user.badge}
-              </span>
-            )}
-          </h1>
-          {user.headline && <p className="mt-0.5 text-ink-muted">{user.headline}</p>}
-          <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-[15px]">
-            {stats.map((s) => (
-              <div key={s.label} className="flex gap-1">
-                <dt className="sr-only">{s.label}</dt>
-                <dd>
-                  <span className="font-bold">{s.n}</span> <span className="text-ink-muted">{s.label}</span>
-                </dd>
-              </div>
-            ))}
-          </dl>
           {profile.communities.length > 0 && <ProfileCommunities communities={profile.communities} isMe={profile.is_me} />}
         </div>
       </section>

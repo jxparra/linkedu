@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
+import { Select } from "@/components/Select";
 import { AppShell } from "@/components/app/AppShell";
 import { Avatar } from "@/components/Avatar";
 import { Button } from "@/components/Button";
@@ -40,6 +41,7 @@ import {
   type Job,
 } from "@/lib/jobs";
 import { timeAgo } from "@/lib/time";
+import { useConfirm } from "@/components/ConfirmDialog";
 
 const msg = (e: unknown) => (e instanceof ApiError ? e.message : "Algo ha fallado. Inténtalo de nuevo.");
 
@@ -83,7 +85,7 @@ function ApplyDialog({ job, onClose, onDone }: { job: Job; onClose: () => void; 
       >
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 id="apply-title" className="text-xl font-semibold">
+            <h2 id="apply-title" className="text-xl font-bold">
               Inscribirte en la oferta
             </h2>
             <p className="mt-0.5 text-ink-muted">
@@ -96,7 +98,7 @@ function ApplyDialog({ job, onClose, onDone }: { job: Job; onClose: () => void; 
         </div>
 
         <p className="mt-4 rounded-input bg-page px-3.5 py-3 text-sm text-ink-muted">
-          La empresa verá tu perfil de StudyHub: nombre, estudios, centro y publicaciones.
+          La empresa verá tu perfil de Linkedu: nombre, estudios, centro y publicaciones.
         </p>
 
         <label htmlFor="apply-msg" className="mb-1.5 mt-4 block text-sm font-medium">
@@ -138,7 +140,7 @@ function Tracker({ job, onWithdraw }: { job: Job; onWithdraw: () => void }) {
   return (
     <section className="rounded-card border border-line bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-lg font-semibold">Tu candidatura</h2>
+        <h2 className="text-lg font-bold">Tu candidatura</h2>
         <Chip className={APPLICATION_STATUS[status].cls}>{APPLICATION_STATUS[status].label}</Chip>
       </div>
       {job.applied_at && <p className="mt-0.5 text-sm text-ink-muted">Te inscribiste {timeAgo(job.applied_at)}</p>}
@@ -208,13 +210,13 @@ function Applicants({ jobId }: { jobId: number }) {
 
   return (
     <section id="candidatos" className="scroll-mt-24 rounded-card border border-line bg-card">
-      <h2 className="border-b border-line px-5 py-4 text-lg font-semibold">
+      <h2 className="border-b border-line px-5 py-4 text-lg font-bold">
         Candidatos{items && items.length > 0 && <span className="font-normal text-ink-muted"> · {items.length}</span>}
       </h2>
       {items === null ? (
         <div className="space-y-2 p-4">
           {[0, 1].map((i) => (
-            <div key={i} className="h-16 animate-pulse rounded-xl bg-page" />
+            <div key={i} className="h-16 animate-pulse rounded-card bg-page" />
           ))}
         </div>
       ) : items.length === 0 ? (
@@ -240,22 +242,18 @@ function Applicants({ jobId }: { jobId: number }) {
                   >
                     <MessageCircle className="h-5 w-5" aria-hidden />
                   </Link>
-                  <label className="sr-only" htmlFor={`st-${a.id}`}>
-                    Estado de la candidatura de {a.student.name}
-                  </label>
-                  <select
-                    id={`st-${a.id}`}
+                  <Select
+                    ariaLabel={`Estado de la candidatura de ${a.student.name}`}
+                    tone="bare"
                     value={a.status}
-                    onChange={(e) => change(a, e.target.value as ApplicationStatus)}
-                    className={`h-11 rounded-full border-0 px-4 text-sm font-semibold ${APPLICATION_STATUS[a.status].cls}`}
-                  >
-                    {a.status === "enviada" && <option value="enviada">Nueva</option>}
-                    {COMPANY_OPTIONS.map((s) => (
-                      <option key={s} value={s}>
-                        {APPLICATION_STATUS[s].label}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(v) => change(a, v as ApplicationStatus)}
+                    options={[
+                      ...(a.status === "enviada" ? [{ value: "enviada", label: "Nueva" }] : []),
+                      ...COMPANY_OPTIONS.map((st) => ({ value: st, label: APPLICATION_STATUS[st].label })),
+                    ]}
+                    className="w-44"
+                    buttonClassName={`h-11 rounded-btn text-sm font-semibold ${APPLICATION_STATUS[a.status].cls}`}
+                  />
                 </div>
               </div>
               {a.message && <p className="mt-3 whitespace-pre-line rounded-input bg-page px-3.5 py-3 text-[15px] text-ink">{a.message}</p>}
@@ -270,6 +268,7 @@ function Applicants({ jobId }: { jobId: number }) {
 /* ---------------------------------------------------------------- Página */
 function Detail({ id, user }: { id: number; user: User }) {
   const router = useRouter();
+  const { confirm, dialog } = useConfirm();
   const [job, setJob] = useState<Job | null>(null);
   const [missing, setMissing] = useState<string | null>(null);
   const [applying, setApplying] = useState(false);
@@ -305,12 +304,22 @@ function Detail({ id, user }: { id: number; user: User }) {
       setError(msg(e));
     }
   };
-  const withdraw = () => {
-    if (confirmAction("¿Seguro que quieres retirar tu candidatura?")) act(() => api<Job>(`/jobs/${job.id}/apply`, { method: "DELETE" }));
+  const withdraw = async () => {
+    const ok = await confirm({
+      title: "¿Retirar tu candidatura?",
+      text: "La empresa dejará de ver tu inscripción. Podrás volver a inscribirte mientras la oferta siga abierta.",
+      action: "Retirar candidatura",
+    });
+    if (ok) act(() => api<Job>(`/jobs/${job.id}/apply`, { method: "DELETE" }));
   };
   const toggleStatus = () => act(() => api<Job>(`/jobs/${job.id}/status`, { method: "PATCH", body: { status: closed ? "abierta" : "cerrada" } }));
-  const remove = () => {
-    if (!confirmAction("¿Eliminar la oferta? Se borrarán también las candidaturas.")) return;
+  const remove = async () => {
+    const ok = await confirm({
+      title: "¿Eliminar la oferta?",
+      text: "Se borrarán también todas las candidaturas. No se puede deshacer.",
+      action: "Eliminar oferta",
+    });
+    if (!ok) return;
     act(async () => {
       await api(`/jobs/${job.id}`, { method: "DELETE" });
       router.push("/empleo/mias");
@@ -328,6 +337,7 @@ function Detail({ id, user }: { id: number; user: User }) {
 
   return (
     <div className="space-y-4">
+      {dialog}
       <Link href="/empleo" onClick={(e) => { if (window.history.length > 1) { e.preventDefault(); router.back(); } }} className="inline-flex min-h-11 items-center gap-2 font-semibold text-ink-muted hover:text-ink">
         <ArrowLeft className="h-5 w-5" aria-hidden />
         Volver a las ofertas
@@ -345,7 +355,7 @@ function Detail({ id, user }: { id: number; user: User }) {
                   {job.matches_studies && <Chip className="bg-brand-50 text-brand-700">Para tus estudios</Chip>}
                   {closed && <Chip>Oferta cerrada</Chip>}
                 </div>
-                <h1 className="mt-1 text-[28px] font-semibold leading-tight">{job.title}</h1>
+                <h1 className="mt-1 text-balance text-[28px] font-bold leading-tight">{job.title}</h1>
                 <Link href={`/perfil/${job.company.id}`} className="mt-1 inline-flex items-center gap-1 text-[17px] text-brand-700 hover:underline">
                   {job.company.name}
                   {job.company.verified && <BadgeCheck className="h-4 w-4" aria-label="Empresa verificada" />}
@@ -357,15 +367,20 @@ function Detail({ id, user }: { id: number; user: User }) {
                   <span className="inline-flex items-center gap-1">
                     <Clock className="h-4 w-4" aria-hidden /> Publicada {timeAgo(job.created_at)}
                   </span>
-                  <span className="inline-flex items-center gap-1">
-                    <Users className="h-4 w-4" aria-hidden /> {job.applicants} {job.applicants === 1 ? "inscrito" : "inscritos"}
-                  </span>
+                  {job.applicants > 0 && (
+                    <span className="inline-flex items-center gap-1">
+                      <Users className="h-4 w-4" aria-hidden /> {job.applicants} {job.applicants === 1 ? "inscrito" : "inscritos"}
+                    </span>
+                  )}
                 </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <Chip>{JOB_TYPES[job.type] ?? job.type}</Chip>
-                  {job.schedule && <Chip>{SCHEDULES[job.schedule]}</Chip>}
-                  <Chip className="bg-page text-ink">{pay ?? "Salario no indicado"}</Chip>
-                </div>
+                {/* Tipo de contrato y jornada ya están en «Detalles»: aquí solo el sueldo, en grande, como en el resguardo de la lista */}
+                <p className="mt-4">
+                  {pay ? (
+                    <span className="font-display text-[30px] font-extrabold leading-none tracking-tight text-empleo-ink">{pay}</span>
+                  ) : (
+                    <span className="text-[15px] text-ink-subtle">Salario no indicado</span>
+                  )}
+                </p>
               </div>
             </div>
 
@@ -376,7 +391,7 @@ function Detail({ id, user }: { id: number; user: User }) {
                 </Button>
               )}
               {isStudent && job.my_status && (
-                <span className="inline-flex min-h-11 items-center gap-2 rounded-full bg-green-50 px-5 font-semibold text-success">
+                <span className="inline-flex min-h-11 items-center gap-2 rounded-btn bg-green-50 px-5 font-semibold text-success">
                   <Check className="h-4 w-4" aria-hidden /> Ya estás inscrito
                 </span>
               )}
@@ -384,14 +399,14 @@ function Detail({ id, user }: { id: number; user: User }) {
                 <>
                   <Link
                     href={`/empleo/publicar?editar=${job.id}`}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-5 font-semibold hover:border-ink-subtle"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-btn border border-line px-5 font-semibold hover:border-ink-subtle"
                   >
                     <Pencil className="h-4 w-4" aria-hidden /> Editar
                   </Link>
                   <Button variant="secondary" onClick={toggleStatus}>
                     {closed ? "Reabrir oferta" : "Cerrar oferta"}
                   </Button>
-                  <button type="button" onClick={remove} className="inline-flex min-h-11 items-center gap-2 rounded-full px-4 font-semibold text-danger hover:bg-red-50">
+                  <button type="button" onClick={remove} className="inline-flex min-h-11 items-center gap-2 rounded-btn px-4 font-semibold text-danger hover:bg-red-50">
                     <Trash2 className="h-4 w-4" aria-hidden /> Eliminar
                   </button>
                 </>
@@ -409,14 +424,15 @@ function Detail({ id, user }: { id: number; user: User }) {
           {job.is_mine && <Applicants jobId={job.id} />}
 
           <section className="rounded-card border border-line bg-card p-5 sm:p-6">
-            <h2 className="text-lg font-semibold">Descripción de la oferta</h2>
+            <h2 className="text-lg font-bold">Descripción de la oferta</h2>
             <p className="mt-2 whitespace-pre-line text-[15px] leading-relaxed">{job.description}</p>
             {job.requirements && (
               <>
-                <h2 className="mt-6 text-lg font-semibold">Requisitos</h2>
+                <h2 className="mt-6 text-lg font-bold">Requisitos</h2>
                 <ul className="mt-2 list-disc space-y-1 pl-5 text-[15px]">
                   {job.requirements
-                    .split("\n")
+                    // Algunas ofertas antiguas guardaron el salto de línea como el texto «\n»
+                    .split(/\r?\n|\\n/)
                     .map((r) => r.trim())
                     .filter(Boolean)
                     .map((r) => (
@@ -430,7 +446,7 @@ function Detail({ id, user }: { id: number; user: User }) {
 
         <aside className="space-y-4">
           <section className="rounded-card border border-line bg-card p-5">
-            <h2 className="text-lg font-semibold">Detalles</h2>
+            <h2 className="text-lg font-bold">Detalles</h2>
             <dl className="mt-3 space-y-3">
               {details.map(({ icon: Icon, label, value }) => (
                 <div key={label} className="flex gap-3">
@@ -445,7 +461,7 @@ function Detail({ id, user }: { id: number; user: User }) {
           </section>
 
           <section className="rounded-card border border-line bg-card p-5">
-            <h2 className="text-lg font-semibold">Sobre la empresa</h2>
+            <h2 className="text-lg font-bold">Sobre la empresa</h2>
             <Link href={`/perfil/${job.company.id}`} className="mt-3 flex items-center gap-3">
               <Avatar name={job.company.name} src={job.company.logo_url ? mediaUrl(job.company.logo_url) : null} square />
               <span className="min-w-0">
@@ -480,11 +496,7 @@ function Detail({ id, user }: { id: number; user: User }) {
   );
 }
 
-function confirmAction(text: string): boolean {
-  return window.confirm(text);
-}
-
 export default function OfertaPage() {
   const { id } = useParams<{ id: string }>();
-  return <AppShell wide>{(user) => <Detail id={Number(id)} user={user} />}</AppShell>;
+  return <AppShell wide section="empleo">{(user) => <Detail id={Number(id)} user={user} />}</AppShell>;
 }

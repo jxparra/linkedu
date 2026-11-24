@@ -49,7 +49,7 @@ export default function Tipo() {
   return (
     <OnboardingShell
       progress={35}
-      title="¿Cómo vas a usar StudyHub?"
+      title="¿Cómo vas a usar Linkedu?"
       subtitle="Así te mostramos lo que te interesa."
       onSubmit={submit}
       loading={loading}
@@ -74,7 +74,7 @@ export default function Tipo() {
               }`}
             >
               <span
-                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
+                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-card ${
                   selected ? "bg-brand-600 text-on-brand" : "bg-page text-ink"
                 }`}
               >
