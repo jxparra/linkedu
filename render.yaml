@@ -3,7 +3,7 @@
 # demostración (backend/demo/linkedu-demo.db, solo cuentas @demo.studyhub, contraseña Demo1234).
 services:
   - type: web
-    name: linkedu-api
+    name: linkedu-jxparra-api
     runtime: python
     plan: free
     rootDir: backend

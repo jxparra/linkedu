@@ -8,8 +8,8 @@
 ## 1. Backend en Render
 1. Entrar en https://render.com con la cuenta de GitHub.
 2. **New → Blueprint** → elegir el repositorio `jxparra/StudyHub` y la rama **`estetica-pizarra`**.
-3. Render lee `render.yaml` y crea el servicio `linkedu-api`. Pulsar **Apply** y esperar a que ponga *Live* (unos 3 minutos).
-4. Copiar su dirección, del tipo `https://linkedu-api.onrender.com`. Comprobar que `…/health` responde `{"status":"ok"}`.
+3. Render lee `render.yaml` y crea el servicio `linkedu-jxparra-api`. Pulsar **Apply** y esperar a que ponga *Live* (unos 3 minutos).
+4. Copiar su dirección, del tipo `https://linkedu-jxparra-api.onrender.com`. Comprobar que `…/health` responde `{"status":"ok"}`.
 
 ## 2. Frontend en Vercel
 1. Entrar en https://vercel.com con la cuenta de GitHub.
