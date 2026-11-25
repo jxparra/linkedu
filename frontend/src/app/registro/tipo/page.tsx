@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, Check, GraduationCap } from "lucide-react";
+import { Building2, Check, GraduationCap, Presentation } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ErrorBanner } from "@/components/ErrorBanner";
@@ -16,6 +16,12 @@ const options = [
     text: "Busco trabajos puntuales, comunidades y opiniones sobre mis estudios.",
   },
   {
+    value: "teacher",
+    icon: Presentation,
+    title: "Soy docente",
+    text: "Doy clase en un instituto o universidad y quiero estar cerca de mi alumnado.",
+  },
+  {
     value: "company",
     icon: Building2,
     title: "Soy una empresa",
@@ -26,7 +32,7 @@ const options = [
 export default function Tipo() {
   const router = useRouter();
   useUser();
-  const [role, setRole] = useState<"student" | "company" | null>(null);
+  const [role, setRole] = useState<"student" | "teacher" | "company" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -38,7 +44,8 @@ export default function Tipo() {
     setLoading(true);
     try {
       await api("/onboarding/account-type", { method: "POST", body: { role } });
-      router.push(role === "student" ? "/registro/estudiante/datos" : "/registro/empresa/datos");
+      // Los docentes siguen los mismos pasos que los estudiantes (nombre, centro, foto y comunidades), con sus propios textos
+      router.push(role === "company" ? "/registro/empresa/datos" : "/registro/estudiante/datos");
     } catch (e) {
       setError(e instanceof ApiError ? e.message : "Algo ha fallado. Inténtalo de nuevo.");
     } finally {

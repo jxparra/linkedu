@@ -18,7 +18,11 @@ export default function EstudianteFoto() {
     <OnboardingShell
       progress={80}
       title="Añade una foto para que te reconozcan"
-      subtitle="Los perfiles con foto reciben más respuestas de las empresas."
+      subtitle={
+        user?.role === "teacher"
+          ? "Así tu alumnado te reconocerá en los foros y en los mensajes."
+          : "Los perfiles con foto reciben más respuestas de las empresas."
+      }
       onSubmit={next}
       skip={next}
     >

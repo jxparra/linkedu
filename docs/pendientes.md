@@ -1,6 +1,6 @@
 # Pendientes
 
-> Actualizado: 2026-11-24. Marca lo que vayas haciendo. Último día → [[diario/2026-11-24]]
+> Actualizado: 2026-11-25. Marca lo que vayas haciendo. Último día → [[diario/2026-11-25]]
 
 ## 🔴 Primero (antes de seguir programando)
 - [ ] **Confirmar con el tutor qué se entrega en ~2 semanas** y en qué formato (¿demo, memoria, presentación?)
@@ -33,6 +33,12 @@
 4. **Registro:** valorar elegir estudiante o empresa antes del email (propuesta del revisor externo).
 5. **Estadísticas:** métricas propias de estudiante (ofertas vistas, candidaturas en proceso, respuestas en foros). Necesita backend.
 6. Siguiente bloque grande: **Reseñas** (tabla `reviews` ya creada).
+
+## 👩‍🏫 Docentes y tipos de cuenta (2026-11-25) → [[decisiones/ADR-017-tipos-de-cuenta-y-docentes]]
+- [x] Cuenta de docente, avatares por tipo y etiquetas en todas partes
+- [ ] Revisar en claro y oscuro el registro de docente completo
+- [ ] PostgreSQL de la entrega: el tipo `user_role` necesita el valor `teacher`
+- [ ] ¿Varios centros o estudios por docente? (ahora uno)
 
 ## 🔍 Revisión externa (2026-11-24) → [[decisiones/ADR-016-movimiento-y-reborde-encaja-contigo]]
 Aplicadas la prioridad alta, la media y la baja (ver diario del 2026-11-24). «(demo)» en las empresas se queda a propósito: deja claro que son inventadas.

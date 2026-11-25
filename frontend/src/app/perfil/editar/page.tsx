@@ -25,7 +25,9 @@ function EditForm({ user }: { user: User }) {
     sector: c?.sector ?? "",
     website: c?.website ?? "",
     contact_name: c?.contact_name ?? "",
+    teaches: p?.teaches ?? "",
   });
+  const teacher = user.role === "teacher";
   const [errors, setErrors] = useState<Partial<Record<keyof typeof form, string>>>({});
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -59,7 +61,13 @@ function EditForm({ user }: { user: User }) {
       } else {
         await api("/onboarding/student/identity", {
           method: "PUT",
-          body: { name: form.name.trim(), surname: form.surname.trim(), username: form.username, location: form.location.trim() || null },
+          body: {
+            name: form.name.trim(),
+            surname: form.surname.trim(),
+            username: form.username,
+            location: form.location.trim() || null,
+            ...(teacher ? { teaches: form.teaches.trim() } : {}),
+          },
         });
       }
       router.push(`/perfil/${user.id}`);
@@ -98,6 +106,15 @@ function EditForm({ user }: { user: User }) {
               <Field label="Apellidos" autoComplete="family-name" value={form.surname} onChange={set("surname")} error={errors.surname} />
             </div>
             <Field label="Nombre de usuario" autoComplete="username" value={form.username} onChange={set("username")} error={errors.username} hint="Tu @ en Linkedu." />
+            {teacher && (
+              <Field
+                label="Qué impartes (opcional)"
+                placeholder="Ej.: Programación y Bases de datos"
+                value={form.teaches}
+                onChange={set("teaches")}
+                hint="Se ve junto a tu nombre, para que tu alumnado sepa quién eres."
+              />
+            )}
             <Field
               label="Ubicación (opcional)"
               autoComplete="address-level2"

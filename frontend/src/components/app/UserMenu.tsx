@@ -49,7 +49,7 @@ export function UserMenu({ user, name }: { user: User | null; name: string }) {
         aria-label={`${t("Yo")}: ${name}`}
         className="flex min-h-11 items-center gap-2 rounded-btn py-1 pl-1 pr-2 hover:bg-field-hover"
       >
-        <Avatar name={name || "?"} src={avatar} size="sm" square={company} />
+        <Avatar name={name || "?"} src={avatar} size="sm" role={user?.role} />
         <span className="hidden max-w-[9rem] truncate text-[14px] font-semibold lg:block">{name.split(" ")[0]}</span>
         <ChevronDown className={`h-4 w-4 text-ink-muted transition-transform ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>
@@ -58,7 +58,7 @@ export function UserMenu({ user, name }: { user: User | null; name: string }) {
         <div role="menu" className="pop-in [--pop-origin:top_right] absolute right-0 top-full z-40 mt-2 w-[340px] rounded-card border border-line bg-card p-4 shadow-xl">
           <Link role="menuitem" href="/perfil" className={`${card} items-start`}>
             <span className="flex min-w-0 gap-3">
-              <Avatar name={name || "?"} src={avatar} size="md" square={company} />
+              <Avatar name={name || "?"} src={avatar} size="md" role={user?.role} />
               <span className="min-w-0">
                 <span className="block truncate text-[17px] font-semibold">{name}</span>
                 {profile?.user.headline && <span className="line-clamp-2 text-[13px] text-ink-muted">{profile.user.headline}</span>}
@@ -85,10 +85,13 @@ export function UserMenu({ user, name }: { user: User | null; name: string }) {
           </Link>
 
           <div className="mt-3 space-y-0.5">
-            <Link role="menuitem" href="/empleo/mias" className={row}>
-              <Briefcase className="h-5 w-5" aria-hidden />
-              {company ? t("Mis ofertas de empleo") : t("Mis candidaturas")}
-            </Link>
+            {/* Los docentes no publican ofertas ni se inscriben */}
+            {user?.role !== "teacher" && (
+              <Link role="menuitem" href="/empleo/mias" className={row}>
+                <Briefcase className="h-5 w-5" aria-hidden />
+                {company ? t("Mis ofertas de empleo") : t("Mis candidaturas")}
+              </Link>
+            )}
             <Link role="menuitem" href="/ajustes" className={row}>
               <Settings className="h-5 w-5" aria-hidden />
               {t("Ajustes y privacidad")}

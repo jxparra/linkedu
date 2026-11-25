@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/app/AppShell";
-import { Avatar } from "@/components/Avatar";
+import { Avatar, RoleTag } from "@/components/Avatar";
 import { Composer } from "@/components/feed/Composer";
 import { UnfollowDialog } from "@/components/UnfollowDialog";
 import { PostCard } from "@/components/feed/PostCard";
@@ -75,7 +75,9 @@ function ProfileView({ id, me }: { id: number; me: User }) {
   if (!profile) return <div className="h-64 animate-pulse rounded-card bg-card" />;
 
   const { user } = profile;
-  const isCompany = user.role === "company";
+  const isStudent = user.role !== "company" && user.role !== "teacher";
+  // La franja de arriba del carné toma el color del tipo de cuenta
+  const stripe = user.role === "company" ? "bg-empleo" : user.role === "teacher" ? "bg-docente" : "bg-brand-600";
   const stats = [
     { n: profile.posts, label: profile.posts === 1 ? "publicación" : "publicaciones" },
     { n: profile.followers, label: profile.followers === 1 ? "seguidor" : "seguidores" },
@@ -88,31 +90,24 @@ function ProfileView({ id, me }: { id: number; me: User }) {
         <UnfollowDialog
           name={user.name}
           avatarUrl={user.avatar_url}
-          square={isCompany}
+          role={user.role}
           onConfirm={toggleFollow}
           onCancel={() => setConfirmUnfollow(false)}
         />
       )}
       {/* Cabecera tipo carné: franja de pizarra, foto a la izquierda y los datos al lado (sin foto de portada) */}
       <section className="overflow-hidden rounded-card border border-line bg-card">
-        <div className="h-2 bg-brand-600" aria-hidden />
+        <div className={`h-2 ${stripe}`} aria-hidden />
         <div className="p-5 sm:p-6">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-            <Avatar name={user.name} src={user.avatar_url} size="xl" square={isCompany} />
+            <Avatar name={user.name} src={user.avatar_url} size="xl" role={user.role} />
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
                   <h1 className="text-[28px] font-bold leading-tight">
                     {user.name}
-                    {user.badge && (
-                      <span
-                        className={`ml-2 inline-block rounded-[6px] px-2 py-0.5 align-middle font-sans text-xs font-semibold tracking-normal ${
-                          isCompany ? "bg-page text-ink-muted" : "bg-brand-50 text-brand-700"
-                        }`}
-                      >
-                        {user.badge}
-                      </span>
-                    )}
+                    {/* Tipo de cuenta y, si es estudiante, su curso */}
+                    <RoleTag role={user.role} detail={isStudent ? user.badge : null} className="ml-2 align-middle font-sans tracking-normal" />
                   </h1>
                   {user.headline && <p className="mt-1 text-base text-ink-muted">{user.headline}</p>}
                 </div>

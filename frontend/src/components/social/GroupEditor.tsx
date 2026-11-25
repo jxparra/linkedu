@@ -133,7 +133,7 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
           <h1 className="text-[28px] font-bold leading-tight">{editing ? "Editar grupo" : "Crear grupo"}</h1>
 
           <div className="flex items-center gap-3">
-            <Avatar name={me || "?"} size="md" square={user.role === "company"} />
+            <Avatar name={me || "?"} size="md" role={user.role} />
             <div>
               <p className="font-semibold">{me}</p>
               <p className="text-[13px] text-ink-muted">Administrador</p>
@@ -278,7 +278,7 @@ export function GroupEditor({ user, group }: { user: User; group?: Group }) {
             <div className={`rounded-card border border-line bg-card p-4 ${mobile ? "order-2" : ""}`}>
               {/* Igual que la caja de publicar de verdad: iconos en un solo color a la derecha, sin barra de acciones */}
               <div className="flex items-center gap-3">
-                <Avatar name={me || "?"} size="sm" square={user.role === "company"} />
+                <Avatar name={me || "?"} size="sm" role={user.role} />
                 <span className="flex-1 truncate rounded-btn bg-field px-4 py-2.5 text-[15px] text-field-text">Escribe algo en el grupo…</span>
                 <Video className="h-5 w-5 shrink-0 text-ink-muted" aria-hidden />
                 <ImagePlus className="h-5 w-5 shrink-0 text-ink-muted" aria-hidden />

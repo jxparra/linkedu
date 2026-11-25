@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 
 from app.deps import DB, VerifiedUser
-from app.models import Comment, Community, CommunityMember, Follow, Like, Post, StudentProfile, User
+from app.models import Comment, Community, CommunityMember, Follow, Like, Post, StudentProfile, User, UserRole
 from app.routers.groups import _card, forums
 from app.routers.posts import visible_to
 from app.schemas.groups import GroupCard
@@ -116,13 +116,14 @@ def discover(user: VerifiedUser, db: DB):
                 reason=reason,
             )
         )
-        if len(posts_out) == 3:
+        # Más de las 3 que se muestran: el panel quita las que ya están en tu feed
+        if len(posts_out) == 8:
             break
 
     # --- Personas para seguir ----------------------------------------------------
     candidates = list(
         db.execute(
-            select(User.id, StudentProfile.degree_id, StudentProfile.school_id)
+            select(User.id, StudentProfile.degree_id, StudentProfile.school_id, User.role)
             .outerjoin(StudentProfile, StudentProfile.user_id == User.id)
             .where(User.id != user.id, User.onboarding_done.is_(True), User.id.not_in(following or {0}))
         ).all()
@@ -141,14 +142,20 @@ def discover(user: VerifiedUser, db: DB):
         ).all()
     )
     ranked = []
-    for uid, d, s in candidates:
+    i_teach = user.role == UserRole.teacher
+    for uid, d, s, role in candidates:
         score, reason = 0.0, None
+        teaches = role == UserRole.teacher
         if degree_id and d == degree_id:
             score += 4
-            reason = "Estudia lo mismo que tú"
+            # El motivo depende de quién eres tú y quién es la otra persona (docente o estudiante)
+            if teaches:
+                reason = "Da clase en lo mismo que tú" if i_teach else "Da clase en tus estudios"
+            else:
+                reason = "Estudia lo que impartes" if i_teach else "Estudia lo mismo que tú"
         if school_id and s == school_id:
             score += 3
-            reason = reason or "De tu centro de estudios"
+            reason = reason or ("Da clase en tu centro" if teaches else "De tu centro de estudios")
         friends = followed_by_friends.get(uid, 0)
         if friends:
             score += 1.5 * friends
@@ -160,7 +167,7 @@ def discover(user: VerifiedUser, db: DB):
         if score > 0:
             ranked.append((score, uid, reason))
     ranked.sort(key=lambda x: (x[0], -x[1]), reverse=True)
-    top = ranked[:3]
+    top = ranked[:4]
     infos = authors(db, {uid for _, uid, _ in top})
     people_out = [PersonSuggestion(user=infos[uid], reason=reason) for _, uid, reason in top if uid in infos]
 

@@ -121,8 +121,14 @@ function Forums() {
 
   return (
     <div className="space-y-4">
-      <SectionHero kind="foros" title="Foros" subtitle="Las comunidades de tus estudios, de tu centro y de temas que interesan a cualquier estudiante.">
-        <form role="search" onSubmit={submit} className="relative max-w-sm">
+      <SectionHero
+        kind="foros"
+        title="Foros"
+        subtitle="Las comunidades de tus estudios, de tu centro y de temas que interesan a cualquier estudiante."
+        fullScene
+        bleed
+      >
+        <form role="search" onSubmit={submit} className="relative max-w-xl">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-spine-ink" aria-hidden />
           <input
             type="search"

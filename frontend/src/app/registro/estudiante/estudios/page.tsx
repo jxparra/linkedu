@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Autocomplete } from "@/components/Autocomplete";
 import { Checkbox } from "@/components/Checkbox";
 import { ErrorBanner } from "@/components/ErrorBanner";
+import { Field } from "@/components/Field";
 import { OnboardingShell } from "@/components/OnboardingShell";
 import { api, ApiError, type Option } from "@/lib/api";
 import { useUser } from "@/lib/useUser";
@@ -13,7 +14,10 @@ const COURSES = [1, 2, 3, 4, 5, 6];
 
 export default function EstudianteEstudios() {
   const router = useRouter();
-  useUser();
+  const { user } = useUser();
+  // Los docentes pasan por esta misma pantalla: dónde dan clase y qué imparten (sin curso ni casilla de edad)
+  const teacher = user?.role === "teacher";
+  const [teaches, setTeaches] = useState("");
   const [school, setSchool] = useState<Option | null>(null);
   const [degree, setDegree] = useState<Option | null>(null);
   const [course, setCourse] = useState<number | null>(null);
@@ -25,8 +29,8 @@ export default function EstudianteEstudios() {
   const submit = async () => {
     const e: typeof errors = {};
     if (!school) e.school = "Elige tu centro de la lista.";
-    if (!degree) e.degree = "Elige tus estudios de la lista.";
-    if (!over16) e.age = "Debes tener 16 años o más para usar Linkedu.";
+    if (!degree) e.degree = teacher ? "Elige de la lista los estudios en los que das clase." : "Elige tus estudios de la lista.";
+    if (!teacher && !over16) e.age = "Debes tener 16 años o más para usar Linkedu.";
     setErrors(e);
     if (Object.keys(e).length) return;
     setLoading(true);
@@ -34,7 +38,9 @@ export default function EstudianteEstudios() {
     try {
       await api("/onboarding/student/studies", {
         method: "PUT",
-        body: { school_id: school!.id, degree_id: degree!.id, course, is_over_16: over16 },
+        body: teacher
+          ? { school_id: school!.id, degree_id: degree!.id, teaches: teaches.trim() || null }
+          : { school_id: school!.id, degree_id: degree!.id, course, is_over_16: over16 },
       });
       try {
         sessionStorage.setItem("studyhub_study", JSON.stringify({ school: school!.id, degree: degree!.id }));
@@ -48,7 +54,13 @@ export default function EstudianteEstudios() {
   };
 
   return (
-    <OnboardingShell progress={65} title="¿Dónde estudias?" subtitle="Podrás cambiarlo cuando quieras desde tu perfil." onSubmit={submit} loading={loading}>
+    <OnboardingShell
+      progress={65}
+      title={teacher ? "¿Dónde das clase?" : "¿Dónde estudias?"}
+      subtitle="Podrás cambiarlo cuando quieras desde tu perfil."
+      onSubmit={submit}
+      loading={loading}
+    >
       <ErrorBanner message={error} />
       <Autocomplete
         label="Universidad o centro"
@@ -63,7 +75,7 @@ export default function EstudianteEstudios() {
       />
       <Autocomplete
         key={school?.id ?? "none"}
-        label="Estudios"
+        label={teacher ? "Estudios en los que das clase" : "Estudios"}
         placeholder="Ej.: Desarrollo de Aplicaciones Web"
         endpoint={`/catalog/degrees?school_id=${school?.id ?? ""}`}
         value={degree}
@@ -71,6 +83,16 @@ export default function EstudianteEstudios() {
         error={errors.degree}
         disabledHint={school ? undefined : "Elige primero tu centro."}
       />
+      {teacher ? (
+        <Field
+          label="Qué impartes (opcional)"
+          placeholder="Ej.: Programación y Bases de datos"
+          value={teaches}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTeaches(e.target.value)}
+          hint="Se verá junto a tu nombre, para que tu alumnado sepa quién eres."
+        />
+      ) : (
+      <>
       <fieldset>
         <legend className="mb-1.5 text-sm font-medium">Curso (opcional)</legend>
         <div className="flex flex-wrap gap-2">
@@ -95,6 +117,8 @@ export default function EstudianteEstudios() {
         </Checkbox>
         {errors.age && <p className="text-[13px] text-danger">{errors.age}</p>}
       </div>
+      </>
+      )}
     </OnboardingShell>
   );
 }

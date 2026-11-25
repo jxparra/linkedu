@@ -4,7 +4,7 @@ import { Bell, Briefcase, Heart, MessageCircle, Sparkles, Tag, UserPlus, Users }
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/app/AppShell";
-import { Avatar } from "@/components/Avatar";
+import { Avatar, RoleTag } from "@/components/Avatar";
 import { api, refreshUnread, type NotificationItem } from "@/lib/api";
 import { timeAgo } from "@/lib/time";
 import { ChalkText } from "@/components/ChalkLine";
@@ -71,7 +71,7 @@ function List() {
               <>
                 <span className="relative shrink-0">
                   {n.actor ? (
-                    <Avatar name={n.actor.name} src={n.actor.avatar_url} size="md" square={n.actor.role === "company"} />
+                    <Avatar name={n.actor.name} src={n.actor.avatar_url} size="md" role={n.actor.role} />
                   ) : (
                     <span className="flex h-12 w-12 items-center justify-center rounded-full bg-spine text-spine-strong">
                       <BrandMark className="scale-75" />
@@ -83,7 +83,11 @@ function List() {
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-[15px] leading-snug">
-                    {n.actor && <span className="font-semibold">{n.actor.name} </span>}
+                    {n.actor && (
+                      <>
+                        <span className="font-semibold">{n.actor.name}</span> <RoleTag role={n.actor.role} className="align-[1px]" />{" "}
+                      </>
+                    )}
                     {n.text}
                   </span>
                   {n.post_excerpt && <span className="mt-0.5 block truncate text-sm text-ink-muted">«{n.post_excerpt}»</span>}

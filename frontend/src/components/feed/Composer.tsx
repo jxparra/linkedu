@@ -26,7 +26,7 @@ export function Composer({
     <div className="rounded-card border border-line bg-card p-4">
       <div className="flex items-center gap-3">
         <Link href="/perfil" aria-label="Ir a tu perfil" className="shrink-0 rounded-full">
-          <Avatar name={name} size="md" square={user.role === "company"} />
+          <Avatar name={name} size="md" role={user.role} />
         </Link>
         <button
           type="button"

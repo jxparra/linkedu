@@ -89,10 +89,11 @@ export function JobCard({ job, showStatus = true }: { job: Job; showStatus?: boo
         </div>
       </div>
 
-      {/* Resguardo con el sueldo. Las muescas son medias lunas que no salen de la tarjeta, para que no se pisen con la de al lado */}
+      {/* Resguardo con el sueldo. Las muescas son medias lunas que no salen de la tarjeta, para que no se pisen con la de al lado.
+          Con el reborde de «Para tus estudios», las muescas tapan su tramo recto y lo continúan por la curva (globals.css, .ticket-notch) */}
       <div className="relative hidden w-40 shrink-0 flex-col items-center justify-center border-l-2 border-dashed border-line px-3 text-center sm:flex">
-        <span aria-hidden className="absolute -left-[10px] -top-px h-[9px] w-[18px] rounded-b-full border border-t-0 border-line bg-page" />
-        <span aria-hidden className="absolute -bottom-px -left-[10px] h-[9px] w-[18px] rounded-t-full border border-b-0 border-line bg-page" />
+        <span aria-hidden className="ticket-notch ticket-notch-top absolute -left-[10px] -top-px h-[9px] w-[18px] rounded-b-full border border-t-0 border-line bg-page" />
+        <span aria-hidden className="ticket-notch ticket-notch-bottom absolute -bottom-px -left-[10px] h-[9px] w-[18px] rounded-t-full border border-b-0 border-line bg-page" />
         {amount ? (
           <>
             <span className="font-display text-[26px] font-extrabold leading-none tracking-tight text-empleo-ink">{amount}</span>

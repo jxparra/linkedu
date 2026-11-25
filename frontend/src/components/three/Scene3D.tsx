@@ -207,27 +207,26 @@ function buildEstudio(scene: THREE.Scene, p: Palette, mats: Materials, dense: bo
   };
 }
 
-function buildSocial(scene: THREE.Scene, p: Palette, mats: Materials): Built {
+function buildSocial(scene: THREE.Scene, p: Palette, mats: Materials, fill = false): Built {
   const r = rng(21);
   const group = new THREE.Group();
-  const n = 46;
+  // En la cabecera a toda pantalla hay más gente y la red ocupa todo el alto, sin acercarse a la cámara
+  const n = fill ? 72 : 46;
   const nodes: THREE.Vector3[] = [];
   for (let i = 0; i < n; i++) {
     // Nube aplastada: más ancha que alta, como una franja
-    const v = new THREE.Vector3((r() - 0.5) * 16, (r() - 0.5) * 5, (r() - 0.5) * 6);
+    const v = fill
+      ? // Más densa a la derecha (raíz cuadrada) y más clara a la izquierda, donde están el título y el buscador
+        new THREE.Vector3(Math.sqrt(r()) * 18 - 9, (r() - 0.5) * 9, -4 + (r() - 0.5) * 3)
+      : new THREE.Vector3((r() - 0.5) * 16, (r() - 0.5) * 5, (r() - 0.5) * 6);
     nodes.push(v);
   }
+  const orig = nodes.map((v) => v.clone());
   const sphere = new THREE.SphereGeometry(1, 20, 14);
   const people = new THREE.InstancedMesh(sphere, mats.std("brand", p, { roughness: 0.4 }), n);
   const highlights = new THREE.InstancedMesh(sphere, mats.std("mark", p, { roughness: 0.35, emissiveIntensity: 0.2 }), 6);
   const dummy = new THREE.Object3D();
-  const sizes = nodes.map(() => 0.12 + r() * 0.16);
-  nodes.forEach((v, i) => {
-    dummy.position.copy(v);
-    dummy.scale.setScalar(sizes[i]);
-    dummy.updateMatrix();
-    people.setMatrixAt(i, dummy.matrix);
-  });
+  const sizes = nodes.map(() => (fill ? 0.08 + r() * 0.1 : 0.12 + r() * 0.16));
   for (let i = 0; i < 6; i++) {
     dummy.position.copy(nodes[i * 7]);
     dummy.scale.setScalar(sizes[i * 7] * 1.5);
@@ -235,25 +234,41 @@ function buildSocial(scene: THREE.Scene, p: Palette, mats: Materials): Built {
     highlights.setMatrixAt(i, dummy.matrix);
   }
   // Une cada nodo con sus 2 vecinos más cercanos
-  const seg: number[] = [];
+  const pairs: [number, number][] = [];
   nodes.forEach((a, i) => {
     const near = nodes
       .map((b, j) => ({ j, d: a.distanceTo(b) }))
       .filter((x) => x.j !== i)
       .sort((x, y) => x.d - y.d)
       .slice(0, 2);
-    near.forEach(({ j }) => seg.push(a.x, a.y, a.z, nodes[j].x, nodes[j].y, nodes[j].z));
+    near.forEach(({ j }) => pairs.push([i, j]));
   });
   const lines = new THREE.BufferGeometry();
-  lines.setAttribute("position", new THREE.Float32BufferAttribute(seg, 3));
-  const links = new THREE.LineSegments(lines, mats.line("brand", p, 0.45));
+  const segPos = new Float32Array(pairs.length * 6);
+  lines.setAttribute("position", new THREE.BufferAttribute(segPos, 3));
+  // Coloca personas y enlaces según `nodes` (se repite al repartir la red por la cabecera)
+  const place = () => {
+    nodes.forEach((v, i) => {
+      dummy.position.copy(v);
+      dummy.scale.setScalar(sizes[i]);
+      dummy.updateMatrix();
+      people.setMatrixAt(i, dummy.matrix);
+    });
+    people.instanceMatrix.needsUpdate = true;
+    pairs.forEach(([a, b], k) => segPos.set([nodes[a].x, nodes[a].y, nodes[a].z, nodes[b].x, nodes[b].y, nodes[b].z], k * 6));
+    lines.attributes.position.needsUpdate = true;
+    lines.computeBoundingSphere();
+  };
+  place();
+  const links = new THREE.LineSegments(lines, mats.line("brand", p, fill ? 0.3 : 0.45));
   group.add(people, highlights, links);
   scene.add(group);
 
   return {
     update(t) {
-      group.rotation.y = Math.sin(t * 0.12) * 0.5;
-      group.rotation.x = Math.sin(t * 0.09) * 0.12;
+      // A lo ancho de la pantalla, un giro pequeño: con el de siempre los extremos se saldrían de la franja
+      group.rotation.y = Math.sin(t * 0.12) * (fill ? 0.12 : 0.5);
+      group.rotation.x = Math.sin(t * 0.09) * (fill ? 0.06 : 0.12);
       // Los destacados «laten», como alguien que acaba de publicar
       for (let i = 0; i < 6; i++) {
         dummy.position.copy(nodes[i * 7]);
@@ -264,10 +279,17 @@ function buildSocial(scene: THREE.Scene, p: Palette, mats: Materials): Built {
       highlights.instanceMatrix.needsUpdate = true;
     },
     recolor: (pal) => mats.paint(pal),
+    // Como `fitter`: los nodos se separan para llenar lo que se ve, sin cambiar de tamaño
+    fit: fill
+      ? (w, h) => {
+          nodes.forEach((v, i) => v.set((orig[i].x / 18) * w, (orig[i].y / 9) * h, orig[i].z));
+          place();
+        }
+      : undefined,
   };
 }
 
-function buildForos(scene: THREE.Scene, p: Palette, mats: Materials): Built {
+function buildForos(scene: THREE.Scene, p: Palette, mats: Materials, fill = false): Built {
   const r = rng(33);
   const list: Floater[] = [];
   const bubbleGeo = new RoundedBoxGeometry(1.4, 0.8, 0.22, 4, 0.2);
@@ -277,7 +299,9 @@ function buildForos(scene: THREE.Scene, p: Palette, mats: Materials): Built {
   const lightMat = mats.std("card", p, { roughness: 0.8 });
   const dotMat = mats.std("ink", p);
   const dotLight = mats.std("card", p);
-  const n = 16;
+  // En la cabecera a toda pantalla: más burbujas, algo más pequeñas y sin acercarse a la cámara
+  const n = fill ? 24 : 16;
+  let top = 5.5; // altura a la que una burbuja vuelve a empezar abajo
   for (let i = 0; i < n; i++) {
     const own = i % 3 === 0;
     const g = new THREE.Group();
@@ -291,9 +315,9 @@ function buildForos(scene: THREE.Scene, p: Palette, mats: Materials): Built {
       dot.position.set((d - 1) * 0.28, 0, 0.12);
       g.add(dot);
     }
-    const s = 0.7 + r() * 0.6;
+    const s = fill ? 0.6 + r() * 0.35 : 0.7 + r() * 0.6;
     g.scale.setScalar(s);
-    const base = spread(r, i, n, 17, 9, [-6, 0]);
+    const base = spread(r, i, n, fill ? 18 : 17, 9, fill ? [-8, -2] : [-6, 0]);
     g.position.copy(base);
     g.rotation.set((r() - 0.5) * 0.5, (r() - 0.5) * 0.8, (r() - 0.5) * 0.3);
     scene.add(g);
@@ -306,17 +330,25 @@ function buildForos(scene: THREE.Scene, p: Palette, mats: Materials): Built {
       speed: 0.5 + r() * 0.3,
     });
   }
+  // Se crea una vez: guarda las posiciones de partida para repartirlas en cada cambio de tamaño
+  const fitAll = fill ? fitter(list) : null;
   return {
     update(t, dt) {
       for (const f of list) {
         // Suben despacio y vuelven a empezar abajo: la conversación no para
         f.base.y += dt * 0.35;
-        if (f.base.y > 5.5) f.base.y = -5.5;
+        if (f.base.y > top) f.base.y = -top;
         f.obj.children.slice(2).forEach((dot, k) => (dot.position.y = Math.max(0, Math.sin(t * 5 - k * 0.6)) * 0.08));
       }
       floatAll(list, t, dt);
     },
     recolor: (pal) => mats.paint(pal),
+    fit: fitAll
+      ? (w, h) => {
+          fitAll(w, h);
+          top = h / 2 + 1; // suben por todo el alto visible y salen por arriba antes de volver a empezar
+        }
+      : undefined,
   };
 }
 
@@ -399,7 +431,7 @@ export default function Scene3D({
   onDark?: boolean;
   /** Fondo fijo de pantalla completa: objetos en los márgenes y se para tras 8 s sin mover el ratón */
   ambient?: boolean;
-  /** La escena llena todo el espacio que ocupa, repartiendo los objetos en proporción (cabecera de Empleo) */
+  /** La escena llena todo el espacio que ocupa, repartiendo los objetos en proporción (cabeceras de Social, Foros y Empleo) */
   fill?: boolean;
   className?: string;
 }) {
@@ -436,9 +468,9 @@ export default function Scene3D({
     let palette = readPalette(onDark);
     const built =
       kind === "social"
-        ? buildSocial(scene, palette, mats)
+        ? buildSocial(scene, palette, mats, fill)
         : kind === "foros"
-          ? buildForos(scene, palette, mats)
+          ? buildForos(scene, palette, mats, fill)
           : kind === "empleo"
             ? buildEmpleo(scene, palette, mats, fill)
             : buildEstudio(scene, palette, mats, dense, ambient);

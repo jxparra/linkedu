@@ -52,7 +52,7 @@ export default function EstudianteComunidades() {
   return (
     <OnboardingShell
       progress={95}
-      title="Únete a comunidades de tus estudios"
+      title={user?.role === "teacher" ? "Únete a las comunidades de tu alumnado" : "Únete a comunidades de tus estudios"}
       subtitle="Verás sus publicaciones en tu inicio. Puedes salir cuando quieras."
       onSubmit={submit}
       loading={loading}
@@ -67,7 +67,7 @@ export default function EstudianteComunidades() {
         </div>
       ) : communities.length === 0 ? (
         <p className="rounded-card bg-page p-5 text-ink-muted">
-          Aún no hay comunidades para tus estudios. Podrás crear la primera desde tu inicio.
+          Aún no hay comunidades para {user?.role === "teacher" ? "estos estudios" : "tus estudios"}. Podrás crear la primera desde tu inicio.
         </p>
       ) : (
         <ul className="space-y-3">

@@ -116,7 +116,7 @@ export const CommentComposer = forwardRef<HTMLTextAreaElement | null, Props>(fun
     <div className="flex items-start gap-2">
       {me ? (
         <Link href="/perfil" aria-label="Ir a tu perfil" className="shrink-0">
-          <Avatar name={name} size="sm" square={me.role === "company"} />
+          <Avatar name={name} size="sm" role={me.role} />
         </Link>
       ) : (
         <span className="h-9 w-9 shrink-0 rounded-full bg-page" />

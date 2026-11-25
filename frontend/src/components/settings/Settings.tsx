@@ -38,7 +38,7 @@ export function SettingsNav({ user }: { user: User | null }) {
   return (
     <nav aria-label={t("Ajustes")} className="space-y-0.5 rounded-card border border-line bg-card p-2">
       <div className="mb-2 flex items-center gap-3 px-2 pt-2">
-        <Avatar name={name || "?"} src={avatar} size="sm" square={user?.role === "company"} />
+        <Avatar name={name || "?"} src={avatar} size="sm" role={user?.role} />
         <h1 className="pb-1 text-[28px] font-bold">
           <ChalkText>{t("Ajustes")}</ChalkText>
         </h1>

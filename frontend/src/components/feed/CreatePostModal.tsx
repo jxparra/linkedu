@@ -206,7 +206,7 @@ export function CreatePostModal({ user, initialPanel = "main", initialCommunity,
             <PanelHeader title="Crear publicación" id="create-post-title" onClose={onClose} />
             <div className="overflow-y-auto px-4 pb-4 pt-3">
               <div className="flex items-center gap-3">
-                <Avatar name={name} size="md" square={user.role === "company"} />
+                <Avatar name={name} size="md" role={user.role} />
                 <div className="min-w-0">
                   <p className="text-[15px] leading-snug">
                     <span className="font-semibold">{name}</span>
@@ -529,7 +529,7 @@ function TagPanel({ value, onBack, onDone }: { value: Author[]; onBack: () => vo
             return (
               <li key={a.id}>
                 <button type="button" onClick={() => toggle(a)} aria-pressed={on} className="flex w-full items-center gap-3 rounded-card px-3 py-2 text-left hover:bg-page">
-                  <Avatar name={a.name} src={a.avatar_url} size="sm" square={a.role === "company"} />
+                  <Avatar name={a.name} src={a.avatar_url} size="sm" role={a.role} />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-semibold">{a.name}</span>
                     {a.headline && <span className="block truncate text-[13px] text-ink-muted">{a.headline}</span>}

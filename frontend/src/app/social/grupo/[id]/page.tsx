@@ -4,7 +4,7 @@ import { CalendarDays, Check, ChevronDown, Globe, Lock, LogOut, MapPin, Pencil, 
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { Avatar } from "@/components/Avatar";
+import { Avatar, RoleTag } from "@/components/Avatar";
 import { Button, ButtonLink } from "@/components/Button";
 import { Composer } from "@/components/feed/Composer";
 import { PostCard } from "@/components/feed/PostCard";
@@ -22,10 +22,11 @@ const dateFmt = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "long"
 function PersonRow({ person, extra }: { person: Author; extra?: string }) {
   return (
     <Link href={`/perfil/${person.id}`} className="-mx-2 flex items-center gap-3 rounded-card px-2 py-2 hover:bg-page">
-      <Avatar name={person.name} src={person.avatar_url ? mediaUrl(person.avatar_url) : null} size="md" square={person.role === "company"} />
+      <Avatar name={person.name} src={person.avatar_url ? mediaUrl(person.avatar_url) : null} size="md" role={person.role} />
       <span className="min-w-0 flex-1">
         <span className="flex items-center gap-2">
           <span className="truncate font-semibold">{person.name}</span>
+          <RoleTag role={person.role} />
           {extra && <span className="shrink-0 rounded-[6px] bg-brand-50 px-2 py-0.5 text-[12px] font-semibold text-brand-700">{extra}</span>}
         </span>
         {person.headline && <span className="block truncate text-[13px] text-ink-muted">{person.headline}</span>}

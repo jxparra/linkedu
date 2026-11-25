@@ -1073,6 +1073,212 @@ def seed_groups(db) -> int:
     return created
 
 
+# Docentes de prueba: email, nombre, apellidos, usuario, centro, estudios en los que da clase, qué imparte, ciudad
+DEMO_TEACHERS = [
+    ("elena.profe", "Elena", "Robles Gámez", "elena.robles", "IES Zaidín-Vergeles", "CFGS Desarrollo de Aplicaciones Web",
+     "Programación y Bases de datos", "Granada"),
+    ("andres.profe", "Andrés", "Ferrer Lucena", "andres.ferrer", "Universidad de Granada", "Grado en Ingeniería Informática",
+     "Sistemas Operativos", "Granada"),
+]
+
+# Publicaciones de docentes: clave del docente, comunidad, tipo, texto, hace cuántos minutos
+DEMO_TEACHER_POSTS = [
+    ("elena.profe", "CFGS Desarrollo de Aplicaciones Web", "recurso",
+     "He subido al aula virtual una batería de ejercicios de normalización hasta 3FN con las soluciones paso a paso. "
+     "Haced primero los cinco primeros sin mirar y el jueves los corregimos en clase.", 20 * 60),
+    ("andres.profe", "Técnicas de estudio", "general",
+     "Un consejo de alguien que corrige muchos exámenes: explicad el razonamiento aunque no lleguéis al resultado. "
+     "Un desarrollo claro con un fallo de cálculo suele valer más que un número suelto.", 9 * 60),
+]
+
+# Comentarios de docentes en publicaciones de estudiantes: clave del docente, inicio del texto de la publicación, comentario
+DEMO_TEACHER_COMMENTS = [
+    ("elena.profe", "¿Alguien tiene ejercicios resueltos de normalización",
+     "Irene, acabo de subir una batería con soluciones al aula virtual. Si te atascas en la 3FN, pásate el miércoles por tutoría."),
+]
+
+
+def seed_teachers(db) -> int:
+    """Docentes de prueba con alguna publicación y comentario. No duplica si ya existen."""
+    users = _ensure_users(db)
+    pw = hash_password(DEMO_PASSWORD)
+    now = datetime.now(timezone.utc)
+    teachers: dict[str, User] = {}
+    created = 0
+    for key, name, surname, username, school_name, degree_name, teaches, city in DEMO_TEACHERS:
+        email = key + DEMO_DOMAIN
+        u = db.scalar(select(User).where(User.email == email))
+        if not u:
+            school = db.scalar(select(School).where(School.name == school_name))
+            degree = db.scalar(select(Degree).where(Degree.name == degree_name))
+            u = User(email=email, password_hash=pw, username=username, role=UserRole.teacher, email_verified=True, onboarding_done=True)
+            db.add(u)
+            db.flush()
+            db.add(StudentProfile(user_id=u.id, name=name, surname=surname, location=city, school_id=school.id,
+                                  degree_id=degree.id, teaches=teaches, is_over_16=True))
+            created += 1
+        teachers[key] = u
+    db.flush()
+    communities = {c.name: c for c in db.scalars(select(Community))}
+    for key, community_name, ptype, text, age in DEMO_TEACHER_POSTS:
+        author = teachers[key]
+        if db.scalar(select(Post.id).where(Post.user_id == author.id, Post.content == text)):
+            continue
+        community = communities.get(community_name)
+        if community and not db.get(CommunityMember, (community.id, author.id)):
+            db.add(CommunityMember(community_id=community.id, user_id=author.id))
+        when = now - timedelta(minutes=age)
+        post = Post(user_id=author.id, community_id=community.id if community else None, type=ptype, content=text,
+                    created_at=when, updated_at=when)
+        db.add(post)
+        db.flush()
+        # Algunos «me gusta» de estudiantes
+        for student in list(users.values())[:6]:
+            if not db.get(Like, (student.id, post.id)):
+                db.add(Like(user_id=student.id, post_id=post.id))
+    for key, starts, text in DEMO_TEACHER_COMMENTS:
+        author = teachers[key]
+        post = db.scalar(select(Post).where(Post.content.startswith(starts)))
+        if post and not db.scalar(select(Comment.id).where(Comment.post_id == post.id, Comment.user_id == author.id)):
+            db.add(Comment(post_id=post.id, user_id=author.id, content=text, created_at=post.created_at + timedelta(minutes=40)))
+    db.commit()
+    return created
+
+
+# Publicaciones recientes de empresas, para que también salgan en Inicio (que muestra lo más reciente).
+# usuario, comunidad (None = sin comunidad), tipo, texto, hace cuántos minutos
+DEMO_COMPANY_POSTS = [
+    ("technova", "Programadores de Granada", "general",
+     "Abrimos 2 plazas de prácticas de desarrollo web para enero (React + FastAPI), con mentor y remuneradas. "
+     "Si estudias DAW o DAM, mira la oferta en Empleo y escríbenos cualquier duda por aquí.", 3 * 60),
+    ("academia_avanza", None, "recurso",
+     "Taller gratuito de bases de datos para FP este jueves a las 18:00: normalización, consultas SQL y dudas de examen. "
+     "Plazas limitadas, apúntate respondiendo a esta publicación.", 6 * 60),
+    ("cafecampus", None, "general",
+     "Semana de exámenes ☕ Abrimos hasta las 23:00 y el café es gratis con cualquier desayuno si nos enseñas el carné.", 11 * 60),
+]
+
+# Conversaciones con estudiantes, empresas y docentes mezclados, para ver de un vistazo quién es quién (ADR-017).
+# Inicio del texto de la publicación → [(usuario, comentario, [(usuario, respuesta), …]), …]
+DEMO_ROLE_THREADS = {
+    "He subido al aula virtual una batería de ejercicios de normalización": [
+        ("irene.cm", "¡Gracias, Elena! El ejercicio 4 me está costando: ¿la dependencia entre código postal y ciudad ya rompe la 3FN?", [
+            ("elena.robles", "Exacto: es una dependencia transitiva. Sácala a su propia tabla y lo tienes."),
+            ("hugo.dam", "Yo me lío siempre con eso. Me apunto la explicación 🙏"),
+        ]),
+        ("technova", "Buen material. En las entrevistas de prácticas preguntamos justo esto: normalizar un modelo pequeño en la pizarra.", [
+            ("irene.cm", "¡Pues me viene genial saberlo antes de enviaros el CV!"),
+        ]),
+    ],
+    "Un consejo de alguien que corrige muchos exámenes": [
+        ("marta.ruiz", "¿Y en los tipo test? Ahí no hay razonamiento que valga 😅", [
+            ("andres.ferrer", "En los test, leed dos veces el enunciado: la mitad de los fallos son por un «no» que se escapa."),
+        ]),
+        ("academia_avanza", "Lo repetimos mucho en clase de refuerzo: el desarrollo también puntúa. Muy buen consejo.", []),
+        ("elena.robles", "Suscribo. Y dejad los cálculos ordenados: corregir un folio caótico cansa a cualquiera.", []),
+    ],
+    "Este sábado hay hackathon en la ETSIIT": [
+        ("irene.cm", "¡Yo me apunto! Somos dos de DAW, nos falta alguien de diseño.", [
+            ("alvaro.design", "Me ofrezco para el diseño si es en remoto 🙋‍♂️"),
+        ]),
+        ("technova", "Somos patrocinadores: habrá un premio a la mejor app y entrevistas para prácticas con los finalistas.", []),
+        ("andres.ferrer", "Desde la ETSIIT os animamos a todos, también a primero. Se aprende muchísimo en un fin de semana.", []),
+    ],
+    "Truco para el CV: pon tus proyectos de clase": [
+        ("talento_joven", "Totalmente. Cuando revisamos CV de estudiantes, un enlace a un proyecto vale más que tres cursos online.", [
+            ("andrea.25", "¡Qué bien leerlo de alguien que selecciona!"),
+        ]),
+        ("estudio_pixel", "Y si es de diseño, un portfolio con 3 trabajos bien explicados mejor que 20 sin contexto.", []),
+        ("elena.robles", "En el módulo de Proyecto os pido justo eso: que el repositorio tenga un README que se entienda.", []),
+    ],
+    "Me han cogido para las prácticas de DAW": [
+        ("elena.robles", "¡Enhorabuena, Mario! Te lo has ganado. Cuéntanos qué tal la primera semana.", []),
+        ("technova", "¡Bienvenido al equipo! Nos vemos el lunes a las 9:00.", [
+            ("mario.14", "¡Allí estaré! Gracias por la oportunidad 🙌"),
+        ]),
+    ],
+    "¿Qué usáis para desplegar proyectos de clase gratis?": [
+        ("hugo.dam", "Vercel para el frontend y Render para el backend. Para clase sobra.", []),
+        ("technova", "Ojo con dormir los servidores gratuitos: si se lo enseñáis a una empresa, despertadlo antes 😉", []),
+        ("andres.ferrer", "Para Sistemas Operativos os recomiendo probar al menos una vez con un servidor propio: se aprende mucho.", []),
+    ],
+    "¿Merece la pena hacer prácticas no remuneradas en segundo?": [
+        ("talento_joven", "Depende de lo que aprendas. Si hay tutor y un plan de formación, puede compensar; si no, mejor buscar otra.", []),
+        ("andres.ferrer", "Mirad siempre que estén dentro de un convenio con la universidad. Si no, no son prácticas.", [
+            ("dani.prieto", "Buen dato, no lo sabía. Lo pregunto en la oficina de prácticas."),
+        ]),
+    ],
+    "Abrimos 2 plazas de prácticas de desarrollo web para enero": [
+        ("irene.cm", "¿Se puede hacer a media jornada? Por las tardes tengo clase.", [
+            ("technova", "Sí, Irene: hay horario de mañana de 9:00 a 13:00. Lo dejamos indicado en la oferta."),
+        ]),
+        ("elena.robles", "Se lo paso a mi grupo de segundo de DAW. Gracias por contar con el instituto.", []),
+        ("hugo.dam", "¿Vale también para DAM aunque sea de primero?", []),
+    ],
+    "Taller gratuito de bases de datos para FP este jueves": [
+        ("irene.cm", "¡Me apunto! Justo me viene genial para el examen.", []),
+        ("elena.robles", "Buena iniciativa. Lo recomiendo como repaso, coincide con lo que damos en clase.", [
+            ("academia_avanza", "¡Gracias, Elena! Si quieres traer a tu grupo, os guardamos sitio."),
+        ]),
+    ],
+    "Semana de exámenes ☕ Abrimos hasta las 23:00": [
+        ("marta.ruiz", "Os vais a convertir en nuestra segunda biblioteca 😂", []),
+        ("andres.ferrer", "Buen plan, pero dormid también, que el cerebro estudia mientras duerme.", []),
+    ],
+    "¿Alguien tiene ejercicios resueltos de normalización": [
+        ("hugo.dam", "Yo tengo los del año pasado, te los paso por mensaje.", []),
+        ("academia_avanza", "Esta semana damos un taller gratuito de bases de datos para FP, por si os sirve.", []),
+    ],
+}
+
+
+def seed_role_threads(db) -> int:
+    """Publicaciones recientes de empresas y comentarios de estudiantes, empresas y docentes. No duplica."""
+    by_username = {u.username: u for u in db.scalars(select(User).where(User.username.is_not(None)))}
+    created = 0
+    now = datetime.now(timezone.utc)
+    communities = {c.name: c for c in db.scalars(select(Community))}
+    for username, community_name, ptype, text, age in DEMO_COMPANY_POSTS:
+        author = by_username.get(username)
+        if not author or db.scalar(select(Post.id).where(Post.user_id == author.id, Post.content == text)):
+            continue
+        community = communities.get(community_name) if community_name else None
+        if community and not db.get(CommunityMember, (community.id, author.id)):
+            db.add(CommunityMember(community_id=community.id, user_id=author.id))
+        when = now - timedelta(minutes=age)
+        db.add(Post(user_id=author.id, community_id=community.id if community else None, type=ptype, content=text,
+                    created_at=when, updated_at=when))
+        created += 1
+    db.flush()
+
+    def add(post, username, text, minutes, parent=None):
+        nonlocal created
+        u = by_username.get(username)
+        if not u:
+            return None
+        c = db.scalar(select(Comment).where(Comment.post_id == post.id, Comment.user_id == u.id, Comment.content == text))
+        if not c:
+            c = Comment(post_id=post.id, user_id=u.id, content=text, parent_id=parent.id if parent else None,
+                        created_at=post.created_at + timedelta(minutes=minutes))
+            db.add(c)
+            db.flush()
+            created += 1
+        return c
+
+    for starts, thread in DEMO_ROLE_THREADS.items():
+        post = db.scalar(select(Post).where(Post.content.startswith(starts)))
+        if not post:
+            continue
+        for i, (username, text, replies) in enumerate(thread):
+            parent = add(post, username, text, 15 + i * 25)
+            if parent is None:
+                continue
+            for j, (r_username, r_text) in enumerate(replies):
+                add(post, r_username, r_text, 25 + i * 25 + j * 6, parent)
+    db.commit()
+    return created
+
+
 def run():
     ensure_schema()
     db = SessionLocal()
@@ -1081,6 +1287,10 @@ def run():
     created = seed_demo(db)
     jobs_created = seed_jobs(db)
     groups_created = seed_groups(db)
+    if seed_teachers(db):
+        print("Docentes de prueba creados.")
+    if seed_role_threads(db):
+        print("Conversaciones entre estudiantes, empresas y docentes creadas.")
     if groups_created:
         print(f"Grupos de prueba creados: {groups_created}.")
     if jobs_created:

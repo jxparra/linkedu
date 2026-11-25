@@ -11,6 +11,7 @@ from app.models.mixins import Timestamps
 class UserRole(str, enum.Enum):
     student = "student"
     company = "company"
+    teacher = "teacher"  # docente: usa la misma ficha personal que el estudiante (StudentProfile) más `teaches`
     admin = "admin"
 
 
@@ -41,6 +42,8 @@ class StudentProfile(Timestamps, Base):
     school_id: Mapped[int | None] = mapped_column(ForeignKey("schools.id"))
     degree_id: Mapped[int | None] = mapped_column(ForeignKey("degrees.id"))
     course: Mapped[int | None]
+    # Solo docentes: qué imparten («Programación y Bases de datos»). El centro y los estudios van en school_id y degree_id
+    teaches: Mapped[str | None] = mapped_column(String(150))
     is_over_16: Mapped[bool] = mapped_column(Boolean, default=False)
 
     user: Mapped[User] = relationship(back_populates="student_profile")

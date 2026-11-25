@@ -47,7 +47,10 @@ function Cuenta({ user }: { user: User }) {
   return (
     <div className="max-w-3xl space-y-4">
       <SettingsCard title={t("Información del perfil")}>
-        <SettingsRow label={company ? t("Nombre, ubicación y sector") : t("Nombre, ubicación y estudios")} href="/perfil/editar" />
+        <SettingsRow
+          label={company ? t("Nombre, ubicación y sector") : user.role === "teacher" ? t("Nombre, ubicación y lo que impartes") : t("Nombre, ubicación y estudios")}
+          href="/perfil/editar"
+        />
         <SettingsRow label={t("Verificaciones")} value={user.email_verified ? `✓ ${t("Email verificado")}` : undefined} />
       </SettingsCard>
 
@@ -60,7 +63,7 @@ function Cuenta({ user }: { user: User }) {
       </SettingsCard>
 
       <SettingsCard title={t("Cuenta")}>
-        <SettingsRow label={t("Tipo de cuenta")} value={company ? t("Empresa") : t("Estudiante")} />
+        <SettingsRow label={t("Tipo de cuenta")} value={company ? t("Empresa") : user.role === "teacher" ? t("Docente") : t("Estudiante")} />
         <SettingsRow label={t("Email")} value={user.email} />
         <SettingsRow label={t("Cerrar sesión")} onClick={logout} />
       </SettingsCard>

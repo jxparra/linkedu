@@ -12,9 +12,10 @@ import type { User } from "@/lib/api";
 export function EmpleoTabs({ user, onDark = false }: { user: User; onDark?: boolean }) {
   const path = usePathname();
   const company = user.role === "company";
+  // Los docentes solo consultan ofertas (no publican ni se inscriben)
   const tabs = [
     { href: "/empleo", label: "Ofertas" },
-    { href: "/empleo/mias", label: company ? "Mis ofertas" : "Mis candidaturas" },
+    ...(user.role === "teacher" ? [] : [{ href: "/empleo/mias", label: company ? "Mis ofertas" : "Mis candidaturas" }]),
   ];
 
   return (

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { AppShell } from "@/components/app/AppShell";
-import { Avatar } from "@/components/Avatar";
+import { Avatar, RoleTag } from "@/components/Avatar";
 import { api, refreshUnread, type Author, type ChatMessage, type Conversation } from "@/lib/api";
 import { timeAgo } from "@/lib/time";
 import { ChalkText } from "@/components/ChalkLine";
@@ -52,9 +52,12 @@ function Thread({ other, onBack, onSent }: { other: Author; onBack: () => void; 
           <ArrowLeft className="h-5 w-5" aria-hidden />
         </button>
         <Link href={`/perfil/${other.id}`} className="flex min-w-0 items-center gap-3">
-          <Avatar name={other.name} src={other.avatar_url} size="sm" square={other.role === "company"} />
+          <Avatar name={other.name} src={other.avatar_url} size="sm" role={other.role} />
           <span className="min-w-0">
-            <span className="block truncate font-semibold">{other.name}</span>
+            <span className="flex items-center gap-1.5">
+              <span className="truncate font-semibold">{other.name}</span>
+              <RoleTag role={other.role} />
+            </span>
             {other.headline && <span className="block truncate text-[13px] text-ink-muted">{other.headline}</span>}
           </span>
         </Link>
@@ -148,10 +151,13 @@ function Inbox() {
                 aria-current={active?.id === c.user.id ? "true" : undefined}
                 className={`flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-page ${active?.id === c.user.id ? "bg-brand-50" : ""}`}
               >
-                <Avatar name={c.user.name} src={c.user.avatar_url} size="md" square={c.user.role === "company"} />
+                <Avatar name={c.user.name} src={c.user.avatar_url} size="md" role={c.user.role} />
                 <span className="min-w-0 flex-1">
                   <span className="flex items-baseline justify-between gap-2">
-                    <span className={`truncate ${c.unread ? "font-bold" : "font-semibold"}`}>{c.user.name}</span>
+                    <span className="flex min-w-0 items-center gap-1.5">
+                      <span className={`truncate ${c.unread ? "font-bold" : "font-semibold"}`}>{c.user.name}</span>
+                      <RoleTag role={c.user.role} />
+                    </span>
                     <span className="shrink-0 text-xs text-ink-subtle">{timeAgo(c.last_at)}</span>
                   </span>
                   <span className={`block truncate text-sm ${c.unread ? "font-semibold text-ink" : "text-ink-muted"}`}>

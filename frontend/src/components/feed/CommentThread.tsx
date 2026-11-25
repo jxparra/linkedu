@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { api, mediaUrl, type Comment, type User } from "@/lib/api";
 import { timeAgo } from "@/lib/time";
-import { Avatar } from "../Avatar";
+import { Avatar, RoleTag } from "../Avatar";
 import { CommentComposer } from "./CommentComposer";
 
 type Shared = {
@@ -163,7 +163,7 @@ function CommentItem({
   return (
     <div id={`comentario-${comment.id}`} className="group flex items-start gap-2">
       <Link href={`/perfil/${author.id}`} aria-hidden tabIndex={-1} className="shrink-0">
-        <Avatar name={author.name} src={author.avatar_url} size="sm" square={author.role === "company"} />
+        <Avatar name={author.name} src={author.avatar_url} size="sm" role={author.role} />
       </Link>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1">
@@ -172,8 +172,9 @@ function CommentItem({
               <Link href={`/perfil/${author.id}`} className="font-semibold hover:underline">
                 {author.name}
               </Link>
+              <RoleTag role={author.role} />
               {comment.by_post_author && (
-                <span className="rounded-full bg-brand-50 px-1.5 py-px text-[11px] font-semibold text-brand-700">Autor</span>
+                <span className="rounded-full border border-line px-1.5 text-[11px] font-semibold leading-[16px] text-ink-muted">Autor</span>
               )}
             </p>
             {comment.content && <p className="whitespace-pre-line break-words leading-snug">{renderMentions(comment.content)}</p>}

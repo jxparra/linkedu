@@ -5,7 +5,7 @@ export type User = {
   id: number;
   email: string;
   username: string | null;
-  role: "student" | "company" | "admin" | null;
+  role: "student" | "company" | "teacher" | "admin" | null;
   email_verified: boolean;
   onboarding_done: boolean;
   student_profile: {
@@ -15,6 +15,8 @@ export type User = {
     school_id: number | null;
     degree_id: number | null;
     course: number | null;
+    /** Solo docentes: qué imparten */
+    teaches?: string | null;
   } | null;
   company: { name: string; sector: string | null; location: string | null; website?: string | null; contact_name?: string | null } | null;
 };

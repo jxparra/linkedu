@@ -35,7 +35,10 @@ export function TodayBand({ user }: { user: User }) {
   const tiles: Tile[] = [
     company
       ? { href: "/empleo/mias", icon: Briefcase, n: null, label: "Tus ofertas y candidatos", tone: "bg-empleo-50 text-empleo-ink" }
-      : { href: "/empleo?para_mi=1", icon: Briefcase, n: jobs, label: jobs === 1 ? "oferta para tus estudios" : "ofertas para tus estudios", tone: "bg-empleo-50 text-empleo-ink" },
+      : user.role === "teacher"
+        ? // Docente: las ofertas de los estudios en los que da clase, para pasárselas a su alumnado
+          { href: "/empleo?para_mi=1", icon: Briefcase, n: jobs, label: jobs === 1 ? "oferta para tu alumnado" : "ofertas para tu alumnado", tone: "bg-empleo-50 text-empleo-ink" }
+        : { href: "/empleo?para_mi=1", icon: Briefcase, n: jobs, label: jobs === 1 ? "oferta para tus estudios" : "ofertas para tus estudios", tone: "bg-empleo-50 text-empleo-ink" },
     { href: "/social/foros", icon: MessagesSquare, n: forums, label: forums === 1 ? "foro tuyo con actividad" : "foros tuyos con actividad", tone: "bg-foros-50 text-foros-ink" },
     { href: "/social", icon: Users, n: groups, label: groups === 1 ? "grupo que encaja contigo" : "grupos que encajan contigo", tone: "bg-social-50 text-social-ink" },
   ];

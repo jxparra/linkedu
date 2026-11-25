@@ -45,7 +45,7 @@ function Sidebar({ user }: { user: User | null }) {
       <section className="overflow-hidden rounded-card border border-line bg-card">
         <div className="h-2 bg-brand-600" aria-hidden />
         <div className="flex items-center gap-3 p-3">
-          <Avatar name={name || "?"} src={profile?.user.avatar_url ? mediaUrl(profile.user.avatar_url) : null} size="md" square={user?.role === "company"} />
+          <Avatar name={name || "?"} src={profile?.user.avatar_url ? mediaUrl(profile.user.avatar_url) : null} size="md" role={user?.role} />
           <div className="min-w-0">
             <Link href="/perfil" className="block truncate font-semibold leading-tight hover:underline">
               {name}

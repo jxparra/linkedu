@@ -13,6 +13,7 @@ class StudentProfileOut(BaseModel):
     school_id: int | None
     degree_id: int | None
     course: int | None
+    teaches: str | None = None
 
 
 class CompanyOut(BaseModel):
@@ -39,7 +40,7 @@ class UserOut(BaseModel):
 
 
 class AccountTypeIn(BaseModel):
-    role: Literal["student", "company"]
+    role: Literal["student", "company", "teacher"]
 
 
 class StudentIdentityIn(BaseModel):
@@ -47,13 +48,17 @@ class StudentIdentityIn(BaseModel):
     surname: str = Field(min_length=1, max_length=120)
     username: str = Field(pattern=r"^[a-z0-9_.]{3,30}$")
     location: str | None = Field(default=None, max_length=120)
+    # Solo docentes (se ignora en estudiantes)
+    teaches: str | None = Field(default=None, max_length=150)
 
 
 class StudentStudiesIn(BaseModel):
+    """Estudios del estudiante o, para un docente, dónde da clase y qué imparte."""
     school_id: int
     degree_id: int
     course: int | None = Field(default=None, ge=1, le=6)
-    is_over_16: bool
+    is_over_16: bool = False
+    teaches: str | None = Field(default=None, max_length=150)
 
 
 class CompanyIn(BaseModel):

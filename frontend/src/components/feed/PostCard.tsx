@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { announceRelation, api, onRelation, refreshGroups, type Post } from "@/lib/api";
 import { coverTopic, groupNoun } from "@/lib/groups";
 import { timeAgo } from "@/lib/time";
-import { Avatar } from "../Avatar";
+import { Avatar, RoleTag } from "../Avatar";
 import { GroupCover } from "../social/GroupCover";
 import { UnfollowDialog } from "../UnfollowDialog";
 import { LikeBurst } from "./LikeBurst";
@@ -69,7 +69,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
   const textRef = useRef<HTMLParagraphElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const { author } = post;
-  const isCompany = author.role === "company";
+  const isStudent = author.role !== "company" && author.role !== "teacher";
   const inModal = variant === "modal";
   const extras = [
     post.tagged.length > 0 && `con ${post.tagged.map((t) => t.name).join(", ")}`,
@@ -232,13 +232,14 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
           // Publicación de un grupo o foro: manda el grupo, y quien la publicó va debajo, más pequeño
           <Link href={groupHref} aria-hidden tabIndex={-1} className="relative shrink-0">
             <GroupCover src={community.cover_url} topic={coverTopic(community)} iconSize="sm" className="h-12 w-12 rounded-card" />
-            <span className="absolute -bottom-1.5 -right-1.5 rounded-full ring-2 ring-card">
-              <Avatar name={author.name} src={author.avatar_url} size="xs" square={isCompany} />
+            {/* El aro sigue la forma del avatar (redondo, cuadrado; el hexágono del docente no lleva aro) */}
+            <span className={`absolute -bottom-1.5 -right-1.5 ${author.role === "company" ? "rounded-[10px] ring-2 ring-card" : author.role === "teacher" ? "" : "rounded-full ring-2 ring-card"}`}>
+              <Avatar name={author.name} src={author.avatar_url} size="xs" role={author.role} />
             </span>
           </Link>
         ) : (
           <Link href={`/perfil/${author.id}`} aria-hidden tabIndex={-1} className="shrink-0">
-            <Avatar name={author.name} src={author.avatar_url} size="md" square={isCompany} />
+            <Avatar name={author.name} src={author.avatar_url} size="md" role={author.role} />
           </Link>
         )}
         <div className="min-w-0 flex-1">
@@ -253,6 +254,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
                 <Link href={`/perfil/${author.id}`} id={`post-${post.id}-${variant}-author`} className="font-medium hover:underline">
                   {author.name}
                 </Link>
+                <RoleTag role={author.role} className="ml-1.5 align-[1px]" />
                 {extras.length > 0 && ` ${extras.join(" · ")}`}
               </p>
             </>
@@ -262,15 +264,8 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
                 <Link href={`/perfil/${author.id}`} id={`post-${post.id}-${variant}-author`} className="text-base font-bold text-ink hover:underline">
                   {author.name}
                 </Link>
-                {author.badge && (
-                  <span
-                    className={`ml-2 inline-block rounded-full px-2 py-0.5 align-[2px] text-[11px] font-semibold ${
-                      isCompany ? "bg-page text-ink-muted" : "bg-brand-50 text-brand-700"
-                    }`}
-                  >
-                    {author.badge}
-                  </span>
-                )}
+                {/* Tipo de cuenta y, si es estudiante, su curso (o «Máster») en el mismo cartel */}
+                <RoleTag role={author.role} detail={isStudent ? author.badge : null} className="ml-2 align-[2px]" />
                 {extras.length > 0 && <span className="text-[15px] text-ink-muted"> {extras.join(" · ")}</span>}
               </p>
               {author.headline && <p className="truncate text-[13px] text-ink-muted">{author.headline}</p>}
@@ -468,7 +463,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
         <UnfollowDialog
           name={author.name}
           avatarUrl={author.avatar_url}
-          square={isCompany}
+          role={author.role}
           onConfirm={() => setFollow(false)}
           onCancel={() => setConfirmUnfollow(false)}
         />

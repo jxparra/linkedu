@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { GroupCard, GroupCardSkeleton } from "@/components/social/GroupCard";
 import { SectionHeader } from "@/components/social/GroupRow";
-import { SocialShell } from "@/components/social/SocialNav";
+import { SocialActions, SocialNavLinks, SocialShell, SocialTabs } from "@/components/social/SocialNav";
 import { api, type GroupCard as Group, type GroupSuggestions } from "@/lib/api";
 import { SectionHero } from "@/components/SectionHero";
 
@@ -83,8 +83,14 @@ function Suggestions() {
     if (!full) load();
   }, [full, load]);
 
-  if (full) return <FullSection key={full} section={full} />;
-  if (error) return <Retry onRetry={load} />;
+  // «Ver todo»: sin cabecera grande, con el menú de Social normal arriba
+  if (full)
+    return (
+      <>
+        <SocialTabs />
+        <FullSection key={full} section={full} />
+      </>
+    );
 
   const province = data?.province ?? null;
   const forYou = sectionText("for_you", province);
@@ -103,7 +109,23 @@ function Suggestions() {
 
   return (
     <div>
-      <SectionHero kind="social" title="Social" subtitle="Grupos de tu clase, de tu ciudad y de lo que te gusta. Cada punto de la red es alguien como tú." />
+      <SectionHero
+        kind="social"
+        title="Social"
+        subtitle="Grupos de tu clase, de tu ciudad y de lo que te gusta. Cada punto de la red es alguien como tú."
+        fullScene
+        bleed
+        aside={<SocialNavLinks onDark />}
+      >
+        <SocialActions onDark />
+      </SectionHero>
+
+      {error ? (
+        <div className="mt-10">
+          <Retry onRetry={load} />
+        </div>
+      ) : (
+        <>
 
       <section aria-labelledby="for-you" className="mt-10">
         <SectionHeader id="for-you" title={forYou.title} subtitle={forYou.subtitle} href={data && data.for_you.length > 4 ? "/social?ver=para-ti" : undefined} />
@@ -136,13 +158,15 @@ function Suggestions() {
           <p className="rounded-card border border-line bg-card p-6 text-center text-ink-muted">Ya has visto todos los grupos. ¿Por qué no creas uno?</p>
         )}
       </section>
+        </>
+      )}
     </div>
   );
 }
 
 export default function Social() {
   return (
-    <SocialShell>
+    <SocialShell tabs={false}>
       {() => (
         <Suspense>
           <Suggestions />

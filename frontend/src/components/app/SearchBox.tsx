@@ -4,7 +4,7 @@ import { ArrowLeft, MessagesSquare, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { api, type SearchResult } from "@/lib/api";
-import { Avatar } from "../Avatar";
+import { Avatar, RoleTag } from "../Avatar";
 
 /**
  * Buscador de la barra superior. Al activarlo se oscurece el resto de la pantalla
@@ -124,9 +124,12 @@ export function SearchBox({ open, onOpenChange }: { open: boolean; onOpenChange:
                   {results.users.map((u) => (
                     <li key={u.id}>
                       <Link href={`/perfil/${u.id}`} onClick={close} className="flex items-center gap-3 rounded-card px-3 py-2 hover:bg-page">
-                        <Avatar name={u.name} src={u.avatar_url} size="sm" square={u.role === "company"} />
+                        <Avatar name={u.name} src={u.avatar_url} size="sm" role={u.role} />
                         <span className="min-w-0">
-                          <span className="block truncate font-semibold">{u.name}</span>
+                          <span className="flex items-center gap-1.5">
+                            <span className="truncate font-semibold">{u.name}</span>
+                            <RoleTag role={u.role} />
+                          </span>
                           {u.headline && <span className="block truncate text-[13px] text-ink-muted">{u.headline}</span>}
                         </span>
                       </Link>

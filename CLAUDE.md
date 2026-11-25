@@ -5,12 +5,12 @@ Red social para estudiantes y empresas: empleo (trabajos puntuales y prácticas)
 ## Estructura
 - `frontend/`: Next.js 15 + React 19 + TypeScript + Tailwind 4. Three.js para las escenas 3D.
 - `backend/`: FastAPI + SQLAlchemy 2. En local usa SQLite (`backend/.env`); el `docker-compose.yml` (PostgreSQL) es para la entrega.
-- `docs/`: vault de Obsidian. `diario/` (qué se hizo cada día), `decisiones/` (ADR-001…015), `diseno/sistema-diseno.md`, `pendientes.md`.
+- `docs/`: vault de Obsidian. `diario/` (qué se hizo cada día), `decisiones/` (ADR-001…017), `diseno/sistema-diseno.md`, `pendientes.md`.
 
 ## Arrancar (dos terminales)
 - Backend: `cd backend && .venv\Scripts\activate && fastapi dev app/main.py` → http://localhost:8000 (`/docs`)
 - Frontend: `cd frontend && npm run dev` → http://localhost:3000
-- Cuentas de prueba (contraseña `Demo1234`): `irene@demo.studyhub` (estudiante), `technova@demo.studyhub` (empresa).
+- Cuentas de prueba (contraseña `Demo1234`): `irene@demo.studyhub` (estudiante), `technova@demo.studyhub` (empresa), `elena.profe@demo.studyhub` (docente).
 
 ## Reglas que ya nos han costado un disgusto
 - **Nunca `next build` / `npm run build` con `npm run dev` en marcha**: sobrescribe `.next` y el servidor se queda sin estilos (arreglo: parar, borrar `frontend/.next`, `npm run dev`).

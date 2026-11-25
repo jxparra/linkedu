@@ -2,7 +2,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models import Company, Degree, Notification, School, StudentProfile, User
+from app.models import Company, Degree, Notification, School, StudentProfile, User, UserRole
 from app.schemas.posts import AuthorOut
 
 LEVEL_BADGE = {"master": "Máster"}
@@ -32,6 +32,12 @@ def authors(db: Session, user_ids: set[int]) -> dict[int, AuthorOut]:
             name = company.name
             headline = ", ".join(x for x in (company.sector, company.location) if x) or None
             badge, avatar = "Empresa", company.logo_url
+        elif profile and user.role == UserRole.teacher:
+            # Docente: qué imparte y dónde (la etiqueta «Docente» la pone el frontend a partir de `role`)
+            name = f"{profile.name} {profile.surname}"
+            parts = [profile.teaches or (short_degree(degree.name) if degree else None), school.name if school else None, profile.location]
+            headline = ", ".join(p for p in parts if p) or None
+            badge, avatar = None, profile.avatar_url
         elif profile:
             name = f"{profile.name} {profile.surname}"
             parts = [short_degree(degree.name) if degree else None, school.name if school else None, profile.location]

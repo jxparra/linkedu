@@ -75,7 +75,7 @@ export function PeoplePicker({
                 aria-pressed={picked.has(p.id)}
                 className="flex min-h-12 w-full items-center gap-3 rounded-btn px-2 text-left hover:bg-page"
               >
-                <Avatar name={p.name} src={p.avatar_url ? mediaUrl(p.avatar_url) : null} size="sm" square={p.role === "company"} />
+                <Avatar name={p.name} src={p.avatar_url ? mediaUrl(p.avatar_url) : null} size="sm" role={p.role} />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-semibold">{p.name}</span>
                   {p.headline && <span className="block truncate text-[13px] text-ink-muted">{p.headline}</span>}

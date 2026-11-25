@@ -82,6 +82,11 @@
   --color-foros: #b83a63;
   --color-foros-50: #fbe6ed;
   --color-foros-ink: #9c2f52;
+  /* Color por tipo de cuenta: estudiante = pizarra (brand), empresa = ocre (empleo), docente = violeta tinta.
+     Solo en el avatar y en la etiqueta junto al nombre (ADR-017) */
+  --color-docente: #6e4bab;
+  --color-docente-50: #efe8f7;
+  --color-docente-ink: #5b3d8f;
   --color-on-section: #ffffff;
 
   /* Cabeceras de perfil y de Estadísticas: pizarra */
@@ -146,6 +151,9 @@
     --color-foros: #f08aa8;
     --color-foros-50: #3a1f29;
     --color-foros-ink: #f5a3bb;
+    --color-docente: #c3a6ee;
+    --color-docente-50: #2a2238;
+    --color-docente-ink: #d2bdf2;
     --color-on-section: #121513;
     --color-banner-from: #1c2e27;
     --color-banner-to: #24392f;
@@ -536,6 +544,11 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
   }
 }
 
+/* Avatar de docente: hexágono (estudiante redondo, empresa cuadrada). Recorta igual una foto que las iniciales. */
+.avatar-hex {
+  clip-path: polygon(50% 0, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+}
+
 /* Reborde de «encaja contigo»: ofertas de tus estudios, tus foros con actividad y grupos para ti.
    Un trazo de 2 px del color de la sección que aparece una vez (se «enciende») y queda fijo. */
 .match-ring {
@@ -564,6 +577,26 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
   from {
     opacity: 0;
     transform: scale(1.015);
+  }
+}
+/* Ofertas: el reborde sigue la forma del billete. Cada muesca queda por encima del reborde (tapa su tramo recto
+   con el color del fondo) y dibuja la curva con el mismo trazo y color, así el contorno entra y sale de la muesca. */
+.match-ring .ticket-notch {
+  z-index: 21;
+  border-color: var(--match-color, var(--color-social));
+  animation: match-notch-in 700ms 150ms var(--ease-expo) both;
+}
+.match-ring .ticket-notch-top {
+  top: -1px;
+  border-width: 0 2px 2px;
+}
+.match-ring .ticket-notch-bottom {
+  bottom: -1px;
+  border-width: 2px 2px 0;
+}
+@keyframes match-notch-in {
+  from {
+    border-color: var(--color-line);
   }
 }
 
@@ -707,6 +740,7 @@ a.rounded-btn:active {
   .spine-mark-swipe,
   .spine-icon-in,
   .match-ring::before,
+  .match-ring .ticket-notch,
   .results-in > *,
   .stagger-in > *,
   .count-in,

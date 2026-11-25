@@ -14,6 +14,7 @@ export function UnfollowDialog({
   name,
   avatarUrl,
   square = false,
+  role,
   kind = "person",
   picture,
   note,
@@ -23,6 +24,8 @@ export function UnfollowDialog({
   name: string;
   avatarUrl?: string | null;
   square?: boolean;
+  /** Tipo de cuenta de la persona (forma del avatar) */
+  role?: string | null;
   kind?: "person" | "group" | "forum";
   picture?: ReactNode;
   note?: string;
@@ -52,7 +55,7 @@ export function UnfollowDialog({
         aria-describedby="unfollow-text"
         className="w-full max-w-sm rounded-card bg-card p-6 text-center shadow-xl"
       >
-        <span className="mx-auto block w-fit">{picture ?? <Avatar name={name} src={avatarUrl} size="lg" square={square} />}</span>
+        <span className="mx-auto block w-fit">{picture ?? <Avatar name={name} src={avatarUrl} size="lg" square={square} role={role} />}</span>
         <h2 id="unfollow-title" className="mt-4 text-xl font-bold">
           {person ? `¿Dejar de seguir a ${name}?` : `¿Salir de «${name}»?`}
         </h2>
