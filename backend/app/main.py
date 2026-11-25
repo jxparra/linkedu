@@ -49,11 +49,37 @@ def _seed_jobs_if_empty():
         db.close()
 
 
+def _restore_demo_snapshot():
+    """Despliegue: si la base de datos SQLite no existe, copia la de demostración (solo cuentas @demo.studyhub)
+    y sus imágenes. Se hace antes de la primera conexión, al importar la app."""
+    if not settings.demo_snapshot or not settings.database_url.startswith("sqlite:///"):
+        return
+    import shutil
+    from pathlib import Path
+
+    db_path = Path(settings.database_url.removeprefix("sqlite:///"))
+    snapshot = Path(settings.demo_snapshot)
+    if not db_path.exists() and snapshot.exists():
+        db_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(snapshot, db_path)
+        logging.getLogger("studyhub").info("Base de datos de demostración restaurada desde %s", snapshot)
+    media = snapshot.parent / "uploads"
+    if media.is_dir():
+        settings.upload_path.mkdir(parents=True, exist_ok=True)
+        for f in media.iterdir():
+            dest = settings.upload_path / f.name
+            if not dest.exists():
+                shutil.copyfile(f, dest)
+
+
+_restore_demo_snapshot()
+
 app = FastAPI(title="Linkedu API", version="0.1.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.frontend_url],
+    allow_origin_regex=settings.frontend_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

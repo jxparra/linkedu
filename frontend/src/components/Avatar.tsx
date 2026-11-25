@@ -2,7 +2,7 @@ const sizes = { xs: "h-6 w-6 text-[9px]", sm: "h-9 w-9 text-xs", md: "h-12 w-12 
 
 /**
  * Cada tipo de cuenta tiene su forma y su color, para saber quién es quién de un vistazo (ADR-017):
- * estudiante, redondo en pizarra; empresa, cuadrado en ocre; docente, hexágono en violeta tinta.
+ * estudiante, redondo en azul; empresa, cuadrado en naranja; docente, hexágono en violeta tinta.
  * La forma se mantiene también con foto, así se distingue sin depender del color.
  */
 const KINDS = {
@@ -62,9 +62,9 @@ export function RoleTag({ role, detail, className = "" }: { role?: string | null
     teacher: ["Docente", "bg-docente-50 text-docente-ink"],
   }[kind];
   return (
-    <span className={`inline-flex shrink-0 items-center rounded-[6px] px-1.5 py-px text-[12px] font-semibold leading-[18px] ${tag[1]} ${className}`}>
+    <span className={`inline-flex shrink-0 items-center rounded-tag px-1.5 py-px text-[12px] font-semibold leading-[18px] ${tag[1]} ${className}`}>
       {tag[0]}
-      {detail && <span className="font-medium"> · {detail}</span>}
+      {detail && <span className="ml-1 font-medium">· {detail}</span>}
     </span>
   );
 }

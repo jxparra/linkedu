@@ -1,23 +1,29 @@
 ---
 name: studyhub-ui
-description: Estética y usabilidad del frontend de StudyHub (Next.js 15 + Tailwind 4) con el sistema «Pizarra y fosforito» (verde pizarra, amarillo fosforito, lomo lateral) — único, nada parecido a LinkedIn, Facebook ni InfoJobs, contraste WCAG AA y modo claro/oscuro mediante tokens de globals.css. Úsala SIEMPRE que se cree, rediseñe o retoque cualquier pantalla, componente, color, tipografía, botón, tarjeta, menú o estado vacío de StudyHub, cuando se pida «mejorar la interfaz», «que quede más bonito», «modo oscuro», «más profesional» o «más llamativo», y antes de dar por terminado cualquier cambio visual en frontend/src, aunque el usuario no mencione la estética.
+description: Estética y usabilidad del frontend de StudyHub (Next.js 15 + Tailwind 4) con el sistema «Enlace» (azul y naranja del logotipo, lomo blanco translúcido) — único, nada parecido a LinkedIn, Facebook ni InfoJobs, contraste WCAG AA y modo claro/oscuro mediante tokens de globals.css. Úsala SIEMPRE que se cree, rediseñe o retoque cualquier pantalla, componente, color, tipografía, botón, tarjeta, menú o estado vacío de StudyHub, cuando se pida «mejorar la interfaz», «que quede más bonito», «modo oscuro», «más profesional» o «más llamativo», y antes de dar por terminado cualquier cambio visual en frontend/src, aunque el usuario no mencione la estética.
 ---
 
 # StudyHub UI
 
 > La app se llama ahora **Linkedu** (ADR-013): úsalo en todo texto visible. Los nombres internos (`studyhub_*` en el navegador, esta skill, las carpetas) no cambian.
 
-StudyHub es una red social para estudiantes y empresas (TFC). La interfaz tiene que hacer dos cosas a la vez: **llamar la atención** de un estudiante y **dar confianza** a una empresa que va a publicar una oferta. El sistema se llama «Pizarra y fosforito» y sale del mundo del estudiante: la pizarra del aula (verde muy oscuro) es la marca y el fosforito con el que se subrayan los apuntes marca lo activo. El resto es «papel»: fondo gris verdoso con fichas blancas de borde fino, sin sombras. La personalidad está en tres sitios (el lomo, el fosforito y los títulos en Bricolage Grotesque); todo lo demás es tranquilo.
+StudyHub es una red social para estudiantes y empresas (TFC). La interfaz tiene que hacer dos cosas a la vez: **llamar la atención** de un estudiante y **dar confianza** a una empresa que va a publicar una oferta. El sistema se llama **«Enlace»** (ADR-018) y sale del logotipo: dos eslabones, uno **azul** (`#005cc6`, la marca: botones y enlaces) y otro **naranja** (`#ff9f2e`, lo activo y lo que hay que mirar; el token sigue llamándose `mark`). El lomo va en **blanco translúcido** (cristal esmerilado: `.spine-glass` con `blur(18px) saturate(160%)` y `border-r border-edge`, sobre `.spine-glow`, dos destellos desenfocados azul y naranja del logo detrás), con iconos y texto en tinta (`rail-ink`, `rail-strong`) y el logo normal, con texto claro (`rail-ink`, `rail-strong`) y el resto es «papel» frío casi blanco con fichas blancas de borde fino, sin sombras. La personalidad está en tres sitios (el lomo con los eslabones, el naranja de lo activo y los títulos en Bricolage Grotesque); todo lo demás es tranquilo y con aire.
 
 Toda la interfaz está en español. La documentación del diseño está en `docs/diseno/sistema-diseno.md` y las decisiones en `docs/decisiones/` (vault de Obsidian).
+
+## Logotipo
+- Archivos en `frontend/public/`: `logo.png` / `logo-dark.png` (completo) y `logo-mark.png` / `logo-mark-dark.png` (solo los eslabones). Favicon: `src/app/icon.png`.
+- Usa siempre `<Logo>` (`components/Logo.tsx`) o `<BrandMark>` (`components/app/Spine.tsx`): cambian solos con el tema. Sobre un fondo oscuro en los dos temas (lomo, bloque azul noche), pasa `onDark`.
+- No redibujes el nombre con texto ni cambies sus colores.
 
 ## Lo que ya se probó y no funcionó
 
 Esto da contexto a las reglas de abajo:
-- **Azul cobalto** (primera versión) y **azul petróleo** («Carpeta profesional», ADR-010): se seguían confundiendo con LinkedIn. **No vuelvas a un azul como color de marca.**
+- **Azul cobalto** (primera versión) y **azul petróleo** (ADR-010) **como único color**: se confundían con LinkedIn. Desde ADR-018 el azul vuelve porque es el del logo, pero **solo en botones, enlaces e iconos pequeños**; las superficies grandes van en azul noche o en papel, y el naranja aporta lo que LinkedIn no tiene. Si una pantalla se llena de azul del logo, avisa.
 - **Lo que de verdad hacía parecerse a LinkedIn/Facebook era la estructura**, no solo el color: secciones centradas arriba con icono y texto debajo, botones píldora, la barra «Me gusta / Comentar / Compartir / Enviar» a todo el ancho, el perfil con portada y la foto redonda encima, los iconos de colores de la caja de publicar y el buscador de Empleo calcado de InfoJobs (MAYÚSCULAS, «V» como flecha). No reintroduzcas ninguno.
 - **Carpeta original** (bordes negros de 2 px, sombras desplazadas, Unbounded): parecía una app infantil.
 - **Fondo crema + titulares con remates + terracota** o **negro + verde ácido**: son las estéticas genéricas «hechas por IA». Evítalas.
+- **Pizarra y fosforito** (ADR-011, verde y amarillo): sustituida por los colores del logo. No la recuperes.
 
 Si una propuesta acerca la web a alguno de esos extremos, avísalo antes de aplicarla.
 
@@ -36,20 +42,21 @@ Si una propuesta acerca la web a alguno de esos extremos, avísalo antes de apli
 | Fondo de la app / de tarjetas | `bg-page` / `bg-card` | `bg-white`, `bg-gray-*` |
 | Texto principal / secundario / terciario | `text-ink` / `text-ink-muted` / `text-ink-subtle` | `text-black`, `text-gray-*` |
 | Separadores y bordes finos | `border-line` | `border-gray-*` |
-| Botón principal | `bg-brand-600 text-on-brand hover:bg-brand-hover` | `text-white` sobre `brand-600` (en oscuro la pizarra es clara y el texto va oscuro) |
+| Botón principal | `bg-brand-600 text-on-brand hover:bg-brand-hover` | `text-white` sobre `brand-600` (en oscuro el azul se aclara y el texto va oscuro) |
 | Enlaces y texto de color | `text-brand-700` | `text-brand-600` como texto pequeño |
 | Fondos suaves de marca | `bg-brand-50` | |
 | Botón secundario | `btn-pop bg-card text-ink hover:bg-page` (o `<Button variant="secondary">`) | |
-| Opción activa de cualquier navegación | `nav-mark` (fosforito con texto `on-mark`) | el color de la sección, `bg-brand-50` |
-| Subrayado de fosforito en un texto | `.marker` (una vez por pantalla como mucho) | `bg-mark` en bloques grandes, `text-mark` |
-| Radio de botones con texto | `rounded-btn` (8 px) | `rounded-full` (píldora) |
+| Opción activa de cualquier navegación | `nav-mark` (naranja con texto `on-mark`) | el color de la sección, `bg-brand-50` |
+| Subrayado naranja suave en un texto | `.marker` (una vez por pantalla como mucho) | `bg-mark` en bloques grandes, `text-mark` |
+| Radio de botones con texto | `rounded-btn` (10 px) | `rounded-full` (píldora) |
+| Radio de etiquetas pequeñas («Empresa», «Recurso», «Para tus estudios») | `rounded-tag` (6 px) | `rounded-full`, `rounded-[6px]` |
 | Campos, buscadores, iconos redondos | `bg-field hover:bg-field-hover`, texto `text-field-text` | |
 | Fondo oscuro con texto claro (chips, avatares) | `bg-ink text-inverse` | `bg-ink text-white` |
 | Capas sobre fotos | `bg-black/50 text-white` (las fotos no cambian con el tema) | `bg-ink/50` |
 | Estados | `text-success`, `text-warning`, `text-danger`, `bg-red-50`, `bg-green-50` (tienen versión oscura) | |
 | Botón o globo rojo (borrar, salir, no leídos) | `bg-danger text-on-danger` | `text-white` (en oscuro el rojo es claro) |
 
-**Color por sección:** Social = pizarra (`social`, el de la marca), Empleo = ocre (`empleo`), Foros = lacre (`foros`). Cada uno tiene `-50` (fondo suave) e `-ink` (icono y texto). Se usan **en pequeñas dosis**: una etiqueta o un icono. Ejemplo: `bg-empleo-50 text-empleo-ink`. La navegación activa va siempre en fosforito (`nav-mark`), no en el color de la sección. No pintes tarjetas enteras ni cabeceras con el color saturado.
+**Color por sección:** Social = azul (`social`, el de la marca), Empleo = naranja (`empleo`, el del logo), Foros = verde azulado (`foros`). Cada uno tiene `-50` (fondo suave) e `-ink` (icono y texto). Se usan **en pequeñas dosis**: una etiqueta o un icono. Ejemplo: `bg-empleo-50 text-empleo-ink`. La navegación activa va siempre en naranja (`nav-mark`), no en el color de la sección. No pintes tarjetas enteras ni cabeceras con el color saturado.
 
 Si necesitas un color nuevo, añádelo como token en los **dos** bloques de `globals.css` (claro y oscuro) y comprueba su contraste. Un color que solo existe en un tema es el fallo más típico del modo oscuro.
 
@@ -64,7 +71,7 @@ Si necesitas un color nuevo, añádelo como token en los **dos** bloques de `glo
 - **Acciones que no se pueden deshacer** (eliminar, retirar): `const { confirm, dialog } = useConfirm()` de `components/ConfirmDialog.tsx`, con un verbo concreto en el botón. Nunca `window.confirm`.
 - **Portadas de temas** (`lib/groups.ts`): el icono es blanco, así que los dos extremos del degradado tienen que dar al menos 3:1 con blanco.
 - **Cabecera de grupo o foro:** carpeta con pestaña (la temática), portada en un cuadrado a la izquierda y secciones en `nav-mark` (`GroupHeader.tsx`). Nunca portada a lo ancho con fila de avatares ni pestañas subrayadas (ADR-014).
-- **Pantallas sin cabecera de sección** (Mensajes, Notificaciones, Ajustes, Estadísticas): el h1 lleva `<ChalkText>` (tiza en tinta). El trazo en fosforito es solo para la pizarra.
+- **Pantallas sin cabecera de sección** (Mensajes, Notificaciones, Ajustes, Estadísticas): el h1 lleva `<ChalkText>` (tiza en tinta). El trazo naranja es solo para las cabeceras oscuras de sección.
 - **Avatar de empresa sin foto:** cuadrado en `bg-empleo-50 text-empleo-ink`, nunca `bg-ink` (en oscuro sale casi blanco).
 - **Texto secundario dentro de `nav-mark`:** en `text-on-mark`, no en `ink-muted` (en oscuro, 1,45:1).
 - **Estados vacíos:** dicen qué falta y qué hacer, con un botón de acción («Aún no estás en ningún foro. Mira los de tus estudios»).
@@ -79,7 +86,7 @@ Si necesitas un color nuevo, añádelo como token en los **dos** bloques de `glo
 
 ## Movimiento y 3D
 
-- **3D:** `components/three/Scene3D.tsx` tiene cuatro escenas (`estudio`, `social`, `foros`, `empleo`). Úsalas con `Backdrop3D` (carga diferida, sin SSR) o con `<SectionHero kind=…>` para la cabecera de una sección; el fondo de Inicio es `<AppShell ambient>`. Una escena por página como mucho. Sobre la pizarra, pasa `onDark`.
+- **3D:** `components/three/Scene3D.tsx` tiene cuatro escenas (`estudio`, `social`, `foros`, `empleo`). Úsalas con `Backdrop3D` (carga diferida, sin SSR) o con `<SectionHero kind=…>` para la cabecera de una sección; el fondo de Inicio es `<AppShell ambient>`. Una escena por página como mucho. Sobre una cabecera oscura, pasa `onDark`.
 - **Movimiento:** solo `transform` y `opacity`, con las curvas `--ease-enter`, `--ease-move` y `--ease-expo` de `globals.css`. Cada página entra una vez (`.page-enter` en `<main>`); no animes cada tarjeta. Tarjetas que se pueden inclinar: `className="tilt"` + `useTilt()` (solo grupos y ofertas, no el feed).
 - Todo lo que se mueva tiene que tener su versión en `@media (prefers-reduced-motion: reduce)`.
 - No ejecutes `next build` con `npm run dev` en marcha: sobrescribe `.next` y deja el servidor sin estilos.
@@ -87,7 +94,7 @@ Si necesitas un color nuevo, añádelo como token en los **dos** bloques de `glo
 ## Llamativo, pero con criterio
 
 Pon la personalidad en **un sitio por pantalla** y deja tranquilo el resto. Buenos sitios:
-- El lomo y el fosforito de la opción activa (siempre presentes; no añadas otro elemento llamativo al lado)
+- El lomo y el naranja de la opción activa (siempre presentes; no añadas otro elemento llamativo al lado)
 - La portada de un grupo o foro (degradado con icono de su temática, `lib/groups.ts`)
 - Una microinteracción (el confeti del «me gusta», el botón que se hunde un píxel al pulsarlo)
 - Un número o titular importante en `font-display`

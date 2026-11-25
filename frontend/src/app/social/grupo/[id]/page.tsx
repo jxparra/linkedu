@@ -27,7 +27,7 @@ function PersonRow({ person, extra }: { person: Author; extra?: string }) {
         <span className="flex items-center gap-2">
           <span className="truncate font-semibold">{person.name}</span>
           <RoleTag role={person.role} />
-          {extra && <span className="shrink-0 rounded-[6px] bg-brand-50 px-2 py-0.5 text-[12px] font-semibold text-brand-700">{extra}</span>}
+          {extra && <span className="shrink-0 rounded-tag bg-brand-50 px-2 py-0.5 text-[12px] font-semibold text-brand-700">{extra}</span>}
         </span>
         {person.headline && <span className="block truncate text-[13px] text-ink-muted">{person.headline}</span>}
       </span>

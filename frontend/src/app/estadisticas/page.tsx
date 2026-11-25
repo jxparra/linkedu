@@ -147,7 +147,7 @@ function Rendimiento() {
 
   return (
     <>
-      {/* La cifra protagonista, en la pizarra: lo único llamativo de la pantalla */}
+      {/* La cifra protagonista, en la cabecera oscura: lo único llamativo de la pantalla */}
       <section aria-labelledby="stats-hero" className="relative flex flex-col rounded-card bg-board px-6 py-6 text-spine-strong sm:px-8 sm:py-7">
         <h2 id="stats-hero" className="text-[17px] font-semibold text-spine-ink">
           {t("Te siguen")}
@@ -269,8 +269,8 @@ function Content() {
 
   return (
     <div className="space-y-3">
-      <section className="rounded-card border border-line bg-card px-6 pb-5 pt-5">
-        <h1 className="pb-1 text-[28px] font-bold leading-tight">
+      <section>
+        <h1 className="text-[28px] font-bold leading-tight">
           <ChalkText>{t("Estadísticas")}</ChalkText>
         </h1>
         {/* En móvil no hay columna izquierda: se cambia de vista aquí */}

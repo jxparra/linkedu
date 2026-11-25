@@ -174,7 +174,7 @@ function CommentItem({
               </Link>
               <RoleTag role={author.role} />
               {comment.by_post_author && (
-                <span className="rounded-full border border-line px-1.5 text-[11px] font-semibold leading-[16px] text-ink-muted">Autor</span>
+                <span className="rounded-tag border border-line px-1.5 text-[11px] font-semibold leading-[16px] text-ink-muted">Autor</span>
               )}
             </p>
             {comment.content && <p className="whitespace-pre-line break-words leading-snug">{renderMentions(comment.content)}</p>}

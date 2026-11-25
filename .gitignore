@@ -29,3 +29,11 @@ Thumbs.db
 
 # Archivos subidos por los usuarios
 backend/uploads/
+
+# Vídeos promocionales y sus archivos de trabajo (pesan mucho)
+brag-output/
+# Audio del vídeo (la canción tiene derechos de autor)
+/*.mp3
+
+# Excepción: base de datos de demostración para el despliegue (solo cuentas @demo.studyhub)
+!backend/demo/*.db

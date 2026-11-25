@@ -12,7 +12,7 @@ const THEMES: { value: ThemePref; label: string }[] = [
   { value: "system", label: "Como el sistema" },
 ];
 
-/** Tema: claro, oscuro o el del sistema. Radios de verdad (se manejan con las flechas); el elegido, en fosforito. */
+/** Tema: claro, oscuro o el del sistema. Radios de verdad (se manejan con las flechas); el elegido, en naranja. */
 function ThemePicker() {
   const t = useT();
   const { pref, change } = useTheme();

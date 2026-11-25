@@ -73,7 +73,7 @@ function GroupSearchInner({ autoFocus, onDark }: { autoFocus: boolean; onDark: b
   );
 }
 
-/** Apartados de Social (el activo en fosforito). Con `onDark` van dentro de la cabecera de la sección. */
+/** Apartados de Social (el activo en naranja). Con `onDark` van dentro de la cabecera de la sección. */
 export function SocialNavLinks({ onDark = false }: { onDark?: boolean }) {
   const path = usePathname();
   const t = useT();
@@ -115,7 +115,7 @@ export function SocialActions({ onDark = false }: { onDark?: boolean }) {
 }
 
 /**
- * Menú de Social: una sola fila con los apartados (el activo en fosforito), el buscador de grupos y «Crear grupo».
+ * Menú de Social: una sola fila con los apartados (el activo en naranja), el buscador de grupos y «Crear grupo».
  * En Descubrir no sale: va dentro de la cabecera de la sección.
  */
 export function SocialTabs() {

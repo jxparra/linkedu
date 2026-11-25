@@ -1,42 +1,43 @@
 @import "tailwindcss";
 
-/* Tokens de diseño de Linkedu: estética «Pizarra y fosforito» → docs/diseno/sistema-diseno.md
-   Pizarra (verde oscuro de aula) como marca y amarillo fosforito para marcar lo activo, como se subrayan los apuntes.
+/* Tokens de diseño de Linkedu: estética «Enlace» (ADR-018) → docs/diseno/sistema-diseno.md
+   Sale del logotipo: el azul del eslabón (#005cc6) es la marca y el naranja (#ff9f2e) marca lo activo y lo que hay que mirar.
+   El resto es papel claro, un poco frío, con fichas blancas de borde fino: mucho aire y un solo color fuerte por bloque.
    Cada color tiene versión clara (aquí) y oscura (más abajo, en :root[data-theme="dark"]).
    Las utilidades de Tailwind leen estas variables, así que cambiar el tema solo cambia los valores. */
-/* Cada sección tiñe su fondo y su cabecera con su color (Social verde, Foros granate, Empleo ocre).
+/* Cada sección tiñe su fondo y su cabecera con su color (Social azul, Foros verde azulado, Empleo naranja).
    Más color, pero en superficies grandes y suaves, no en cada tarjeta. Contraste medido en los dos temas. */
 [data-section="social"] {
-  --color-page: #eef4f0;
-  --color-topbar: #eef4f0;
+  --color-page: #eef4fc;
+  --color-topbar: #eef4fc;
 }
 [data-section="foros"] {
-  --color-page: #f9f3f5;
-  --color-topbar: #f9f3f5;
-  --color-hero: #7a2442;
-  --color-hero-ink: #f2c9d6;
+  --color-page: #eef8f7;
+  --color-topbar: #eef8f7;
+  --color-hero: #0b5c5e;
+  --color-hero-ink: #e2f6f5;
 }
 [data-section="empleo"] {
-  --color-page: #f7f2e6;
-  --color-topbar: #f7f2e6;
-  --color-hero: #6e4a08;
-  --color-hero-ink: #f1dcae;
+  --color-page: #fdf6ee;
+  --color-topbar: #fdf6ee;
+  --color-hero: #7a3a00;
+  --color-hero-ink: #ffe9cf;
 }
 :root[data-theme="dark"] [data-section="social"] {
-  --color-page: #131715;
-  --color-topbar: #131715;
+  --color-page: #0d1424;
+  --color-topbar: #0d1424;
 }
 :root[data-theme="dark"] [data-section="foros"] {
-  --color-page: #161214;
-  --color-topbar: #161214;
-  --color-hero: #3d1824;
-  --color-hero-ink: #f2c9d6;
+  --color-page: #0e1620;
+  --color-topbar: #0e1620;
+  --color-hero: #0d3335;
+  --color-hero-ink: #b5ece8;
 }
 :root[data-theme="dark"] [data-section="empleo"] {
-  --color-page: #161410;
-  --color-topbar: #161410;
-  --color-hero: #3a2a0e;
-  --color-hero-ink: #f1dcae;
+  --color-page: #13141c;
+  --color-topbar: #13141c;
+  --color-hero: #2a1b0b;
+  --color-hero-ink: #ffd7a8;
 }
 
 /* Fuentes: `inline` porque apuntan a variables de next/font (si no, quedan vacías en :root y se ve la letra del sistema) */
@@ -46,133 +47,143 @@
 }
 
 @theme {
-  /* Principal: verde pizarra, un punto más vivo (texto blanco 6,35:1) */
-  --color-brand-50: #e2f0e9;
-  --color-brand-100: #c9e3d7;
-  --color-brand-600: #236b55;
-  --color-brand-hover: #1d5a48;
-  --color-brand-700: #1f5a47; /* textos y enlaces (8,04:1 sobre blanco) */
+  /* Principal: el azul del logotipo (texto blanco 6,28:1) */
+  --color-brand-50: #e8f1fd;
+  --color-brand-100: #d3e4fa;
+  --color-brand-600: #005cc6;
+  --color-brand-hover: #004fa9;
+  --color-brand-700: #0050ad; /* textos y enlaces (7,63:1 sobre blanco) */
   --color-on-brand: #ffffff;
 
-  /* Fosforito: la opción activa y lo que hay que mirar. Siempre con texto ink encima (13:1) */
-  --color-mark: #ffe24a;
-  --color-on-mark: #1b1e1c;
-  --color-mark-soft: rgba(255, 226, 74, 0.55);
+  /* Naranja del logotipo: la opción activa y lo que hay que mirar. Siempre con texto ink encima (7,8:1).
+     Se mantiene el nombre «mark» (antes fosforito) para no tocar cada componente */
+  --color-mark: #ff9f2e;
+  --color-on-mark: #14213d;
+  --color-mark-soft: rgba(255, 159, 46, 0.28);
 
-  /* El lomo (navegación lateral): pizarra intensa con texto de tiza */
-  --color-spine: #1f4236;
-  --color-spine-ink: #a9c4b8;
-  --color-spine-strong: #f3f7f4;
-  /* Cabecera de cada sección: un color propio, profundo, con texto de tiza. Lo fija [data-section] más abajo */
-  --color-hero: #1f5a47;
-  --color-hero-ink: #c9e3d7;
-  --color-board: #1f4236; /* la pizarra de la portada */
+  /* El lomo (navegación lateral): blanco translúcido con desenfoque y borde marcado (se nota sin pesar).
+     Iconos y textos en tinta: rail-ink 10,4:1, rail-strong 15:1 */
+  --color-spine: rgba(255, 255, 255, 0.72);
+  /* spine-ink y spine-strong son el texto claro de las cabeceras oscuras (Social, Foros, Empleo, cierre de la portada) */
+  --color-rail-ink: #2b3a55;
+  --color-rail-strong: #14213d;
+  --color-logo-on-dark: #4f94f5; /* azul del logo sobre las cabeceras oscuras (escena 3D) */
+  --color-spine-ink: #b4c6e6;
+  --color-spine-strong: #f4f7fc;
+  /* Cabecera de cada sección: un color propio, profundo, con texto claro. Lo fija [data-section] más arriba */
+  --color-hero: #0a3a80;
+  --color-hero-ink: #d3e4fa;
+  --color-board: #0b2552; /* el panel oscuro de la portada */
 
-  --color-accent-50: #fff6c7;
-  --color-accent-400: #d9a900;
-  --color-accent-800: #6b5400;
+  --color-accent-50: #fff1e0;
+  --color-accent-400: #f08300;
+  --color-accent-800: #8a4300;
 
   /* Un color por sección: fondo suave (-50) y tono fuerte para icono y texto (-ink) */
-  --color-social: #236b55;
-  --color-social-50: #e2f0e9;
-  --color-social-ink: #1f5a47;
-  --color-empleo: #a66f00;
-  --color-empleo-50: #fbf0d2;
-  --color-empleo-ink: #7a5300;
-  --color-foros: #b83a63;
-  --color-foros-50: #fbe6ed;
-  --color-foros-ink: #9c2f52;
-  /* Color por tipo de cuenta: estudiante = pizarra (brand), empresa = ocre (empleo), docente = violeta tinta.
+  --color-social: #005cc6;
+  --color-social-50: #e8f1fd;
+  --color-social-ink: #0050ad;
+  --color-empleo: #b85a00;
+  --color-empleo-50: #fff1e0;
+  --color-empleo-ink: #9a4a00;
+  --color-foros: #0e7778;
+  --color-foros-50: #e2f5f4;
+  --color-foros-ink: #0b6b6b;
+  /* Color por tipo de cuenta: estudiante = azul (brand), empresa = naranja (empleo), docente = violeta tinta.
      Solo en el avatar y en la etiqueta junto al nombre (ADR-017) */
   --color-docente: #6e4bab;
   --color-docente-50: #efe8f7;
   --color-docente-ink: #5b3d8f;
   --color-on-section: #ffffff;
 
-  /* Cabeceras de perfil y de Estadísticas: pizarra */
-  --color-banner-from: #1f4236;
-  --color-banner-to: #3d7a64;
+  /* Cabeceras de perfil y de Estadísticas: del azul noche al azul del logo */
+  --color-banner-from: #0b2552;
+  --color-banner-to: #1c5fb8;
 
-  --color-ink: #1b1e1c;
-  --color-ink-muted: #5c625e;
-  --color-ink-subtle: #6a706b;
+  --color-ink: #14213d;
+  --color-ink-muted: #4f5d75;
+  --color-ink-subtle: #5f6b82;
   --color-inverse: #ffffff;
-  --color-edge: #c8ccc6;
-  --color-line: #e1e4de;
-  --color-page: #f1f2ee; /* papel gris verdoso: las tarjetas blancas destacan encima */
+  --color-edge: #c8d1de;
+  --color-line: #e2e7ef;
+  --color-page: #f5f7fb; /* papel frío y muy claro: las fichas blancas destacan sin sombras */
   --color-card: #ffffff;
-  --color-topbar: #f1f2ee;
-  --color-field: rgba(27, 30, 28, 0.05);
-  --color-field-hover: rgba(27, 30, 28, 0.09);
-  --color-field-text: #5c625e;
+  --color-topbar: #f5f7fb;
+  --color-field: rgba(20, 33, 61, 0.05);
+  --color-field-hover: rgba(20, 33, 61, 0.09);
+  --color-field-text: #4f5d75;
 
-  --color-success: #2e7d32;
+  --color-success: #1e7a46;
   --color-warning: #b45309;
   --color-danger: #c62828;
   --color-on-danger: #ffffff; /* texto sobre bg-danger */
 
 
-  --radius-input: 8px;
-  --radius-card: 10px;
-  --radius-btn: 8px;
+  --radius-input: 10px;
+  --radius-card: 14px;
+  --radius-btn: 10px;
+  --radius-tag: 6px; /* etiquetas pequeñas: «Empresa», «Recurso», «Para tus estudios»… */
 
-  /* Sin sombras difusas: las tarjetas se separan por el borde, como fichas sobre la mesa */
+  /* Sin sombras difusas en reposo: las tarjetas se separan por el borde */
   --shadow-card: none;
-  --shadow-pop: 0 1px 0 rgba(27, 30, 28, 0.08);
+  --shadow-pop: 0 1px 0 rgba(20, 33, 61, 0.08);
 }
 
-/* Modo oscuro: por elección (Ajustes) o, si no se ha elegido, según el sistema. Pizarra de verdad: verde casi negro y tiza */
+/* Modo oscuro: por elección (Ajustes) o, si no se ha elegido, según el sistema. Azul noche con el logo aclarado */
 @layer base {
   :root[data-theme="dark"] {
-    --color-brand-50: #1c2e27;
-    --color-brand-100: #23392f;
-    --color-brand-600: #8fd1b5;
-    --color-brand-hover: #a8ddc6;
-    --color-brand-700: #a8ddc6;
-    --color-on-brand: #121513;
-    --color-mark: #e7c93a;
-    --color-on-mark: #121513;
-    --color-mark-soft: rgba(231, 201, 58, 0.32);
-    --color-spine: #1a1e1b;
-    --color-spine-ink: #a3aaa5;
-    --color-spine-strong: #eceeea;
-    --color-hero: #17342b;
-    --color-hero-ink: #a8ddc6;
-    --color-board: #22392f;
-    --color-accent-50: #332c12;
-    --color-accent-400: #e7c93a;
-    --color-accent-800: #e7c93a;
-    --color-social: #8fd1b5;
-    --color-social-50: #1c2e27;
-    --color-social-ink: #a8ddc6;
-    --color-empleo: #e7b85a;
-    --color-empleo-50: #33291a;
-    --color-empleo-ink: #ebc678;
-    --color-foros: #f08aa8;
-    --color-foros-50: #3a1f29;
-    --color-foros-ink: #f5a3bb;
+    --color-brand-50: #15233b;
+    --color-brand-100: #1a2c4a;
+    --color-brand-600: #7db2ff;
+    --color-brand-hover: #9cc4ff;
+    --color-brand-700: #9cc4ff;
+    --color-on-brand: #0d1320;
+    --color-mark: #ffa040;
+    --color-on-mark: #0d1320;
+    --color-mark-soft: rgba(255, 160, 64, 0.3);
+    --color-spine: rgba(24, 32, 58, 0.72);
+    --color-rail-ink: #c3cbdb;
+    --color-rail-strong: #f4f7fc;
+    --color-logo-on-dark: #4f94f5;
+    --color-spine-ink: #a7b3c9;
+    --color-spine-strong: #eef2f8;
+    --color-hero: #10284f;
+    --color-hero-ink: #b9d4ff;
+    --color-board: #13284a;
+    --color-accent-50: #33230f;
+    --color-accent-400: #ffa040;
+    --color-accent-800: #ffb867;
+    --color-social: #7db2ff;
+    --color-social-50: #15233b;
+    --color-social-ink: #9cc4ff;
+    --color-empleo: #ffa040;
+    --color-empleo-50: #33230f;
+    --color-empleo-ink: #ffbb73;
+    --color-foros: #5fd0cb;
+    --color-foros-50: #11302f;
+    --color-foros-ink: #7fdcd7;
     --color-docente: #c3a6ee;
     --color-docente-50: #2a2238;
     --color-docente-ink: #d2bdf2;
-    --color-on-section: #121513;
-    --color-banner-from: #1c2e27;
-    --color-banner-to: #24392f;
-    --color-ink: #eceeea;
-    --color-ink-muted: #a3aaa5;
-    --color-ink-subtle: #868d88;
-    --color-inverse: #121513;
-    --color-edge: #3a413c;
-    --color-line: #2a302c;
-    --color-page: #121513;
-    --color-card: #1a1e1b;
-    --color-topbar: #121513;
+    --color-on-section: #0d1320;
+    --color-banner-from: #15233b;
+    --color-banner-to: #1b3460;
+    --color-ink: #e9edf5;
+    --color-ink-muted: #a7b0c2;
+    --color-ink-subtle: #8a94a8;
+    --color-inverse: #0d1320;
+    --color-edge: #34405a;
+    --color-line: #242d40;
+    --color-page: #0d1320;
+    --color-card: #151c2c;
+    --color-topbar: #0d1320;
     --color-field: rgba(255, 255, 255, 0.07);
     --color-field-hover: rgba(255, 255, 255, 0.12);
-    --color-field-text: #a3aaa5;
+    --color-field-text: #a7b0c2;
     --color-success: #81c784;
     --color-warning: #f0a35a;
     --color-danger: #ff8a80;
-    --color-on-danger: #121513;
+    --color-on-danger: #0d1320;
     /* Colores de Tailwind que se usan sueltos (avisos de error, "seleccionado"…) */
     --color-red-50: #3a1d1c;
     --color-green-50: #17301f;
@@ -182,6 +193,101 @@
     --shadow-pop: none;
     color-scheme: dark;
   }
+}
+
+/* Cabeceras de Social, Foros y Empleo de cristal esmerilado, uniforme (sin degradado):
+   ::before = brillos suaves (blanco y naranja) en la zona de la escena 3D, lejos del título;
+   ::after  = el color de la sección al 85 % con desenfoque encima, igual en toda la cabecera.
+   Los pseudoelementos llevan el backdrop-filter, no la sección: así no se crea un bloque contenedor para lo `fixed` de dentro.
+   Contraste del texto sobre el 85 %: Social 5,7:1, Foros 4,9:1, Empleo 5,1:1. */
+.section-hero.bg-hero {
+  background: transparent;
+}
+.section-hero.bg-hero::before,
+.section-hero.bg-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.section-hero.bg-hero::before {
+  z-index: -30;
+  background:
+    radial-gradient(34% 70% at 74% 78%, rgba(255, 255, 255, 0.95), transparent 70%),
+    radial-gradient(30% 70% at 97% 95%, var(--color-mark), transparent 70%),
+    radial-gradient(26% 60% at 52% 110%, rgba(255, 255, 255, 0.7), transparent 70%);
+  filter: blur(28px);
+  clip-path: inset(0);
+}
+.section-hero.bg-hero::after {
+  z-index: -20;
+  /* Grano muy fino encima del color: es lo que da la sensación de cristal esmerilado */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    color-mix(in srgb, var(--color-hero) 85%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+:root[data-theme="dark"] .section-hero.bg-hero::before {
+  opacity: 0.45;
+}
+
+/* Lomo de cristal: los destellos del logo (azul y naranja) quedan detrás de la barra y el desenfoque los convierte
+   en un brillo suave; así se ve el efecto de cristal esmerilado aunque detrás solo haya fondo liso. */
+.spine-glow {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 84px;
+  z-index: 29;
+  overflow: hidden;
+  pointer-events: none;
+}
+.spine-glow::before,
+.spine-glow::after {
+  content: "";
+  position: absolute;
+  left: -40px;
+  width: 150px;
+  height: 260px;
+  border-radius: 50%;
+  filter: blur(28px);
+}
+.spine-glow::before {
+  top: -60px;
+  background: var(--color-brand-600);
+  opacity: 0.42;
+}
+.spine-glow::after {
+  top: 44%;
+  background: var(--color-mark);
+  opacity: 0.45;
+}
+.spine-glass {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.48));
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.6);
+}
+:root[data-theme="dark"] .spine-glow::before,
+:root[data-theme="dark"] .spine-glow::after {
+  opacity: 0.22;
+}
+:root[data-theme="dark"] .spine-glass {
+  background: linear-gradient(180deg, rgba(24, 32, 58, 0.7), rgba(24, 32, 58, 0.55));
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Logotipo: dos versiones (azul del logo en claro, azul aclarado en oscuro). Se ve la que toca según el tema */
+.logo-dark {
+  display: none;
+}
+:root[data-theme="dark"] .logo-light {
+  display: none;
+}
+:root[data-theme="dark"] .logo-dark {
+  display: block;
 }
 
 @layer base {
@@ -288,7 +394,7 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
   box-shadow: var(--shadow-card);
 }
 
-/* Subrayado de fosforito: una franja por debajo del texto, como al marcar apuntes.
+/* Subrayado naranja suave: una franja por debajo del texto, como al marcar apuntes.
    Se usa en un solo sitio por pantalla (la portada y los títulos de página). */
 .marker {
   background-image: linear-gradient(
@@ -302,11 +408,11 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
   padding-inline: 0.08em;
 }
 
-/* Opción activa de la navegación: pastilla de fosforito con la esquina un poco torcida */
+/* Opción activa de la navegación: pastilla naranja */
 .nav-mark {
   background: var(--color-mark);
   color: var(--color-on-mark);
-  border-radius: 6px 10px 7px 9px;
+  border-radius: 8px;
 }
 
 /* Confeti al dar "me gusta" */
@@ -465,6 +571,13 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
     display: none;
   }
 }
+/* La escena se aparta del título, el subtítulo y el buscador (antes pasaba por encima en Foros y Empleo) */
+@media (min-width: 640px) {
+  .section-hero-scene-full {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0 45%, #000 70%);
+    mask-image: linear-gradient(90deg, transparent 0 45%, #000 70%);
+  }
+}
 /* En la cabecera de sección, la escena se desvanece hacia el texto */
 .section-hero-scene {
   -webkit-mask-image: linear-gradient(90deg, transparent 15%, #000 55%);
@@ -481,13 +594,10 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
   }
 }
 /* La escena llega a todos los bordes; esta veladura (del color de la cabecera) la funde solo donde está el texto */
+/* Ya no hace falta: la escena se aparta del texto con su máscara y en el móvil no se muestra. Además, con las cabeceras
+   translúcidas, su color opaco dibujaba un corte a la altura del título. */
 .hero-text-veil {
-  background: linear-gradient(180deg, var(--color-hero) 0, var(--color-hero) 34%, transparent 62%);
-}
-@media (min-width: 640px) {
-  .hero-text-veil {
-    background: radial-gradient(70% 85% at 0% 0%, var(--color-hero) 45%, transparent 100%);
-  }
+  display: none;
 }
 /* En la portada, la escena deja limpio el titular (en móvil, la parte de arriba) */
 @media (max-width: 767px) {
@@ -511,7 +621,7 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
   stroke-dashoffset: 220;
   animation: chalk-draw 700ms 180ms var(--ease-expo) forwards;
 }
-/* En las pantallas sin cabecera de sección: el mismo trazo, en tinta y más fino (el fosforito ya está en el lomo) */
+/* En las pantallas sin cabecera de sección: el mismo trazo, en tinta y más fino (el naranja ya está en el lomo) */
 .chalk-line-ink path {
   stroke: var(--color-ink);
   stroke-width: 2.5;
@@ -522,7 +632,7 @@ button.bg-brand-600.text-on-brand:active:not(:disabled),
   }
 }
 
-/* El fosforito del lomo: al cambiar de sección se «pinta» de izquierda a derecha, como un trazo de rotulador.
+/* El naranja del lomo: al cambiar de sección se «pinta» de izquierda a derecha, como un trazo de rotulador.
    Antes se deslizaba de una sección a otra y, por el camino, tapaba las etiquetas de las secciones intermedias. */
 .spine-mark-swipe {
   transform-origin: left center;
@@ -762,9 +872,9 @@ a.rounded-btn:active {
   }
 }
 
-/* Portada: una sola secuencia de entrada (titular, texto, botones y pizarra, 70 ms entre cada uno) */
-.hero-in > div > *,
-.hero-in > .board-3d {
+/* Portada: una sola secuencia de entrada (titular, texto y botones, 70 ms entre cada uno).
+   Después, la ficha del estudiante entra por la izquierda, la oferta por la derecha y los eslabones las unen. */
+.hero-in > div > * {
   animation: page-in 700ms var(--ease-expo) both;
 }
 .hero-in > div > :nth-child(2) {
@@ -773,43 +883,43 @@ a.rounded-btn:active {
 .hero-in > div > :nth-child(3) {
   animation-delay: 140ms;
 }
-.hero-in > .board-3d {
-  animation-name: board-in;
-  animation-delay: 200ms;
-  animation-duration: 900ms;
+.link-card-a {
+  animation: link-from-left 900ms 220ms var(--ease-expo) both;
 }
-/* La pizarra está girada hacia el centro, como colgada en la pared del aula */
-.board-3d {
-  transform: perspective(1400px) rotateY(-9deg) rotateX(3deg);
+.link-card-b {
+  animation: link-from-right 900ms 300ms var(--ease-expo) both;
 }
-@keyframes board-in {
+.link-knot {
+  animation: link-knot 700ms 780ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.link-badge {
+  animation: page-in 500ms 1050ms var(--ease-expo) both;
+}
+@keyframes link-from-left {
   from {
     opacity: 0;
-    transform: perspective(1400px) rotateY(-24deg) rotateX(6deg) translateX(40px);
+    transform: translateX(-36px) rotate(-2deg);
   }
 }
-/* Las fichas de la pizarra se mecen despacio, cada una a su ritmo */
-.board-card {
-  animation: board-bob 6s ease-in-out infinite;
+@keyframes link-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(36px) rotate(2deg);
+  }
 }
-.board-card:nth-child(2) {
-  animation-delay: -2s;
-}
-.board-card:nth-child(3) {
-  animation-delay: -4s;
-}
-@keyframes board-bob {
-  50% {
-    transform: translateY(-5px);
+@keyframes link-knot {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-90deg);
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-in > div > *,
-  .hero-in > .board-3d {
+  .link-card-a,
+  .link-card-b,
+  .link-knot,
+  .link-badge {
     animation: page-in-fade 300ms ease both;
-  }
-  .board-card {
-    animation-play-state: paused;
   }
 }
 

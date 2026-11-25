@@ -9,7 +9,7 @@ import { timeAgo } from "@/lib/time";
 import { useTilt } from "@/lib/useTilt";
 
 export function Chip({ children, className = "bg-page text-ink-muted" }: { children: React.ReactNode; className?: string }) {
-  return <span className={`inline-flex items-center rounded-[6px] px-2.5 py-1 text-[13px] font-semibold ${className}`}>{children}</span>;
+  return <span className={`inline-flex items-center rounded-tag px-2.5 py-1 text-[13px] font-semibold ${className}`}>{children}</span>;
 }
 
 /**
@@ -36,7 +36,7 @@ export function JobCard({ job, showStatus = true }: { job: Job; showStatus?: boo
             {(isNew(job.created_at) && !closed) || job.matches_studies || closed || (showStatus && job.my_status) ? (
               <div className="mb-1.5 flex flex-wrap items-center gap-2">
                 {isNew(job.created_at) && !closed && <Chip className="bg-accent-50 text-accent-800">Nueva</Chip>}
-                {job.matches_studies && <Chip className="bg-brand-50 text-brand-700">Para tus estudios</Chip>}
+                {job.matches_studies && <Chip className="bg-empleo-50 text-empleo-ink">Para tus estudios</Chip>}
                 {closed && <Chip>Cerrada</Chip>}
                 {showStatus && job.my_status && <Chip className={APPLICATION_STATUS[job.my_status].cls}>{APPLICATION_STATUS[job.my_status].label}</Chip>}
               </div>

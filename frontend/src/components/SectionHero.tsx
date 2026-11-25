@@ -4,7 +4,7 @@ import { Backdrop3D } from "./three/Backdrop3D";
 import type { SceneKind } from "./three/Scene3D";
 
 /**
- * Cabecera de sección (Social, Foros, Empleo): una pizarra con la escena 3D de la sección
+ * Cabecera de sección (Social, Foros, Empleo): un fondo oscuro con la escena 3D de la sección
  * a la derecha y el título subrayado con tiza, que se dibuja al entrar.
  */
 export function SectionHero({

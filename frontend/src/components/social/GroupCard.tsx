@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, GraduationCap, Loader2, Lock, MapPin, School, Sparkles, Users, X } from "lucide-react";
+import { Check, GraduationCap, Loader2, Lock, MapPin, Plus, School, Sparkles, Users, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { api, refreshGroups, type GroupCard as Group } from "@/lib/api";
@@ -109,7 +109,7 @@ export function GroupCard({
         </p>
         {featured && group.description && <p className="mt-3 line-clamp-3 max-w-[52ch] text-[15px] leading-relaxed text-ink-muted">{group.description}</p>}
         {group.reason && (
-          <p className="mt-2 inline-flex max-w-full items-center gap-1.5 self-start rounded-[6px] bg-brand-50 px-2 py-1 text-[12px] font-semibold text-brand-700">
+          <p className="mt-2 inline-flex max-w-full items-center gap-1.5 self-start rounded-tag bg-brand-50 px-2 py-1 text-[12px] font-semibold text-brand-700">
             <ReasonIcon reason={group.reason} />
             <span className="truncate">{group.reason}</span>
           </p>
@@ -127,9 +127,9 @@ export function GroupCard({
               type="button"
               onClick={join}
               disabled={busy}
-              className="flex min-h-11 w-full items-center justify-center gap-2 rounded-btn bg-field text-[15px] font-semibold text-ink transition-colors hover:bg-field-hover"
+              className="btn-pop flex min-h-11 w-full items-center justify-center gap-2 rounded-btn bg-card text-[15px] font-semibold text-ink hover:bg-page"
             >
-              {busy && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
+              {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Plus className="h-4 w-4" aria-hidden />}
               Unirme
             </button>
           )}

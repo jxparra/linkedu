@@ -356,7 +356,7 @@ export function PostCard({ post, variant = "feed", onHide, onDelete, onFollowCha
 
       <div className="px-4 pb-3">
         {TYPE_LABEL[post.type] && (
-          <span className="mb-1.5 inline-block rounded-full bg-accent-50 px-2.5 py-0.5 text-xs font-semibold text-accent-800">
+          <span className="mb-1.5 inline-block rounded-tag bg-accent-50 px-2.5 py-0.5 text-xs font-semibold text-accent-800">
             {TYPE_LABEL[post.type]}
           </span>
         )}

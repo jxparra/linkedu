@@ -22,7 +22,7 @@ export default function Seccion() {
           <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-card bg-accent-50 text-accent-800">
             <Hammer className="h-6 w-6" aria-hidden />
           </span>
-          <h1 className="mt-4 text-[28px] font-semibold">{section.title}</h1>
+          <h1 className="mt-4 text-[28px] font-bold">{section.title}</h1>
           <p className="mx-auto mt-2 max-w-md text-ink-muted">{section.text}</p>
           <p className="mt-1 text-sm font-semibold text-accent-800">Próximamente</p>
           <ButtonLink href="/inicio" variant="secondary" className="mt-6">

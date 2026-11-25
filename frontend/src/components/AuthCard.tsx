@@ -8,7 +8,7 @@ export function AuthCard({ title, children, footer }: { title: string; children:
         <Logo />
       </div>
       <div className="mx-auto mt-10 w-full max-w-[440px]">
-        <h1 className="mb-6 text-center text-[28px] font-semibold leading-tight">{title}</h1>
+        <h1 className="mb-6 text-center text-[28px] font-bold leading-tight">{title}</h1>
         <div className="rounded-card border border-line bg-card p-6 sm:p-8">{children}</div>
         {footer && <div className="mt-6 text-center text-sm text-ink-muted">{footer}</div>}
       </div>

@@ -1,5 +1,7 @@
 # Sistema de diseño
 
+> **Desde el 2026-11-25 la paleta es la del logotipo («Enlace», [[decisiones/ADR-018-estetica-enlace-logotipo]]):** azul `#005cc6` de marca, naranja `#ff9f2e` para lo activo, lomo azul noche `#0b2552`, Foros verde azulado y Empleo naranja. Las tablas de color de abajo son de «Pizarra y fosforito» y quedan como historial; los valores vigentes están en `frontend/src/app/globals.css`.
+
 ## Estética: «Pizarra y fosforito»
 Decisión → [[decisiones/ADR-011-estetica-pizarra-fosforito]] (sustituye a [[decisiones/ADR-010-estetica-carpeta-profesional]])
 

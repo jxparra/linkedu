@@ -57,9 +57,8 @@ export function TopBar({ user }: { user: User | null }) {
     <header className="sticky top-0 z-20 border-b border-line bg-topbar">
       {/* Fondo sólido a propósito: con backdrop-blur, el oscurecido del buscador (fixed) quedaría encerrado en la barra */}
       <div className="mx-auto flex h-16 max-w-[1120px] items-center gap-3 px-4">
-        <Link href="/inicio" aria-label="Linkedu, ir al inicio" className="flex items-center gap-1 sm:hidden">
-          <BrandMark />
-          <span className="font-display text-xl font-bold tracking-tight">linkedu</span>
+        <Link href="/inicio" aria-label="Linkedu, ir al inicio" className="flex items-center sm:hidden">
+          <BrandMark size={36} />
         </Link>
         <div className="relative">
           <SearchBox open={searching} onOpenChange={setSearching} />

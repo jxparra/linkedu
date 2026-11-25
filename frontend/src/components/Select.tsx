@@ -24,7 +24,7 @@ export function Select({
   buttonClassName = "h-12",
   tone = "default",
 }: {
-  /** default: campo normal · board: sobre la pizarra (Estadísticas) · bare: sin borde, el color lo pone buttonClassName */
+  /** default: campo normal · board: sobre la cabecera oscura (Estadísticas) · bare: sin borde, el color lo pone buttonClassName */
   tone?: "default" | "board" | "bare";
   value: string;
   onChange: (v: string) => void;

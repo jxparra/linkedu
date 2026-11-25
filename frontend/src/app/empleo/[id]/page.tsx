@@ -352,7 +352,7 @@ function Detail({ id, user }: { id: number; user: User }) {
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap gap-2">
                   {isNew(job.created_at) && !closed && <Chip className="bg-accent-50 text-accent-800">Nueva</Chip>}
-                  {job.matches_studies && <Chip className="bg-brand-50 text-brand-700">Para tus estudios</Chip>}
+                  {job.matches_studies && <Chip className="bg-empleo-50 text-empleo-ink">Para tus estudios</Chip>}
                   {closed && <Chip>Oferta cerrada</Chip>}
                 </div>
                 <h1 className="mt-1 text-balance text-[28px] font-bold leading-tight">{job.title}</h1>

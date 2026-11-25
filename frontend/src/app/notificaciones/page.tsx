@@ -36,10 +36,11 @@ function List() {
   }, []);
 
   return (
-    <section className="rounded-card border border-line bg-card">
-      <h1 className="border-b border-line px-5 pb-5 pt-4 text-[28px] font-bold leading-tight">
+    <>
+      <h1 className="mb-4 text-[28px] font-bold leading-tight">
         <ChalkText>Notificaciones</ChalkText>
       </h1>
+      <section className="rounded-card border border-line bg-card">
       {items === null ? (
         <div className="space-y-2 p-4">
           {[0, 1, 2].map((i) => (
@@ -73,8 +74,8 @@ function List() {
                   {n.actor ? (
                     <Avatar name={n.actor.name} src={n.actor.avatar_url} size="md" role={n.actor.role} />
                   ) : (
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-spine text-spine-strong">
-                      <BrandMark className="scale-75" />
+                    <span className="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-card">
+                      <BrandMark size={30} />
                     </span>
                   )}
                   <span className={`absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-card ${cls}`}>
@@ -123,7 +124,8 @@ function List() {
         </div>
           ))
       )}
-    </section>
+      </section>
+    </>
   );
 }
 

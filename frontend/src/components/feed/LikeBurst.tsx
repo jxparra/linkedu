@@ -2,7 +2,7 @@
 
 import { useMemo, type CSSProperties } from "react";
 
-const COLORS = ["var(--color-foros)", "var(--color-mark)", "var(--color-brand-600)", "var(--color-empleo)", "var(--color-mark)"]; // colores de las secciones y el fosforito
+const COLORS = ["var(--color-foros)", "var(--color-mark)", "var(--color-brand-600)", "var(--color-empleo)", "var(--color-mark)"]; // colores de las secciones y el naranja de lo activo
 const PIECES = 14;
 
 /** Pequeña explosión de confeti alrededor del icono de "me gusta". Se monta de nuevo en cada like (cambia `key`). */

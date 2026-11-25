@@ -27,7 +27,7 @@
 - [ ] Traducir al inglés los textos nuevos (panel de interés, diálogos de salir, Foros)
 
 ## ▶️ Próximo día (por este orden)
-1. **Decidir si se queda «Pizarra y fosforito»** y unir la rama `estetica-pizarra` a `main`.
+1. **Revisar la estética «Enlace» (logo nuevo, ADR-018)** en todas las pantallas y unir la rama `estetica-pizarra` a `main`.
 2. **Editar perfil completo:** estudios, foto y descripción (ahora `/perfil/editar` solo cambia nombre, @usuario y ubicación, o los datos de la empresa).
 3. **Repasar los estudios recomendados de las ofertas de prueba** (`backend/app/seed.py`): la de auxiliar de enfermería estaba unida a Medicina; puede haber más así.
 4. **Registro:** valorar elegir estudiante o empresa antes del email (propuesta del revisor externo).

@@ -34,33 +34,33 @@ import {
  * Las claves son las de backend/app/services/groups.py (TOPICS).
  */
 export const TOPIC_STYLE: Record<string, { icon: LucideIcon; from: string; to: string }> = {
-  programacion: { icon: Code2, from: "#1B1E1C", to: "#2B5B4B" },
-  tecnologia: { icon: Cpu, from: "#1F4236", to: "#4F8A73" },
-  diseno: { icon: Palette, from: "#9D174D", to: "#DB2777" },
-  salud: { icon: HeartPulse, from: "#B91C1C", to: "#EF4444" },
-  psicologia: { icon: Brain, from: "#7A2E48", to: "#C2627F" },
+  programacion: { icon: Code2, from: "#14213D", to: "#005CC6" },
+  tecnologia: { icon: Cpu, from: "#0B2552", to: "#1C5FB8" },
+  diseno: { icon: Palette, from: "#5B3D8F", to: "#8E6BC9" },
+  salud: { icon: HeartPulse, from: "#0B6B6B", to: "#1F9A93" },
+  psicologia: { icon: Brain, from: "#3C2A78", to: "#7E62B8" },
   derecho: { icon: Scale, from: "#334155", to: "#64748B" },
-  empresa: { icon: TrendingUp, from: "#065F46", to: "#0EA372" },
+  empresa: { icon: TrendingUp, from: "#7A3A00", to: "#C26A12" },
   ciencia: { icon: FlaskConical, from: "#0E7490", to: "#199CB0" },
-  quedadas: { icon: PartyPopper, from: "#C2410C", to: "#C2821C" },
-  deportes: { icon: Dumbbell, from: "#15803D", to: "#36A25D" },
-  musica: { icon: Music, from: "#7E22CE", to: "#CA69D9" },
-  videojuegos: { icon: Gamepad2, from: "#1B1E1C", to: "#5C6B63" },
-  cine: { icon: Clapperboard, from: "#14161F", to: "#5B6070" },
-  viajes: { icon: Plane, from: "#0369A1", to: "#2D99C9" },
-  pisos: { icon: House, from: "#92400E", to: "#C68009" },
+  quedadas: { icon: PartyPopper, from: "#B85A00", to: "#D9770F" },
+  deportes: { icon: Dumbbell, from: "#0B5C5E", to: "#2A9D8F" },
+  musica: { icon: Music, from: "#3C2A78", to: "#6E5BC4" },
+  videojuegos: { icon: Gamepad2, from: "#14213D", to: "#4F5D75" },
+  cine: { icon: Clapperboard, from: "#0B2552", to: "#4F5D75" },
+  viajes: { icon: Plane, from: "#0050AD", to: "#2D8BE0" },
+  pisos: { icon: House, from: "#8A4300", to: "#C76A0E" },
   idiomas: { icon: Languages, from: "#0F766E", to: "#229F8F" },
   estudio: { icon: Library, from: "#0F766E", to: "#259F93" },
-  empleo: { icon: Briefcase, from: "#7A5300", to: "#B38929" },
-  voluntariado: { icon: HandHeart, from: "#BE123C", to: "#E46779" },
+  empleo: { icon: Briefcase, from: "#7A3A00", to: "#B85A00" },
+  voluntariado: { icon: HandHeart, from: "#9A4A00", to: "#C97B1A" },
   fotografia: { icon: Camera, from: "#374151", to: "#898F9A" },
-  cocina: { icon: ChefHat, from: "#B45309", to: "#B2881A" },
-  lectura: { icon: BookOpen, from: "#78350F", to: "#D97706" },
-  arte: { icon: Brush, from: "#A21CAF", to: "#DC67A4" },
+  cocina: { icon: ChefHat, from: "#8A4300", to: "#C97B1A" },
+  lectura: { icon: BookOpen, from: "#0B6B6B", to: "#229F8F" },
+  arte: { icon: Brush, from: "#5B3D8F", to: "#9B6BC9" },
   // Foros (comunidades de estudios, de centros y generales): no tienen temática
-  "foro-degree": { icon: GraduationCap, from: "#7A2E48", to: "#B83A63" },
-  "foro-school": { icon: School, from: "#1F4236", to: "#3D7A64" },
-  "foro-general": { icon: MessagesSquare, from: "#1B1E1C", to: "#9C2F52" },
+  "foro-degree": { icon: GraduationCap, from: "#0B5C5E", to: "#0E8A86" },
+  "foro-school": { icon: School, from: "#0B2552", to: "#1C5FB8" },
+  "foro-general": { icon: MessagesSquare, from: "#14213D", to: "#0E7778" },
 };
 
 /** Los foros son comunidades de tipo degree | school | general. Los grupos de Social son type "group". */
@@ -80,7 +80,7 @@ export function coverTopic(g: { topic: string | null; type?: string | null }): s
   return g.topic ?? (isForum(g.type) ? `foro-${g.type}` : null);
 }
 
-export const DEFAULT_TOPIC_STYLE = { icon: Users, from: "#1F4236", to: "#3D7A64" };
+export const DEFAULT_TOPIC_STYLE = { icon: Users, from: "#0B2552", to: "#1C5FB8" };
 
 export function topicStyle(topic: string | null | undefined) {
   return (topic && TOPIC_STYLE[topic]) || DEFAULT_TOPIC_STYLE;

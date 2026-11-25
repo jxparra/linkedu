@@ -3,7 +3,7 @@
 import { useCallback, useRef } from "react";
 
 /**
- * Inclina una tarjeta hacia el puntero (máx. 5°) y mueve un brillo de fosforito bajo él.
+ * Inclina una tarjeta hacia el puntero (máx. 5°) y mueve un brillo naranja suave bajo él.
  * Solo con ratón: en pantallas táctiles y con «reducir movimiento» no hace nada.
  * Escribe variables CSS directamente en el elemento (sin re-renderizar React); la clase `tilt` hace el resto.
  */

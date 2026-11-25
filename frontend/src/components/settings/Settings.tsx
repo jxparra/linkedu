@@ -18,7 +18,7 @@ export const SETTINGS_SECTIONS = [
   { href: "/ajustes/notificaciones", label: "Notificaciones", icon: Bell },
 ];
 
-/** Columna izquierda de Ajustes: el título y las secciones; la activa, en fosforito. */
+/** Columna izquierda de Ajustes: tu foto, tu nombre y las secciones; la activa, en naranja. El h1 va sobre el contenido. */
 export function SettingsNav({ user }: { user: User | null }) {
   const t = useT();
   const path = usePathname();
@@ -39,9 +39,7 @@ export function SettingsNav({ user }: { user: User | null }) {
     <nav aria-label={t("Ajustes")} className="space-y-0.5 rounded-card border border-line bg-card p-2">
       <div className="mb-2 flex items-center gap-3 px-2 pt-2">
         <Avatar name={name || "?"} src={avatar} size="sm" role={user?.role} />
-        <h1 className="pb-1 text-[28px] font-bold">
-          <ChalkText>{t("Ajustes")}</ChalkText>
-        </h1>
+        <p className="min-w-0 truncate font-semibold">{name}</p>
       </div>
       {SETTINGS_SECTIONS.map(({ href, label, icon: Icon }) => {
         const active = current === href;
@@ -65,18 +63,18 @@ export function SettingsNav({ user }: { user: User | null }) {
 
 /**
  * Ajustes en el móvil: la columna izquierda no se muestra, así que el título y las secciones
- * van arriba del contenido, como en Social (fichas que se desplazan y la activa en fosforito).
+ * van arriba del contenido, como en Social (fichas que se desplazan y la activa en naranja).
  */
 export function SettingsMobileNav() {
   const t = useT();
   const path = usePathname();
   const chip = "flex min-h-11 shrink-0 items-center gap-1.5 rounded-btn px-4 text-sm font-semibold transition-colors";
   return (
-    <div className="mb-4 space-y-4 md:hidden">
-      <h1 className="pb-1 text-[28px] font-bold leading-tight">
+    <div className="mb-4 space-y-4">
+      <h1 className="text-[28px] font-bold leading-tight">
         <ChalkText>{t("Ajustes")}</ChalkText>
       </h1>
-      <nav aria-label={t("Ajustes")} className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4">
+      <nav aria-label={t("Ajustes")} className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 md:hidden">
         {SETTINGS_SECTIONS.map(({ href, label, icon: Icon }) => {
           const active = path === href;
           return (
@@ -114,7 +112,7 @@ export function SettingsRow({ label, value, href, soon, onClick }: { label: stri
       <span className="text-[15px]">{label}</span>
       <span className="flex items-center gap-2 text-[15px] text-ink-muted">
         {value && <span className="max-w-[220px] truncate">{value}</span>}
-        {soon && <span className="rounded-full bg-page px-2.5 py-0.5 text-[12px] font-semibold">{t("Próximamente")}</span>}
+        {soon && <span className="rounded-tag bg-page px-2.5 py-0.5 text-[12px] font-semibold">{t("Próximamente")}</span>}
         {(href || onClick) && <ArrowRight className="h-5 w-5 text-ink" aria-hidden />}
       </span>
     </>

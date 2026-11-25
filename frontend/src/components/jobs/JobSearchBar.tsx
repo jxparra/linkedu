@@ -230,7 +230,7 @@ export function JobSearchBar({
         <button
           type="submit"
           aria-busy={busy}
-          className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-btn bg-brand-600 px-5 sm:px-7 text-[15px] font-semibold text-on-brand transition-colors hover:bg-brand-hover"
+          className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-btn bg-empleo-ink px-5 sm:px-7 text-[15px] font-semibold text-on-section transition-colors hover:bg-empleo"
         >
           {busy && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
           <span className="sm:hidden">{busy ? "…" : "Buscar"}</span>

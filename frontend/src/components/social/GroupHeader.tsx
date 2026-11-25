@@ -14,7 +14,7 @@ export const GROUP_TABS: { key: GroupTab; label: string }[] = [
 /**
  * Cabecera de un grupo como una carpeta: la temática en la pestaña de arriba, la portada en un
  * cuadrado a la izquierda (foto o icono de la temática), el nombre en Bricolage y las secciones
- * marcadas en fosforito. Sin portada a lo ancho ni pestañas subrayadas (eso era Facebook Grupos).
+ * marcadas en naranja. Sin portada a lo ancho ni pestañas subrayadas (eso era Facebook Grupos).
  * La usan la página del grupo y la vista previa de "Crear grupo" (con `placeholder`, en gris).
  */
 export function GroupHeader({

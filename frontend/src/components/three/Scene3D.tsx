@@ -6,8 +6,8 @@ import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeom
 
 /**
  * Escenas 3D de fondo, cada una con objetos de su sección:
- * - estudio: fichas, lápices de fosforito, libros y polvo de tiza (portada e Inicio)
- * - social: una red de personas (nodos unidos por líneas) que gira despacio
+ * - estudio: fichas, lápices naranjas, libros y polvo de tiza (portada e Inicio)
+ * - social: grupos de personas enlazados, con mensajes que viajan entre ellos y los eslabones del logo
  * - foros: bocadillos de conversación que suben
  * - empleo: maletines y documentos flotando
  *
@@ -16,21 +16,23 @@ import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeom
  */
 export type SceneKind = "estudio" | "social" | "foros" | "empleo";
 
-type Palette = Record<"brand" | "mark" | "empleo" | "foros" | "card" | "ink" | "edge" | "page", THREE.Color>;
+type Palette = Record<"brand" | "logo" | "mark" | "empleo" | "foros" | "card" | "ink" | "edge" | "page", THREE.Color>;
 
-/** Con `onDark` (escena sobre la pizarra) el verde de marca pasa al color tiza, para que se vea sobre el fondo oscuro. */
+/** Con `onDark` (escena sobre una cabecera oscura) el azul de marca pasa a un azul claro, para que se vea sobre el fondo oscuro. */
 function readPalette(onDark: boolean): Palette {
   const css = getComputedStyle(document.documentElement);
   const c = (name: string, fallback: string) => new THREE.Color((css.getPropertyValue(name).trim() || fallback) as THREE.ColorRepresentation);
   return {
-    brand: onDark ? c("--color-spine-ink", "#a9c4b8") : c("--color-brand-600", "#2b5b4b"),
-    mark: c("--color-mark", "#ffe24a"),
-    empleo: c("--color-empleo", "#a66f00"),
-    foros: c("--color-foros", "#b83a63"),
+    brand: onDark ? c("--color-spine-ink", "#b4c6e6") : c("--color-brand-600", "#005cc6"),
+    // El azul del logo; sobre la cabecera oscura, un punto más claro para que se distinga del fondo
+    logo: onDark ? c("--color-logo-on-dark", "#4f94f5") : c("--color-brand-600", "#005cc6"),
+    mark: c("--color-mark", "#ff9f2e"),
+    empleo: c("--color-empleo", "#b85a00"),
+    foros: c("--color-foros", "#0e7778"),
     card: c("--color-card", "#ffffff"),
-    ink: c("--color-ink", "#1b1e1c"),
-    edge: c("--color-edge", "#c8ccc6"),
-    page: c("--color-page", "#f1f2ee"),
+    ink: c("--color-ink", "#14213d"),
+    edge: c("--color-edge", "#c8d1de"),
+    page: c("--color-page", "#f5f7fb"),
   };
 }
 
@@ -207,83 +209,181 @@ function buildEstudio(scene: THREE.Scene, p: Palette, mats: Materials, dense: bo
   };
 }
 
+/**
+ * Social: grupos de personas (cabeza y hombros) enlazados. En cada grupo alguien «acaba de publicar» (naranja),
+ * unos pocos enlaces unen un grupo con otro y por ellos viajan mensajes (puntos naranjas). Cerca, los eslabones del logotipo.
+ * Todo va a la derecha y por debajo de las pestañas: a la izquierda están el título y el buscador.
+ */
 function buildSocial(scene: THREE.Scene, p: Palette, mats: Materials, fill = false): Built {
   const r = rng(21);
   const group = new THREE.Group();
-  // En la cabecera a toda pantalla hay más gente y la red ocupa todo el alto, sin acercarse a la cámara
-  const n = fill ? 72 : 46;
-  const nodes: THREE.Vector3[] = [];
-  for (let i = 0; i < n; i++) {
-    // Nube aplastada: más ancha que alta, como una franja
-    const v = fill
-      ? // Más densa a la derecha (raíz cuadrada) y más clara a la izquierda, donde están el título y el buscador
-        new THREE.Vector3(Math.sqrt(r()) * 18 - 9, (r() - 0.5) * 9, -4 + (r() - 0.5) * 3)
-      : new THREE.Vector3((r() - 0.5) * 16, (r() - 0.5) * 5, (r() - 0.5) * 6);
-    nodes.push(v);
-  }
-  const orig = nodes.map((v) => v.clone());
-  const sphere = new THREE.SphereGeometry(1, 20, 14);
-  const people = new THREE.InstancedMesh(sphere, mats.std("brand", p, { roughness: 0.4 }), n);
-  const highlights = new THREE.InstancedMesh(sphere, mats.std("mark", p, { roughness: 0.35, emissiveIntensity: 0.2 }), 6);
-  const dummy = new THREE.Object3D();
-  const sizes = nodes.map(() => (fill ? 0.08 + r() * 0.1 : 0.12 + r() * 0.16));
-  for (let i = 0; i < 6; i++) {
-    dummy.position.copy(nodes[i * 7]);
-    dummy.scale.setScalar(sizes[i * 7] * 1.5);
-    dummy.updateMatrix();
-    highlights.setMatrixAt(i, dummy.matrix);
-  }
-  // Une cada nodo con sus 2 vecinos más cercanos
-  const pairs: [number, number][] = [];
-  nodes.forEach((a, i) => {
-    const near = nodes
-      .map((b, j) => ({ j, d: a.distanceTo(b) }))
-      .filter((x) => x.j !== i)
-      .sort((x, y) => x.d - y.d)
-      .slice(0, 2);
-    near.forEach(({ j }) => pairs.push([i, j]));
+  // Cada grupo en fracciones de lo visible (x: -0,5 izquierda … 0,5 derecha; y: -0,5 abajo … 0,5 arriba)
+  const clusters = [
+    { x: 0.12, y: -0.45, n: 6, rad: 0.06 },
+    { x: 0.3, y: -0.2, n: 7, rad: 0.065 },
+    { x: 0.42, y: -0.5, n: 5, rad: 0.05 },
+    { x: 0.46, y: 0.04, n: 4, rad: 0.04 },
+    { x: 0.1, y: -0.04, n: 4, rad: 0.04 },
+  ];
+  const frac: { x: number; y: number; z: number; c: number; hub: boolean }[] = [];
+  clusters.forEach((c, ci) => {
+    // Todos a la misma profundidad y repartidos en un corro regular: así se ven del mismo tamaño y ordenados
+    frac.push({ x: c.x, y: c.y, z: -3, c: ci, hub: true });
+    for (let k = 0; k < c.n; k++) {
+      const ang = (k / c.n) * Math.PI * 2 + Math.PI / 2;
+      // Corro ovalado: la cabecera es mucho más ancha que alta
+      frac.push({ x: c.x + Math.cos(ang) * c.rad, y: c.y + Math.sin(ang) * c.rad * 2.6, z: -3, c: ci, hub: false });
+    }
   });
+  const n = frac.length;
+  const nodes = frac.map(() => new THREE.Vector3());
+  const hubOf = (ci: number) => frac.findIndex((f) => f.c === ci && f.hub);
+
+  // Enlaces: cada persona con el centro de su grupo y con sus vecinos del corro; y unos puentes entre grupos
+  const pairs: [number, number][] = [];
+  frac.forEach((f, i) => {
+    if (f.hub) return;
+    pairs.push([hubOf(f.c), i]);
+    // Corro cerrado: cada persona con la siguiente, y la última con la primera
+    const next = i + 1 < n && frac[i + 1].c === f.c ? i + 1 : hubOf(f.c) + 1;
+    pairs.push([i, next]);
+  });
+  for (const [a, b] of [
+    [0, 1],
+    [1, 3],
+    [1, 2],
+    [0, 4],
+    [4, 1],
+    [0, 2],
+  ]) {
+    pairs.push([hubOf(a) + 1, hubOf(b) + 2]);
+  }
+
+  // Personas con instancias: cabeza (esfera) y hombros (media esfera). Color por instancia, para repintarlo con el tema
+  const headGeo = new THREE.SphereGeometry(0.15, 20, 14);
+  const bodyGeo = new THREE.SphereGeometry(0.26, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2);
+  const personMat = new THREE.MeshStandardMaterial({ roughness: 0.45, metalness: 0.05 });
+  const heads = new THREE.InstancedMesh(headGeo, personMat, n);
+  const bodies = new THREE.InstancedMesh(bodyGeo, personMat, n);
+  // El primero del corro de cada grupo va en naranja
+  const isMark = frac.map((f, i) => !f.hub && i > 0 && frac[i - 1].hub);
+  // Mismo tamaño para todos; el centro de cada corro, apenas un poco mayor
+  const scales = frac.map((f) => (f.hub ? 1.1 : 1));
+  // Se mecen todos a la vez, cada corro con un pequeño desfase
+  const bob = frac.map((f) => f.c * 0.9);
+  const paintPeople = (pal: Palette) => {
+    frac.forEach((_, i) => {
+      const col = isMark[i] ? pal.mark : pal.brand;
+      heads.setColorAt(i, col);
+      bodies.setColorAt(i, col);
+    });
+    if (heads.instanceColor) heads.instanceColor.needsUpdate = true;
+    if (bodies.instanceColor) bodies.instanceColor.needsUpdate = true;
+  };
+  paintPeople(p);
+
   const lines = new THREE.BufferGeometry();
   const segPos = new Float32Array(pairs.length * 6);
   lines.setAttribute("position", new THREE.BufferAttribute(segPos, 3));
-  // Coloca personas y enlaces según `nodes` (se repite al repartir la red por la cabecera)
-  const place = () => {
-    nodes.forEach((v, i) => {
-      dummy.position.copy(v);
-      dummy.scale.setScalar(sizes[i]);
+  const links = new THREE.LineSegments(lines, mats.line("brand", p, 0.32));
+
+  // Mensajes que viajan de una persona a otra por los enlaces
+  const PULSES = 9;
+  const pulses = new THREE.InstancedMesh(new THREE.SphereGeometry(0.07, 12, 8), mats.std("mark", p, { roughness: 0.3 }), PULSES);
+  const travel = Array.from({ length: PULSES }, (_, i) => ({
+    pair: Math.floor(r() * pairs.length),
+    forward: r() > 0.5,
+    t: i / PULSES,
+    speed: 0.35 + r() * 0.3,
+  }));
+
+  // Los eslabones del logotipo (azul y naranja, enlazados), girando despacio
+  const ringGeo = new THREE.TorusGeometry(0.42, 0.11, 18, 56);
+  const rings = new THREE.Group();
+  const ringA = new THREE.Mesh(ringGeo, mats.std("logo", p, { roughness: 0.3 }));
+  const ringB = new THREE.Mesh(ringGeo, mats.std("mark", p, { roughness: 0.35 }));
+  ringA.position.x = -0.28;
+  ringB.position.x = 0.28;
+  ringB.rotation.x = Math.PI / 2;
+  rings.add(ringA, ringB);
+
+  const dummy = new THREE.Object3D();
+  const tmp = new THREE.Vector3();
+  let W = 16;
+  let H = fill ? 6 : 9;
+
+  const place = (t: number) => {
+    frac.forEach((f, i) => {
+      nodes[i].set(f.x * W, f.y * H + Math.sin(t * 0.8 + bob[i]) * 0.06, f.z);
+      const sc = scales[i];
+      dummy.position.set(nodes[i].x, nodes[i].y + 0.13 * sc, nodes[i].z);
+      dummy.scale.setScalar(sc);
       dummy.updateMatrix();
-      people.setMatrixAt(i, dummy.matrix);
+      heads.setMatrixAt(i, dummy.matrix);
+      dummy.position.set(nodes[i].x, nodes[i].y - 0.2 * sc, nodes[i].z);
+      dummy.scale.set(sc, sc * 0.85, sc);
+      dummy.updateMatrix();
+      bodies.setMatrixAt(i, dummy.matrix);
     });
-    people.instanceMatrix.needsUpdate = true;
+    heads.instanceMatrix.needsUpdate = true;
+    bodies.instanceMatrix.needsUpdate = true;
     pairs.forEach(([a, b], k) => segPos.set([nodes[a].x, nodes[a].y, nodes[a].z, nodes[b].x, nodes[b].y, nodes[b].z], k * 6));
     lines.attributes.position.needsUpdate = true;
     lines.computeBoundingSphere();
+    rings.position.set(0.21 * W, -0.5 * H, -2);
   };
-  place();
-  const links = new THREE.LineSegments(lines, mats.line("brand", p, fill ? 0.3 : 0.45));
-  group.add(people, highlights, links);
+
+  const movePulses = (dt: number) => {
+    travel.forEach((m, k) => {
+      m.t += dt * m.speed;
+      if (m.t >= 1) {
+        // Al llegar, sigue por otro enlace que salga de esa persona
+        const [a, b] = pairs[m.pair];
+        const at = m.forward ? b : a;
+        const next = pairs.map((pr, j) => ({ pr, j })).filter(({ pr, j }) => j !== m.pair && (pr[0] === at || pr[1] === at));
+        const pick = next.length ? next[Math.floor(r() * next.length)] : { pr: pairs[m.pair], j: m.pair };
+        m.pair = pick.j;
+        m.forward = pick.pr[0] === at;
+        m.t = 0;
+      }
+      const [a, b] = pairs[m.pair];
+      tmp.copy(m.forward ? nodes[a] : nodes[b]).lerp(m.forward ? nodes[b] : nodes[a], m.t);
+      dummy.position.copy(tmp);
+      // Crece al salir y se apaga al llegar
+      dummy.scale.setScalar(Math.sin(m.t * Math.PI) * 1.1 + 0.05);
+      dummy.updateMatrix();
+      pulses.setMatrixAt(k, dummy.matrix);
+    });
+    pulses.instanceMatrix.needsUpdate = true;
+  };
+
+  place(0);
+  movePulses(0);
+  group.add(heads, bodies, links, pulses, rings);
   scene.add(group);
 
   return {
-    update(t) {
-      // A lo ancho de la pantalla, un giro pequeño: con el de siempre los extremos se saldrían de la franja
-      group.rotation.y = Math.sin(t * 0.12) * (fill ? 0.12 : 0.5);
-      group.rotation.x = Math.sin(t * 0.09) * (fill ? 0.06 : 0.12);
-      // Los destacados «laten», como alguien que acaba de publicar
-      for (let i = 0; i < 6; i++) {
-        dummy.position.copy(nodes[i * 7]);
-        dummy.scale.setScalar(sizes[i * 7] * (1.4 + Math.sin(t * 2 + i) * 0.25));
-        dummy.updateMatrix();
-        highlights.setMatrixAt(i, dummy.matrix);
-      }
-      highlights.instanceMatrix.needsUpdate = true;
+    update(t, dt) {
+      group.rotation.y = Math.sin(t * 0.12) * 0.06;
+      group.rotation.x = Math.sin(t * 0.09) * 0.03;
+      place(t);
+      movePulses(dt);
+      ringA.rotation.y = t * 0.5;
+      ringB.rotation.y = t * 0.5;
+      rings.rotation.z = Math.sin(t * 0.4) * 0.25;
+      rings.rotation.y = Math.sin(t * 0.3) * 0.5;
     },
-    recolor: (pal) => mats.paint(pal),
-    // Como `fitter`: los nodos se separan para llenar lo que se ve, sin cambiar de tamaño
+    recolor: (pal) => {
+      mats.paint(pal);
+      paintPeople(pal);
+    },
+    // Reparte los grupos por lo que se ve de la cabecera, sin cambiar el tamaño de las personas
     fit: fill
       ? (w, h) => {
-          nodes.forEach((v, i) => v.set((orig[i].x / 18) * w, (orig[i].y / 9) * h, orig[i].z));
-          place();
+          W = w;
+          H = h;
+          place(0);
+          movePulses(0);
         }
       : undefined,
   };
@@ -459,7 +559,7 @@ export default function Scene3D({
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 60);
     camera.position.set(0, 0, 11);
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x8a9a90, 1.6));
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x8a96aa, 1.6));
     const sun = new THREE.DirectionalLight(0xffffff, 1.8);
     sun.position.set(4, 6, 8);
     scene.add(sun);

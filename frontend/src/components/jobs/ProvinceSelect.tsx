@@ -15,7 +15,6 @@ export function ProvinceSelect({
   onChange,
   labelledBy,
   withAll = true,
-  flat = false,
   inline = false,
   className = "",
 }: {
@@ -25,8 +24,6 @@ export function ProvinceSelect({
   onChange: (v: string) => void;
   labelledBy?: string;
   withAll?: boolean;
-  /** Estilo del boceto de Empleo: esquinas casi rectas, borde gris y texto en negrita */
-  flat?: boolean;
   className?: string;
 }) {
   const id = useId();
@@ -113,21 +110,15 @@ export function ProvinceSelect({
           inline
             ? `flex h-12 w-full items-center gap-2 rounded-btn px-3 text-left text-[15px] transition-colors ${open ? "bg-field-hover" : "hover:bg-field-hover"}`
             : `flex w-full items-center justify-between gap-2 border bg-card text-left transition-colors ${
-                flat ? "h-[45px] rounded-[3px] px-2.5 text-[17px] font-semibold" : "h-12 rounded-input px-3.5 text-[15px]"
-              } ${open ? "border-brand-600 ring-2 ring-brand-600/20" : flat ? "border-ink-subtle" : "border-edge hover:border-ink-subtle"}`
+                "h-12 rounded-input px-3.5 text-[15px]"
+              } ${open ? "border-brand-600 ring-2 ring-brand-600/20" : "border-edge hover:border-ink-subtle"}`
         }
       >
         {inline && <MapPin className="h-5 w-5 shrink-0 text-ink-subtle" aria-hidden />}
-        <span id={`${id}-value`} className={`${inline ? "flex-1 " : ""}truncate ${flat ? "text-ink-muted" : value ? "text-ink" : "text-ink-subtle"}`}>
+        <span id={`${id}-value`} className={`${inline ? "flex-1 " : ""}truncate ${value ? "text-ink" : "text-ink-subtle"}`}>
           {label}
         </span>
-        {flat ? (
-          <span aria-hidden className="pr-2 text-xl font-semibold text-ink">
-            V
-          </span>
-        ) : (
-          <ChevronDown className={`h-5 w-5 shrink-0 text-ink-muted transition-transform ${open ? "rotate-180" : ""}`} aria-hidden />
-        )}
+        <ChevronDown className={`h-5 w-5 shrink-0 text-ink-muted transition-transform ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>
 
       {open && (
@@ -136,9 +127,7 @@ export function ProvinceSelect({
           id={`${id}-list`}
           role="listbox"
           aria-activedescendant={`${id}-opt-${active}`}
-          className={`pop-in absolute inset-x-0 top-full z-30 mt-0.5 max-h-60 overflow-y-auto border bg-card py-1 ${
-            flat ? "rounded-[3px] border-ink-subtle" : "rounded-input border-line shadow-lg"
-          }`}
+          className="pop-in absolute inset-x-0 top-full z-30 mt-0.5 max-h-60 overflow-y-auto rounded-input border border-line bg-card py-1 shadow-lg"
         >
           {items.map((item) => {
             if ("heading" in item) {
@@ -146,7 +135,7 @@ export function ProvinceSelect({
                 <li
                   key={item.heading}
                   role="presentation"
-                  className={flat ? "px-2.5 pt-1.5 text-[10px] text-ink-muted" : "px-3.5 pb-1 pt-2.5 text-[12px] font-semibold text-ink-subtle"}
+                  className="px-3.5 pb-1 pt-2.5 text-[12px] font-semibold text-ink-subtle"
                 >
                   {item.heading}
                 </li>
@@ -164,14 +153,12 @@ export function ProvinceSelect({
                 aria-selected={selected}
                 onMouseEnter={() => setActive(i)}
                 onClick={() => pick(item.value)}
-                className={`flex items-center justify-between ${
-                  flat ? "min-h-[30px] px-2.5 text-[17px] font-semibold" : "min-h-10 px-3.5 text-[15px]"
-                } ${i === active ? "bg-page" : ""} ${
-                  flat ? (selected ? "text-ink" : "text-ink-muted") : selected ? "font-semibold text-brand-700" : "text-ink"
+                className={`flex min-h-10 items-center justify-between px-3.5 text-[15px] ${i === active ? "bg-page" : ""} ${
+                  selected ? "font-semibold text-brand-700" : "text-ink"
                 }`}
               >
                 {item.label}
-                {selected && !flat && <Check className="h-4 w-4" aria-hidden />}
+                {selected && <Check className="h-4 w-4" aria-hidden />}
               </li>
             );
           })}

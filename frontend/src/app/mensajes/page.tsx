@@ -130,11 +130,12 @@ function Inbox() {
   }, [convs, params, active]);
 
   return (
-    <section className="grid h-[calc(100vh-150px)] min-h-[480px] grid-cols-[minmax(0,1fr)] overflow-hidden rounded-card border border-line bg-card md:grid-cols-[360px_minmax(0,1fr)] lg:grid-cols-[380px_minmax(0,1fr)]">
+    <>
+      <h1 className={`mb-4 text-[28px] font-bold leading-tight ${active ? "hidden md:block" : ""}`}>
+        <ChalkText>Mensajes</ChalkText>
+      </h1>
+    <section className="grid h-[calc(100vh-200px)] min-h-[480px] grid-cols-[minmax(0,1fr)] overflow-hidden rounded-card border border-line bg-card md:grid-cols-[360px_minmax(0,1fr)] lg:grid-cols-[380px_minmax(0,1fr)]">
       <div className={`min-h-0 flex-col border-r border-line ${active ? "hidden md:flex" : "flex"}`}>
-        <h1 className="border-b border-line px-5 pb-5 pt-4 text-[28px] font-bold leading-tight">
-          <ChalkText>Mensajes</ChalkText>
-        </h1>
         <ul className="min-h-0 flex-1 overflow-y-auto">
           {convs === null && <li className="p-5 text-sm text-ink-muted">Cargando…</li>}
           {convs?.length === 0 && (
@@ -183,6 +184,7 @@ function Inbox() {
         )}
       </div>
     </section>
+    </>
   );
 }
 

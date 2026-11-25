@@ -60,7 +60,7 @@ export default function EmpresaLogo() {
         {user?.company && (
           <>
             <p className="mt-4 text-lg font-semibold">{user.company.name}</p>
-            <span className="mt-1 rounded-full bg-page px-2.5 py-0.5 text-xs font-semibold text-ink-muted">Empresa</span>
+            <span className="mt-1 rounded-tag bg-page px-2.5 py-0.5 text-xs font-semibold text-ink-muted">Empresa</span>
           </>
         )}
         <button

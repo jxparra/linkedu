@@ -303,7 +303,7 @@ function Search({ user }: { user: User }) {
                 disabled={state.page <= 1}
                 onClick={() => go({ page: state.page - 1 })}
                 aria-label="Página anterior"
-                className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-card disabled:opacity-40"
+                className="flex h-11 w-11 items-center justify-center rounded-btn hover:bg-card disabled:opacity-40"
               >
                 <ChevronLeft className="h-5 w-5" aria-hidden />
               </button>
@@ -313,7 +313,7 @@ function Search({ user }: { user: User }) {
                   type="button"
                   onClick={() => go({ page: n })}
                   aria-current={n === state.page ? "page" : undefined}
-                  className={`h-11 min-w-11 rounded-full px-2 font-semibold ${n === state.page ? "nav-mark" : "hover:bg-card"}`}
+                  className={`h-11 min-w-11 rounded-btn px-2 font-semibold ${n === state.page ? "nav-mark" : "hover:bg-card"}`}
                 >
                   {n}
                 </button>
@@ -323,7 +323,7 @@ function Search({ user }: { user: User }) {
                 disabled={state.page >= data.pages}
                 onClick={() => go({ page: state.page + 1 })}
                 aria-label="Página siguiente"
-                className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-card disabled:opacity-40"
+                className="flex h-11 w-11 items-center justify-center rounded-btn hover:bg-card disabled:opacity-40"
               >
                 <ChevronRight className="h-5 w-5" aria-hidden />
               </button>

@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 /**
  * Trazo de tiza bajo un título, que se dibuja una vez al entrar (`.chalk-line` en globals.css).
- * `mark` (fosforito) solo sobre la pizarra de las cabeceras de sección; `ink` en las pantallas
+ * `mark` (naranja) solo sobre las cabeceras oscuras de sección; `ink` en las pantallas
  * sin cabecera (Mensajes, Notificaciones, Ajustes, Estadísticas), para no añadir otro color llamativo.
  */
 export function ChalkLine({ tone = "mark" }: { tone?: "mark" | "ink" }) {

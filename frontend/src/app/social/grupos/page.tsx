@@ -54,7 +54,7 @@ function GroupItem({ group, onLeave }: { group: MyGroup; onLeave: (g: MyGroup) =
             </p>
           )}
           {group.role === "admin" && (
-            <span className="mt-1 inline-block rounded-[6px] bg-brand-50 px-2 py-0.5 text-[12px] font-semibold text-brand-700">Administrador</span>
+            <span className="mt-1 inline-block rounded-tag bg-brand-50 px-2 py-0.5 text-[12px] font-semibold text-brand-700">Administrador</span>
           )}
         </div>
       </div>

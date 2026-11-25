@@ -26,7 +26,7 @@ function ProfileCommunities({ communities, isMe }: { communities: Profile["commu
       </p>
       <div className="flex flex-wrap items-center gap-2">
         {shown.map((c) => (
-          <Link key={c.id} href={`/social/grupo/${c.id}`} className="rounded-full bg-page px-3 py-1 text-sm transition-colors hover:bg-field-hover">
+          <Link key={c.id} href={`/social/grupo/${c.id}`} className="rounded-tag bg-page px-3 py-1 text-sm transition-colors hover:bg-field-hover">
             {c.name}
           </Link>
         ))}
@@ -95,7 +95,7 @@ function ProfileView({ id, me }: { id: number; me: User }) {
           onCancel={() => setConfirmUnfollow(false)}
         />
       )}
-      {/* Cabecera tipo carné: franja de pizarra, foto a la izquierda y los datos al lado (sin foto de portada) */}
+      {/* Cabecera tipo carné: franja del color del tipo de cuenta, foto a la izquierda y los datos al lado (sin foto de portada) */}
       <section className="overflow-hidden rounded-card border border-line bg-card">
         <div className={`h-2 ${stripe}`} aria-hidden />
         <div className="p-5 sm:p-6">

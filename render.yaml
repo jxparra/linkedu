@@ -1,0 +1,29 @@
+# Despliegue del backend en Render (plan gratuito). En Render: New → Blueprint → este repositorio.
+# El disco del plan gratuito se borra en cada reinicio: al arrancar se restaura la base de datos de
+# demostración (backend/demo/linkedu-demo.db, solo cuentas @demo.studyhub, contraseña Demo1234).
+services:
+  - type: web
+    name: linkedu-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: DATABASE_URL
+        value: sqlite:///./linkedu.db
+      - key: DEMO_SNAPSHOT
+        value: demo/linkedu-demo.db
+      - key: SECRET_KEY
+        generateValue: true
+      # Activo a propósito: sin servicio de correo, el código de verificación del registro se muestra en pantalla
+      - key: DEBUG
+        value: "true"
+      # Cambiar por la dirección definitiva de Vercel cuando exista
+      - key: FRONTEND_URL
+        value: https://linkedu.vercel.app
+      - key: FRONTEND_ORIGIN_REGEX
+        value: https://.*\.vercel\.app

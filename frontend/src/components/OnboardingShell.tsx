@@ -58,7 +58,7 @@ export function OnboardingShell({
         </div>
 
         <form onSubmit={handle} className="mt-10" noValidate>
-          <h1 className="text-[28px] font-semibold leading-tight">{title}</h1>
+          <h1 className="text-[28px] font-bold leading-tight">{title}</h1>
           {subtitle && <p className="mt-2 text-[15px] text-ink-muted">{subtitle}</p>}
           <div className="mt-8 space-y-5">{children}</div>
           <div className="mt-10 flex items-center justify-between gap-4">
