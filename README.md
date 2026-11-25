@@ -6,6 +6,15 @@ Red social para estudiantes y empresas: trabajos puntuales, comunidades y foros 
 
 Trabajo de Fin de Ciclo (TFC) de Joaquín Parra.
 
+## Ver la web desplegada
+
+| Parte | Dónde | Cómo |
+|---|---|---|
+| Backend (FastAPI) | Render, plan gratuito | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/jxparra/linkedu) · configuración en `render.yaml` |
+| Frontend (Next.js) | Vercel, plan gratuito | Importar el repositorio con **Root Directory** `frontend` y la variable `NEXT_PUBLIC_API_URL` = dirección del backend |
+
+Cuentas de prueba (contraseña `Demo1234`): `irene@demo.studyhub` (estudiante), `technova@demo.studyhub` (empresa), `elena.profe@demo.studyhub` (docente). Guía completa: `docs/despliegue.md`.
+
 ## Estructura
 
 | Carpeta | Contenido |
