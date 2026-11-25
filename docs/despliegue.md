@@ -1,5 +1,7 @@
 # Despliegue de Linkedu (gratis)
 
+**En marcha (2026-11-26):** web https://linkedu-gamma.vercel.app · backend https://linkedu-jxparra-api.onrender.com
+
 Repositorio de despliegue: https://github.com/jxparra/linkedu (rama `main`, copia de `estetica-pizarra` de StudyHub).
 
 - **Backend** (FastAPI) en **Render**, plan gratuito. Configuración en `render.yaml`.
